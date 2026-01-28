@@ -1,6 +1,7 @@
 import { test, expect } from '../../../fixtures/enterpriseFixtures.js';
 import DashboardPhotosTabPage from '../../../pageObjects/enterprise/dashboardEvans/photosTab.po.js';
 import dashboardAccountingNotesData from '../../../testData/enterprise/enterpriseCompanySettings/DashboardAccountingNotes.json' with { type: 'json' };
+import getRandomNumber from '../../../utils/randomNumber.js';
 import { searchJobNumber } from '../../../utils/searchJobNumber.js';
 
 test('Photos Tab Upload and Download Validation', async ({ authenticatedPage }) => {
@@ -87,17 +88,24 @@ test('Photos Tab Upload and Download Validation', async ({ authenticatedPage }) 
   // Verify Create Album button is visible
   await expect(await photosTabPage.verifyCreateAlbumButtonVisible(albumModalFrame)).toBeVisible();
 
+  // Enter album name
+  const albumName = `Automate${getRandomNumber(1, 9999)}`;
+  await photosTabPage.enterNewAlbumName(albumModalFrame, albumName);
+
   // Verify Cancel button is visible
   await expect(await photosTabPage.verifyCancelButtonVisible(albumModalFrame)).toBeVisible();
 
-  // Click Cancel button
-  await photosTabPage.clickCancelButtonInModal(albumModalFrame);
+  // Click Create Album button
+  await photosTabPage.clickCreateAlbumButtonInModal(albumModalFrame);
 
   // Verify the iframe is closed
   await photosTabPage.verifyAlbumModalClosed();
 
   // Click on manage photos and albums button
   await photosTabPage.navigateToManagePhotosAndAlbums();
+
+  await this.page.reload();
+  await this.page.waitForLoadState('networkidle');
 
   // Verify All button is visible in manage photos and albums page
   await expect(await photosTabPage.verifySelectAllButtonVisible()).toBeVisible();
@@ -129,6 +137,15 @@ test('Photos Tab Upload and Download Validation', async ({ authenticatedPage }) 
   // Verify sort photos label is visible in manage photos and albums page
   await expect(await photosTabPage.verifySortPhotosLabelVisible()).toBeVisible();
 
+  // Verify the new album is created and visible on the page manage photos and albums page
+  await expect(await photosTabPage.verifyAlbumCreatedAndVisible(albumName)).toBeVisible();
+
+  // Click on the newly created album
+  await photosTabPage.clickOnCreatedAlbum(albumName);
+
+  // Click on Delete Album button
+  await photosTabPage.clickDeleteAlbumButton();
+
   // Click on all button to enable all photos
   await photosTabPage.clickSelectAllButton();
 
@@ -146,6 +163,4 @@ test('Photos Tab Upload and Download Validation', async ({ authenticatedPage }) 
 
   // Assert Auto Generate Photos Tags are present
   await photosTabPage.verifyAutoGeneratePhotoTagsPresent();
-
-  //
 });

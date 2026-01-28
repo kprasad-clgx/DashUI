@@ -60,10 +60,21 @@ class DashboardEquipmentTabPage {
   // Verify Export to Excel button is visible
   async verifyExportToExcelButtonVisible() {
     const exportToExcelButton = this.page.locator(
-      DashboardEquipmentTabLocators.exportToExcelButton
+      DashboardEquipmentTabLocators.exportToExcelButton,
     );
     await exportToExcelButton.waitFor({ state: 'visible' });
     return exportToExcelButton;
+  }
+
+  // Click on Export to Excel button and wait for download
+  async clickExportToExcelAndAssertDownload() {
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      this.clickExportToExcelButton(),
+    ]);
+    const suggestedFilename = await download.suggestedFilename();
+    // Assert filename starts with 'Equipment' and ends with '.xlsx'
+    return suggestedFilename.startsWith('Equipment') && suggestedFilename.endsWith('.xlsx');
   }
 
   // Verify Export to PDF button is visible
@@ -73,11 +84,22 @@ class DashboardEquipmentTabPage {
     return exportToPDFButton;
   }
 
+  // Click on Export to PDF button and wait for download
+  async clickExportToPDFAndAssertDownload() {
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      this.clickExportToPDFButton(),
+    ]);
+    const suggestedFilename = await download.suggestedFilename();
+    // Assert filename starts with 'Equipment' and ends with '.pdf'
+    return suggestedFilename.startsWith('Equipment') && suggestedFilename.endsWith('.pdf');
+  }
+
   // Verify Equipment Name column header is visible
   async verifyEquipmentNameColumnHeaderVisible() {
     const equipmentNameColumnHeader = this.page.locator(
       DashboardEquipmentTabLocators.equipmentNameColumnHeader,
-      { hasText: 'Equipment Name' }
+      { hasText: 'Equipment Name' },
     );
     await equipmentNameColumnHeader.waitFor({ state: 'visible' });
     return equipmentNameColumnHeader;
@@ -87,7 +109,7 @@ class DashboardEquipmentTabPage {
   async verifyEquipmentTypeColumnHeaderVisible() {
     const equipmentTypeColumnHeader = this.page.locator(
       DashboardEquipmentTabLocators.equipmentTypeColumnHeader,
-      { hasText: 'Equipment Type' }
+      { hasText: 'Equipment Type' },
     );
     await equipmentTypeColumnHeader.waitFor({ state: 'visible' });
     return equipmentTypeColumnHeader;
@@ -97,7 +119,7 @@ class DashboardEquipmentTabPage {
   async verifyBarcodeTextColumnHeaderVisible() {
     const barcodeTextColumnHeader = this.page.locator(
       DashboardEquipmentTabLocators.barcodeTextColumnHeader,
-      { hasText: 'Barcode Text' }
+      { hasText: 'Barcode Text' },
     );
     await barcodeTextColumnHeader.waitFor({ state: 'visible' });
     return barcodeTextColumnHeader;
@@ -107,7 +129,7 @@ class DashboardEquipmentTabPage {
   async verifyStartDateColumnHeaderVisible() {
     const startDateColumnHeader = this.page.locator(
       DashboardEquipmentTabLocators.startDateColumnHeader,
-      { hasText: 'Start Date' }
+      { hasText: 'Start Date' },
     );
     await startDateColumnHeader.waitFor({ state: 'visible' });
     return startDateColumnHeader;
@@ -117,7 +139,7 @@ class DashboardEquipmentTabPage {
   async verifyEndDateColumnHeaderVisible() {
     const endDateColumnHeader = this.page.locator(
       DashboardEquipmentTabLocators.endDateColumnHeader,
-      { hasText: 'End Date' }
+      { hasText: 'End Date' },
     );
     await endDateColumnHeader.waitFor({ state: 'visible' });
     return endDateColumnHeader;
@@ -127,7 +149,7 @@ class DashboardEquipmentTabPage {
   async verifyDaysOnJobColumnHeaderVisible() {
     const daysOnJobColumnHeader = this.page.locator(
       DashboardEquipmentTabLocators.daysOnJobColumnHeader,
-      { hasText: 'Days on Job' }
+      { hasText: 'Days on Job' },
     );
     await daysOnJobColumnHeader.waitFor({ state: 'visible' });
     return daysOnJobColumnHeader;

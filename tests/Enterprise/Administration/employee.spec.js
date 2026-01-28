@@ -90,7 +90,7 @@ test('Verify Add New and Disable Employee Functionality', async ({ authenticated
 
   // Verify success message
   const successMessage = await employeePage.verifySuccessMessage(
-    'Employee details updated successfully.'
+    'Employee details updated successfully.',
   );
   await expect(successMessage).toHaveText('Employee details updated successfully.');
 
@@ -115,47 +115,30 @@ test('Verify Add New and Disable Employee Functionality', async ({ authenticated
   // Click on edit link after verifying count
   await employeePage.clickEditLinkByName();
 
-  // Deactivate the employee locator
-  const deactivateCheckbox = page.locator('#ctl00_ContentPlaceHolder1_chkInactive');
-  await expect(deactivateCheckbox).toBeVisible();
-  await expect(deactivateCheckbox).not.toBeChecked();
-
-  await deactivateCheckbox.check(); // Deactivate the employee
-  await page.waitForLoadState('networkidle');
+  // Deactivate the employee
+  await expect(await employeePage.verifyDeactivateCheckboxVisible()).toBeVisible();
+  await expect(await employeePage.verifyDeactivateCheckboxNotChecked()).not.toBeChecked();
+  await employeePage.checkDeactivateCheckbox();
 
   // Click on Save button
   await employeePage.clickSaveButton();
-  await page.waitForLoadState('networkidle');
 
   // Reassign to an Active Employee modal should appear
-  const reassignModal = page.locator('#RadWindowWrapper_ctl00_ContentPlaceHolder1_window_Common');
-  await expect(reassignModal).toBeVisible({ timeout: 20000 });
+  await expect(await employeePage.verifyReassignModalVisible()).toBeVisible({ timeout: 20000 });
 
   // Assert heading of the modal
-  const modalHeading = reassignModal.locator('em');
-  await expect(modalHeading).toHaveText('Reassign to an Active Employee');
+  await expect(await employeePage.verifyReassignModalHeading()).toHaveText(
+    'Reassign to an Active Employee',
+  );
 
   // Wait for the iframe to be attached and visible
-  await expect(page.locator('iframe[name="window_Common"]')).toBeVisible({ timeout: 20000 });
-
-  // Get its frame locator for interacting with elements inside
-  const reassignFrame = page.frameLocator('iframe[name="window_Common"]');
-
-  // Wait for the OK button to be visible before clicking
-  const okButton = reassignFrame.locator('input[type="submit"][value="OK"], button:has-text("OK")');
-  await expect(okButton).toBeVisible({ timeout: 10000 });
-
-  // Prepare to accept the alert dialog after modal closes
-  page.once('dialog', async (dialog) => {
-    await dialog.accept();
-  });
+  await expect(await employeePage.verifyReassignIframeVisible()).toBeVisible({ timeout: 20000 });
 
   // Click the OK button to confirm reassignment
-  await okButton.click();
+  await employeePage.clickReassignOkButton();
 
-  // Wait for the modal to close (become hidden or detached)
-  await expect(reassignModal).toBeHidden({ timeout: 20000 });
-  await page.waitForLoadState('networkidle');
+  // Wait for the modal to close
+  await employeePage.waitForReassignModalToClose();
 
   // Click on Show Inactive Employees
   await employeePage.clickShowInactiveEmployeesCheckbox();
@@ -174,11 +157,4 @@ test('Verify Add New and Disable Employee Functionality', async ({ authenticated
   // Verify only one employee is found
   const editLinksCountInActive = await employeePage.getEditLinksCount();
   expect(editLinksCountInActive).toBe(1);
-
-  //
 });
-
-// Storage state persists session - no logout needed
-/* test.afterEach(async ({ page, context }) => {
-  // Logout and cleanup
-}); */

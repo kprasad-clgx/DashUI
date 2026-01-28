@@ -163,7 +163,7 @@ class AcceptJobPage {
         response.url().includes('gvAcceptClaims') ||
         response.url().includes('AcceptClaims') ||
         response.status() === 200,
-      { timeout: 10000 }
+      { timeout: 10000 },
     );
 
     await refreshButton.click();
@@ -207,7 +207,7 @@ class AcceptJobPage {
     const actualFileName = download.suggestedFilename();
     if (!actualFileName.startsWith('ClaimsToAccept_') || !actualFileName.endsWith('.xlsx')) {
       throw new Error(
-        `Expected file name pattern: ClaimsToAccept_MM-DD-YYYY.xlsx, but got: ${actualFileName}`
+        `Expected file name pattern: ClaimsToAccept_MM-DD-YYYY.xlsx, but got: ${actualFileName}`,
       );
     }
 

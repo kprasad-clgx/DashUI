@@ -21,7 +21,7 @@ export function saveJobNumber(jobNumber, customerName, filePath, jobName, additi
   };
   fs.writeFileSync(fullPath, JSON.stringify(data, null, 2), 'utf-8');
   console.log(
-    `Job number saved to ${filePath}: ${jobNumber}, Customer: ${customerName}, Job Name: ${jobName}`
+    `Job number saved to ${filePath}: ${jobNumber}, Customer: ${customerName}, Job Name: ${jobName}`,
   );
 }
 
@@ -119,6 +119,4 @@ export function saveJobNumberForCompanySettings(jobNumber, jobNumberWithName) {
     const fullPath = path.resolve(file.path);
     fs.writeFileSync(fullPath, JSON.stringify(file.data, null, 2), 'utf-8');
   });
-
-  console.log(`Job number ${jobNumber} saved to ${files.length} Company Settings JSON files`);
 }

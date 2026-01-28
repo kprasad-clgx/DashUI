@@ -38,9 +38,5 @@ test('Reset Purchase Order Page', async ({ authenticatedPage }) => {
 
   // Verify Status grid header is visible
   const statusGridHeader = await resetPurchaseOrderPage.verifyStatusGridHeader();
+  await expect(statusGridHeader).toBeVisible();
 });
-
-// Storage state persists session - no logout needed
-/* test.afterEach(async ({ page, context }) => {
-  // Logout and cleanup
-}); */

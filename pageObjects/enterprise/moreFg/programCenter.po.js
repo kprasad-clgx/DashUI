@@ -14,7 +14,7 @@ export class ProgramCenterPage {
       exact: true,
     });
     this.globalDocumentHeader = page.locator(
-      '#ctl00_ContentPlaceHolder1_Control_ProviderProgramCenter_Control_ProviderProgramDocument_PanelTitle'
+      '#ctl00_ContentPlaceHolder1_Control_ProviderProgramCenter_Control_ProviderProgramDocument_PanelTitle',
     );
   }
 
@@ -34,7 +34,7 @@ export class ProgramCenterPage {
         .getByText(label.replace(/:$/, ''), { exact: false })
         .first();
       const textContent = await labelLocator.evaluate((el) =>
-        el.textContent.trim().replace(/\s+/g, ' ')
+        el.textContent.trim().replace(/\s+/g, ' '),
       );
 
       if (variableNumberLabels.includes(label)) {
@@ -53,7 +53,7 @@ export class ProgramCenterPage {
         exact: false,
       });
       const textContent = await headerLocator.evaluate((el) =>
-        el.textContent.replace(/\s+/g, ' ').trim()
+        el.textContent.replace(/\s+/g, ' ').trim(),
       );
       const expectedNormalized = header.replace(/\s+/g, ' ').trim();
       expect(textContent).toBe(expectedNormalized);

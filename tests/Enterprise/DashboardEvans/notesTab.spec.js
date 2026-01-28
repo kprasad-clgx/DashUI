@@ -77,6 +77,11 @@ test('Notes Tab Validation', async ({ authenticatedPage }) => {
   // Select public from visibility dropdown and click Change Visibility button
   await notesTabPage.selectVisibilityAndChange('Private');
 
-  // Verify first row in Visibility column has updated to Private
-  //  await expect(await notesTabPage.verifyVisibilityColumnFirstData('Private')).toBeVisible();
+  // Click on export to excel button and assert download
+  const downloadSuccess = await notesTabPage.downloadAndAssertExcel();
+  expect(downloadSuccess).toBeTruthy();
+
+  // Click on export to PDF button and assert download
+  const pdfDownloadSuccess = await notesTabPage.downloadAndAssertPDF();
+  expect(pdfDownloadSuccess).toBeTruthy();
 });

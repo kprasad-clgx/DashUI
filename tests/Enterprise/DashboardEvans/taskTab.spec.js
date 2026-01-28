@@ -14,7 +14,7 @@ test('Compliance Tasks Tab Validation', async ({ authenticatedPage }) => {
 
   // Assert the text of the Compliance Manager label
   await expect(await complianceTasksTabPage.verifyComplianceManagerLabel()).toHaveText(
-    'Compliance Manager'
+    'Compliance Manager',
   );
 
   // Validate Reassign button is visible

@@ -24,11 +24,11 @@ test('Add New Division to Job, Delete Newly Created Job and Assert Cannot Copy N
   await createJobPage.selectCustomer(
     newJobData.customerName,
     newJobData.customerFirstName,
-    newJobData.customerLastName
+    newJobData.customerLastName,
   );
   await createJobPage.checkSameAsCustomerAddress(
     newJobData.customerFirstName,
-    newJobData.customerLastName
+    newJobData.customerLastName,
   );
   await createJobPage.checkWaterMitigation();
   await createJobPage.fillLossDescription(newJobData.lossDescription);
@@ -95,7 +95,7 @@ test('Add New Division to Job, Delete Newly Created Job and Assert Cannot Copy N
 
   // Assert that the last tab text is "Aircraft Restoration"
   await expect(await addNewDivisionPage.verifyLastTabText('Aircraft Restoration')).toHaveText(
-    'Aircraft Restoration'
+    'Aircraft Restoration',
   );
 
   // Click the last tab and wait for it to be selected
@@ -121,6 +121,9 @@ test('Add New Division to Job, Delete Newly Created Job and Assert Cannot Copy N
   await deleteJobPage.deleteJob();
 
   await page.waitForLoadState('networkidle');
+
+  // Verify job assignment link is visible
+  await expect(await deleteJobPage.verifyJobAssignmentLinkVisible()).toBeVisible();
 
   // Navigate to Notes tab
   await notesTabPage.navigateToNotesTab();

@@ -44,7 +44,7 @@ class RoleBasedSecurityPage {
     // Select Role Based Security Option in dropdown
     const roleBasedSecurityOption = this.page.locator(
       RoleBasedSecurityLocators.roleBasedSecurityOption,
-      { hasText: 'Role Based Security Management' }
+      { hasText: 'Role Based Security Management' },
     );
     await roleBasedSecurityOption.waitFor({
       state: 'visible',

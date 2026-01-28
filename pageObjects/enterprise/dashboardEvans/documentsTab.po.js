@@ -56,10 +56,21 @@ class DashboardDocumentsTabPage {
     await this.page.waitForTimeout(5000);
   }
 
+  // Verify Document Categories Option Header is visible
+  async verifyDocumentCategoriesOptionHeaderVisible(headerText) {
+    // This regex matches headerText with any number in parentheses, e.g., Accounting(0), Accounting(5)
+    const regex = new RegExp(`^${headerText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\(\\d+\\)$`);
+    const documentCategoriesOptionHeader = this.page.locator('a.grey_text_l2_b', {
+      hasText: regex,
+    });
+    await documentCategoriesOptionHeader.waitFor({ state: 'visible' });
+    return documentCategoriesOptionHeader;
+  }
+
   // Verify Create Category button is visible
   async verifyCreateCategoryButtonVisible() {
     const createCategoryButton = this.page.locator(
-      DashboardDocumentsTabLocators.createCategoryButton
+      DashboardDocumentsTabLocators.createCategoryButton,
     );
     await createCategoryButton.waitFor({ state: 'visible' });
     return createCategoryButton;
@@ -68,7 +79,7 @@ class DashboardDocumentsTabPage {
   // Verify Upload Document button is visible
   async verifyUploadDocumentButtonVisible() {
     const uploadDocumentButton = this.page.locator(
-      DashboardDocumentsTabLocators.uploadDocumentButton
+      DashboardDocumentsTabLocators.uploadDocumentButton,
     );
     await uploadDocumentButton.waitFor({ state: 'visible' });
     return uploadDocumentButton;
@@ -77,16 +88,30 @@ class DashboardDocumentsTabPage {
   // Verify Manage Job Documents button is visible
   async verifyManageJobDocumentsButtonVisible() {
     const manageJobDocumentsButton = this.page.locator(
-      DashboardDocumentsTabLocators.manageJobDocumentsButton
+      DashboardDocumentsTabLocators.manageJobDocumentsButton,
     );
     await manageJobDocumentsButton.waitFor({ state: 'visible' });
     return manageJobDocumentsButton;
   }
 
+  // Click on Manage Job Documents button
+  async clickManageJobDocumentsButton() {
+    const manageJobDocumentsButton = this.page.locator(
+      DashboardDocumentsTabLocators.manageJobDocumentsButton,
+    );
+    await manageJobDocumentsButton.click();
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  // Verify on Manage Job Documents is redirected to Manage Job Documents page
+  async verifyOnManageJobDocumentsPage() {
+    return this.page.url().includes('JImageDocument');
+  }
+
   // Click Create Category button
   async clickCreateCategoryButton() {
     const createCategoryButton = this.page.locator(
-      DashboardDocumentsTabLocators.createCategoryButton
+      DashboardDocumentsTabLocators.createCategoryButton,
     );
     await createCategoryButton.click();
     await this.page.waitForTimeout(3000);
@@ -143,7 +168,7 @@ class DashboardDocumentsTabPage {
   // Verify Documents Categories Table header is visible
   async verifyDocumentsCategoriesTableHeaderVisible() {
     const documentsCategoriesTableHeader = this.page.locator(
-      DashboardDocumentsTabLocators.documentsCategoriesTableHeader
+      DashboardDocumentsTabLocators.documentsCategoriesTableHeader,
     );
     await documentsCategoriesTableHeader.waitFor({ state: 'visible' });
     return documentsCategoriesTableHeader;
@@ -153,7 +178,7 @@ class DashboardDocumentsTabPage {
   async verifyAccountingAlbumVisible() {
     const accountingAlbum = this.page.locator(
       DashboardDocumentsTabLocators.accountingAlbumInDocumentCategories,
-      { hasText: /Accounting\(\d+\)/ }
+      { hasText: /Accounting\(\d+\)/ },
     );
     await accountingAlbum.waitFor({ state: 'visible' });
     return accountingAlbum;
@@ -163,7 +188,7 @@ class DashboardDocumentsTabPage {
   async verifyMoistureMappingAlbumVisible() {
     const moistureMappingAlbum = this.page.locator(
       DashboardDocumentsTabLocators.moistureMappingAlbumInDocumentCategories,
-      { hasText: /Moisture_Mapping\(\d+\)/ }
+      { hasText: /Moisture_Mapping\(\d+\)/ },
     );
     await moistureMappingAlbum.waitFor({ state: 'visible' });
     return moistureMappingAlbum;
@@ -173,7 +198,7 @@ class DashboardDocumentsTabPage {
   async verifySignedChangeOrdersAlbumVisible() {
     const signedChangeOrdersAlbum = this.page.locator(
       DashboardDocumentsTabLocators.signedChangeOrdersAlbumInDocumentCategories,
-      { hasText: /Signed Change Orders\(\d+\)/ }
+      { hasText: /Signed Change Orders\(\d+\)/ },
     );
     await signedChangeOrdersAlbum.waitFor({ state: 'visible' });
     return signedChangeOrdersAlbum;
@@ -182,7 +207,7 @@ class DashboardDocumentsTabPage {
   // Click Upload Document button
   async clickUploadDocumentButton() {
     const uploadDocumentButton = this.page.locator(
-      DashboardDocumentsTabLocators.uploadDocumentButton
+      DashboardDocumentsTabLocators.uploadDocumentButton,
     );
     await uploadDocumentButton.click();
     await this.page.waitForTimeout(3000);
@@ -191,7 +216,7 @@ class DashboardDocumentsTabPage {
   // Verify Upload popup close button is visible and click it
   async verifyUploadPopupCloseButtonVisible() {
     const uploadPopupCloseButton = this.page.locator(
-      DashboardDocumentsTabLocators.uploadPopupCloseButton
+      DashboardDocumentsTabLocators.uploadPopupCloseButton,
     );
     await uploadPopupCloseButton.waitFor({ state: 'visible' });
     return uploadPopupCloseButton;
@@ -200,7 +225,7 @@ class DashboardDocumentsTabPage {
   // Click Upload popup close button
   async clickUploadPopupCloseButton() {
     const uploadPopupCloseButton = this.page.locator(
-      DashboardDocumentsTabLocators.uploadPopupCloseButton
+      DashboardDocumentsTabLocators.uploadPopupCloseButton,
     );
     await uploadPopupCloseButton.click();
   }

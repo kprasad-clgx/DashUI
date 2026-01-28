@@ -50,8 +50,3 @@ test('Show Admin Job Only in Grid', async ({ authenticatedPage }) => {
   const adminClaimInfoSection = await showAdminJobPage.verifyAdminClaimInfoSection();
   await expect(adminClaimInfoSection).toBeVisible();
 });
-
-// Storage state persists session - no logout needed
-/* test.afterEach(async ({ page, context }) => {
-  // Logout and cleanup
-}); */

@@ -397,7 +397,7 @@ class EnterpriseEstimatePage {
   async assertEstimateFileName(download, jobNumber) {
     const fileName = await download.suggestedFilename();
     const pattern = new RegExp(
-      `^Job-Estimate-${jobNumber.replace(/-/g, '\\-')}(-[A-Z]+)?(\\(\\d+\\))?\\.xls$`
+      `^Job-Estimate-${jobNumber.replace(/-/g, '\\-')}(-[A-Z]+)?(\\(\\d+\\))?\\.xls$`,
     );
     expect(fileName).toMatch(pattern);
   }

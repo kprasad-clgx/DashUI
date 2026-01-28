@@ -65,9 +65,16 @@ const DashboardInvoicesTabLocators = {
   invoiceMemoColumnHeader: '#ctl00_ContentPlaceHolder1_gvInvoices_GridHeader th a',
   invoiceMemoLabel: '#ctl00_ContentPlaceHolder1_gvInvoices_ctl00_ctl02_ctl04_lblReceivableNotes',
   invoiceAmountLabel: '#ctl00_ContentPlaceHolder1_gvInvoices_ctl00_ctl02_ctl04_lblAmount',
+  invoiceMemoInput: '#ctl00_ContentPlaceHolder1_gvInvoices_ctl00_ctl02_ctl04_txtReceivableNotes',
+  invoiceAmountInput: '#ctl00_ContentPlaceHolder1_gvInvoices_ctl00_ctl02_ctl04_txtAmount',
   saveButton: '#ctl00_ContentPlaceHolder1_gvInvoices_ctl00_ctl02_ctl04_btnUpdate',
   cancelButton: '#ctl00_ContentPlaceHolder1_gvInvoices_ctl00_ctl02_ctl04_btnCancel',
   backToSlideBoardButton: '#ctl00_ContentPlaceHolder1_btnBacktoSlideBoard',
+  noteFilterInput:
+    '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Invoices_userControl_gvInvoices_ctl00_ctl02_ctl03_FilterTextBox_ReceivableNote',
+  invoiceRows:
+    '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Invoices_userControl_gvInvoices_GridData table.rgMasterTable > tbody > tr.rgRow, ' +
+    '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Invoices_userControl_gvInvoices_GridData table.rgMasterTable > tbody > tr.rgAltRow',
 };
 
 class DashboardInvoicesTabPage {
@@ -113,6 +120,17 @@ class DashboardInvoicesTabPage {
     return exportToExcelButton;
   }
 
+  // Click on Export to Excel button and wait for download
+  async clickExportToExcelAndAssertDownload() {
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      (await this.verifyExportToExcelButtonVisible()).click(),
+    ]);
+    const suggestedFilename = await download.suggestedFilename();
+    // Assert filename contains 'Invoices' and ends with '.xlsx'
+    return suggestedFilename.includes('Invoices') && suggestedFilename.endsWith('.xlsx');
+  }
+
   // Verify Export to PDF button is visible
   async verifyExportToPDFButtonVisible() {
     const exportToPDFButton = this.page.locator(DashboardInvoicesTabLocators.exportToPDFButton);
@@ -120,11 +138,22 @@ class DashboardInvoicesTabPage {
     return exportToPDFButton;
   }
 
+  // Click on Export to PDF button and wait for download
+  async clickExportToPDFAndAssertDownload() {
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      (await this.verifyExportToPDFButtonVisible()).click(),
+    ]);
+    const suggestedFilename = await download.suggestedFilename();
+    // Assert filename contains 'Invoices' and ends with '.pdf'
+    return suggestedFilename.includes('Invoices') && suggestedFilename.endsWith('.pdf');
+  }
+
   // Verify Invoice PDF column header is visible
   async verifyInvoicePDFColumnHeaderVisible() {
     const invoicePDFColumnHeader = this.page.locator(
       DashboardInvoicesTabLocators.invoicePDFColumnHeader,
-      { hasText: 'Invoice PDF' }
+      { hasText: 'Invoice PDF' },
     );
     await invoicePDFColumnHeader.waitFor({ state: 'visible', timeout: 60000 });
     return invoicePDFColumnHeader;
@@ -134,7 +163,7 @@ class DashboardInvoicesTabPage {
   async verifyInvoiceNoColumnHeaderVisible() {
     const invoiceNoColumnHeader = this.page.locator(
       DashboardInvoicesTabLocators.invoiceNoColumnHeader,
-      { hasText: 'Invoice No.' }
+      { hasText: 'Invoice No.' },
     );
     await invoiceNoColumnHeader.waitFor({ state: 'visible' });
     return invoiceNoColumnHeader;
@@ -153,7 +182,7 @@ class DashboardInvoicesTabPage {
   async verifyCustomerColumnHeaderVisible() {
     const customerColumnHeader = this.page.locator(
       DashboardInvoicesTabLocators.customerColumnHeader,
-      { hasText: 'Customer' }
+      { hasText: 'Customer' },
     );
     await customerColumnHeader.waitFor({ state: 'visible' });
     return customerColumnHeader;
@@ -163,7 +192,7 @@ class DashboardInvoicesTabPage {
   async verifyInvoiceDateColumnHeaderVisible() {
     const invoiceDateColumnHeader = this.page.locator(
       DashboardInvoicesTabLocators.invoiceDateColumnHeader,
-      { hasText: 'Invoice Date' }
+      { hasText: 'Invoice Date' },
     );
     await invoiceDateColumnHeader.waitFor({ state: 'visible' });
     return invoiceDateColumnHeader;
@@ -182,7 +211,7 @@ class DashboardInvoicesTabPage {
   async verifyTaxIncludedColumnHeaderVisible() {
     const taxIncludedColumnHeader = this.page.locator(
       DashboardInvoicesTabLocators.taxIncludedColumnHeader,
-      { hasText: 'Tax Included' }
+      { hasText: 'Tax Included' },
     );
     await taxIncludedColumnHeader.waitFor({ state: 'visible' });
     return taxIncludedColumnHeader;
@@ -206,7 +235,7 @@ class DashboardInvoicesTabPage {
   // Verify Invoice detail page Add New button is visible
   async verifyInvoiceDetailAddNewButtonVisible() {
     const invoiceDetailAddNewButton = this.page.locator(
-      DashboardInvoicesTabLocators.invoiceDetailAddNewButton
+      DashboardInvoicesTabLocators.invoiceDetailAddNewButton,
     );
     await invoiceDetailAddNewButton.waitFor({ state: 'visible' });
     return invoiceDetailAddNewButton;
@@ -215,7 +244,7 @@ class DashboardInvoicesTabPage {
   // Verify Invoice detail page Refresh button is visible
   async verifyInvoiceDetailRefreshButtonVisible() {
     const invoiceDetailRefreshButton = this.page.locator(
-      DashboardInvoicesTabLocators.invoiceDetailRefreshButton
+      DashboardInvoicesTabLocators.invoiceDetailRefreshButton,
     );
     await invoiceDetailRefreshButton.waitFor({ state: 'visible' });
     return invoiceDetailRefreshButton;
@@ -225,7 +254,7 @@ class DashboardInvoicesTabPage {
   async verifyJobNumberColumnHeaderVisible() {
     const jobNumberColumnHeader = this.page.locator(
       DashboardInvoicesTabLocators.jobNumberColumnHeader,
-      { hasText: 'Job Number' }
+      { hasText: 'Job Number' },
     );
     await jobNumberColumnHeader.waitFor({ state: 'visible' });
     return jobNumberColumnHeader;
@@ -235,7 +264,7 @@ class DashboardInvoicesTabPage {
   async verifyInvoiceNumberColumnHeaderVisible() {
     const invoiceNumberColumnHeader = this.page.locator(
       DashboardInvoicesTabLocators.invoiceNumberColumnHeader,
-      { hasText: 'Invoice Number' }
+      { hasText: 'Invoice Number' },
     );
     await invoiceNumberColumnHeader.waitFor({
       state: 'visible',
@@ -248,7 +277,7 @@ class DashboardInvoicesTabPage {
   async verifyInvoiceMemoColumnHeaderVisible() {
     const invoiceMemoColumnHeader = this.page.locator(
       DashboardInvoicesTabLocators.invoiceMemoColumnHeader,
-      { hasText: 'Invoice Memo' }
+      { hasText: 'Invoice Memo' },
     );
     await invoiceMemoColumnHeader.waitFor({ state: 'visible' });
     return invoiceMemoColumnHeader;
@@ -257,7 +286,7 @@ class DashboardInvoicesTabPage {
   // Click Invoice Detail Add New button
   async clickInvoiceDetailAddNewButton() {
     const invoiceDetailAddNewButton = this.page.locator(
-      DashboardInvoicesTabLocators.invoiceDetailAddNewButton
+      DashboardInvoicesTabLocators.invoiceDetailAddNewButton,
     );
     await invoiceDetailAddNewButton.click();
     await this.page.waitForLoadState('networkidle');
@@ -294,7 +323,7 @@ class DashboardInvoicesTabPage {
   // Verify Back to Slide Board button is visible
   async verifyBackToSlideBoardButtonVisible() {
     const backToSlideBoardButton = this.page.locator(
-      DashboardInvoicesTabLocators.backToSlideBoardButton
+      DashboardInvoicesTabLocators.backToSlideBoardButton,
     );
     await backToSlideBoardButton.waitFor({ state: 'visible' });
     return backToSlideBoardButton;
@@ -303,10 +332,50 @@ class DashboardInvoicesTabPage {
   // Click Back to Slide Board button
   async clickBackToSlideBoardButton() {
     const backToSlideBoardButton = this.page.locator(
-      DashboardInvoicesTabLocators.backToSlideBoardButton
+      DashboardInvoicesTabLocators.backToSlideBoardButton,
     );
     await backToSlideBoardButton.click();
     await this.page.waitForLoadState('networkidle');
+  }
+
+  // Fill invoice memo field
+  async fillInvoiceMemo(memoText) {
+    const invoiceMemoInput = this.page.locator(DashboardInvoicesTabLocators.invoiceMemoInput);
+    await invoiceMemoInput.waitFor({ state: 'visible' });
+    await invoiceMemoInput.click();
+    await invoiceMemoInput.fill(memoText.toString());
+  }
+
+  // Fill invoice amount field
+  async fillInvoiceAmount(amount) {
+    const invoiceAmountInput = this.page.locator(DashboardInvoicesTabLocators.invoiceAmountInput);
+    await invoiceAmountInput.waitFor({ state: 'visible' });
+    await invoiceAmountInput.click();
+    await invoiceAmountInput.fill(amount.toString());
+  }
+
+  // Click Save button
+  async clickSaveButton() {
+    const saveButton = this.page.locator(DashboardInvoicesTabLocators.saveButton);
+    await saveButton.click();
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  // Filter invoices by note
+  async filterByNote(noteText) {
+    const noteInput = this.page.locator(DashboardInvoicesTabLocators.noteFilterInput);
+    await noteInput.waitFor({ state: 'visible' });
+    await noteInput.click();
+    await noteInput.fill(noteText.toString());
+    await this.page.keyboard.press('Enter');
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  // Assert invoice row count
+  async assertInvoiceRowCount() {
+    const invoiceRows = this.page.locator(DashboardInvoicesTabLocators.invoiceRows);
+    await invoiceRows.first().waitFor({ state: 'visible', timeout: 5000 });
+    return invoiceRows;
   }
 
   // Get expected invoice detail text

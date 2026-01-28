@@ -28,7 +28,7 @@ function log(message, color = '') {
 }
 
 console.log(
-  `\n${colors.bold}${colors.blue}🔍 DashUI Framework Setup Verification${colors.reset}\n`
+  `\n${colors.bold}${colors.blue}🔍 DashUI Framework Setup Verification${colors.reset}\n`,
 );
 
 let hasErrors = false;

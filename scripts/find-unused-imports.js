@@ -31,7 +31,7 @@ function analyzeFile(filePath) {
             item
               .trim()
               .replace(/\s+as\s+.*$/, '')
-              .trim()
+              .trim(),
           );
           importedItems.push(...named);
         }
@@ -147,7 +147,7 @@ const outputFile = 'UNUSED_IMPORTS_REPORT.txt';
 const reportContent = allResults
   .map(
     (r) =>
-      `FILE: ${r.file}\nLINE ${r.line}: ${r.import}\nREASON: ${r.unused} is never used in the file\n`
+      `FILE: ${r.file}\nLINE ${r.line}: ${r.import}\nREASON: ${r.unused} is never used in the file\n`,
   )
   .join('\n');
 

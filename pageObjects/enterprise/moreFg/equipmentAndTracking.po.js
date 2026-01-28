@@ -7,7 +7,7 @@ export class EquipmentAndTrackingPage {
     this.equipmentAndTrackingMenuItem = page.getByText('Equipment and Tracking', { exact: true });
     this.equipmentDashboardText = page.locator(
       '#ctl00_ContentPlaceHolder1_lblDashBoard.Heading_red + .Heading_blue',
-      { hasText: 'Equipment Dashboard' }
+      { hasText: 'Equipment Dashboard' },
     );
     this.addViewUpdateEquipmentButton = page.locator('#ctl00_ContentPlaceHolder1_Button2');
     this.moveEquipmentButton = page.locator('#ctl00_ContentPlaceHolder1_Button1');
@@ -15,16 +15,16 @@ export class EquipmentAndTrackingPage {
     // Tab 1: Equipment Currently Being Billed
     this.equipmentCurrentlyBilledTab = page.locator(
       '#ctl00_ContentPlaceHolder1_RadTabStrip1 .rtsTxt',
-      { hasText: 'Equipment Currently Being Billed' }
+      { hasText: 'Equipment Currently Being Billed' },
     );
     this.equipmentCurrentlyBilledExportToExcelButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_grEquipmentBilled_ctl00_ctl02_ctl00_ExportToExcelButton'
+      '#ctl00_ContentPlaceHolder1_grEquipmentBilled_ctl00_ctl02_ctl00_ExportToExcelButton',
     );
     this.equipmentCurrentlyBilledExportToPdfButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_grEquipmentBilled_ctl00_ctl02_ctl00_ExportToPdfButton'
+      '#ctl00_ContentPlaceHolder1_grEquipmentBilled_ctl00_ctl02_ctl00_ExportToPdfButton',
     );
     this.equipmentCurrentlyBilledGridColumnHeaders = page.locator(
-      '#ctl00_ContentPlaceHolder1_grEquipmentBilled_GridHeader .rgHeader a'
+      '#ctl00_ContentPlaceHolder1_grEquipmentBilled_GridHeader .rgHeader a',
     );
 
     // Tab 2: Equipment Available
@@ -32,28 +32,28 @@ export class EquipmentAndTrackingPage {
       hasText: 'Equipment Available',
     });
     this.equipmentAvailableGridColumnHeaders = page.locator(
-      '#ctl00_ContentPlaceHolder1_rdEqupAvailable_GridHeader a'
+      '#ctl00_ContentPlaceHolder1_rdEqupAvailable_GridHeader a',
     );
     this.equipmentAvailableExportToExcelButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_rdEqupAvailable_ctl00_ctl02_ctl00_ExportToExcelButton'
+      '#ctl00_ContentPlaceHolder1_rdEqupAvailable_ctl00_ctl02_ctl00_ExportToExcelButton',
     );
     this.equipmentAvailableExportToPdfButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_rdEqupAvailable_ctl00_ctl02_ctl00_ExportToPdfButton'
+      '#ctl00_ContentPlaceHolder1_rdEqupAvailable_ctl00_ctl02_ctl00_ExportToPdfButton',
     );
 
     // Tab 3: Equipment Coming Available
     this.equipmentComingAvailableTab = page.locator(
       '#ctl00_ContentPlaceHolder1_RadTabStrip1 .rtsTxt',
-      { hasText: 'Equipment Coming Available' }
+      { hasText: 'Equipment Coming Available' },
     );
     this.equipmentComingAvailableGridColumnHeaders = page.locator(
-      '#ctl00_ContentPlaceHolder1_rdEquipComAvailable_GridHeader a'
+      '#ctl00_ContentPlaceHolder1_rdEquipComAvailable_GridHeader a',
     );
     this.equipmentComingAvailableExportToExcelButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_rdEquipComAvailable_ctl00_ctl02_ctl00_ExportToExcelButton'
+      '#ctl00_ContentPlaceHolder1_rdEquipComAvailable_ctl00_ctl02_ctl00_ExportToExcelButton',
     );
     this.equipmentComingAvailableExportToPdfButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_rdEquipComAvailable_ctl00_ctl02_ctl00_ExportToPdfButton'
+      '#ctl00_ContentPlaceHolder1_rdEquipComAvailable_ctl00_ctl02_ctl00_ExportToPdfButton',
     );
   }
 
@@ -87,7 +87,7 @@ export class EquipmentAndTrackingPage {
       await expect(
         this.equipmentCurrentlyBilledGridColumnHeaders.filter({
           hasText: headerText,
-        })
+        }),
       ).toBeVisible();
     }
   }
@@ -102,7 +102,7 @@ export class EquipmentAndTrackingPage {
 
     for (const headerText of headers) {
       await expect(
-        this.equipmentAvailableGridColumnHeaders.filter({ hasText: headerText })
+        this.equipmentAvailableGridColumnHeaders.filter({ hasText: headerText }),
       ).toBeVisible();
     }
 
@@ -122,7 +122,7 @@ export class EquipmentAndTrackingPage {
       await expect(
         this.equipmentComingAvailableGridColumnHeaders.filter({
           hasText: headerText,
-        })
+        }),
       ).toBeVisible();
     }
 

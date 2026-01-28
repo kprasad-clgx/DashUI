@@ -42,6 +42,14 @@ test('Survey Tab Validation', async ({ authenticatedPage }) => {
 
   // Validate Customer Service Survey Form title text is correct
   await expect(await surveyTabPage.verifyCustomerServiceSurveyFormTitle()).toHaveText(
-    'Customer Service Survey Form'
+    'Customer Service Survey Form',
   );
+
+  // Click On Export to Excel button and assert download
+  const downloadSuccess = await surveyTabPage.downloadAndAssertExcel();
+  expect(downloadSuccess).toBeTruthy();
+
+  // Click on Export to PDF button and assert download
+  const pdfDownloadSuccess = await surveyTabPage.downloadAndAssertPDF();
+  expect(pdfDownloadSuccess).toBeTruthy();
 });

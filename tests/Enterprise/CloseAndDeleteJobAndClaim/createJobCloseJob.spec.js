@@ -15,11 +15,11 @@ test('Create Job Enterprise and Close it', async ({ authenticatedPage }) => {
   await createJobPage.selectCustomer(
     newJobData.customerName,
     newJobData.customerFirstName,
-    newJobData.customerLastName
+    newJobData.customerLastName,
   );
   await createJobPage.checkSameAsCustomerAddress(
     newJobData.customerFirstName,
-    newJobData.customerLastName
+    newJobData.customerLastName,
   );
   await createJobPage.checkWaterMitigation();
   await createJobPage.fillLossDescription(newJobData.lossDescription);
@@ -36,8 +36,3 @@ test('Create Job Enterprise and Close it', async ({ authenticatedPage }) => {
   // Verify job is closed
   await createJobPage.verifyJobIsClosed();
 });
-
-// Storage state persists session - no logout needed
-/* test.afterEach(async ({ page, context }) => {
-  // Logout and cleanup
-}); */

@@ -74,7 +74,7 @@ class EmployeeSecuritySettingsPage {
   // Verify User Group Access text is visible
   async verifyUserGroupAccessTextVisible() {
     const userGroupAccessText = this.page.locator(
-      EmployeeSecuritySettingsLocators.userGroupAccessText
+      EmployeeSecuritySettingsLocators.userGroupAccessText,
     );
     await userGroupAccessText.waitFor({ state: 'visible' });
     return userGroupAccessText;
@@ -83,7 +83,7 @@ class EmployeeSecuritySettingsPage {
   // Verify User Group Access text has correct content
   async verifyUserGroupAccessTextContent() {
     const userGroupAccessText = this.page.locator(
-      EmployeeSecuritySettingsLocators.userGroupAccessText
+      EmployeeSecuritySettingsLocators.userGroupAccessText,
     );
     return userGroupAccessText;
   }
@@ -97,7 +97,7 @@ class EmployeeSecuritySettingsPage {
   // Verify Select Group dropdown is visible
   async verifySelectGroupDropdownVisible() {
     const selectGroupDropdown = this.page.locator(
-      EmployeeSecuritySettingsLocators.selectGroupDropdown
+      EmployeeSecuritySettingsLocators.selectGroupDropdown,
     );
     await selectGroupDropdown.waitFor({ state: 'visible' });
     return selectGroupDropdown;
@@ -106,7 +106,7 @@ class EmployeeSecuritySettingsPage {
   // Verify Select Group dropdown is enabled
   async verifySelectGroupDropdownEnabled() {
     const selectGroupDropdown = this.page.locator(
-      EmployeeSecuritySettingsLocators.selectGroupDropdown
+      EmployeeSecuritySettingsLocators.selectGroupDropdown,
     );
     return selectGroupDropdown;
   }

@@ -153,7 +153,7 @@ class DashboardNotesTabPage {
   // Verify Change Visibility button is visible
   async verifyChangeVisibilityButtonVisible() {
     const changeVisibilityButton = this.page.locator(
-      DashboardNotesTabLocators.changeVisibilityButton
+      DashboardNotesTabLocators.changeVisibilityButton,
     );
     await changeVisibilityButton.waitFor({ state: 'visible' });
     return changeVisibilityButton;
@@ -187,7 +187,7 @@ class DashboardNotesTabPage {
   // Verify Email Attachments header is visible
   async verifyEmailAttachmentsHeaderVisible() {
     const emailAttachmentsHeader = this.page.locator(
-      DashboardNotesTabLocators.emailAttachmentsHeader
+      DashboardNotesTabLocators.emailAttachmentsHeader,
     );
     await emailAttachmentsHeader.waitFor({ state: 'visible' });
     return emailAttachmentsHeader;
@@ -210,7 +210,7 @@ class DashboardNotesTabPage {
   // Verify Refresh Notes Grid button is visible
   async verifyRefreshNotesGridButtonVisible() {
     const refreshNotesGridButton = this.page.locator(
-      DashboardNotesTabLocators.refreshNotesGridButton
+      DashboardNotesTabLocators.refreshNotesGridButton,
     );
     await refreshNotesGridButton.waitFor({ state: 'visible' });
     return refreshNotesGridButton;
@@ -305,13 +305,13 @@ class DashboardNotesTabPage {
     await option.waitFor({ state: 'visible', timeout: 10000 });
     await option.click({ force: true });
     // Wait a moment for UI to update after dropdown selection
-    await this.page.waitForTimeout(500);
+    await this.page.waitForTimeout(3000);
 
     // Wait for any loading panels to be hidden
     await this.page.waitForLoadState('domcontentloaded');
 
     const changeVisibilityButton = this.page.locator(
-      DashboardNotesTabLocators.changeVisibilityButton
+      DashboardNotesTabLocators.changeVisibilityButton,
     );
     await changeVisibilityButton.waitFor({ state: 'visible', timeout: 10000 });
     await changeVisibilityButton.click({ force: true });
@@ -326,7 +326,7 @@ class DashboardNotesTabPage {
   async verifyVisibilityColumnFirstData(expectedVisibility = 'Private') {
     const visibilityColumnFirstData = this.page.locator(
       DashboardNotesTabLocators.visibilityColumnFirstData,
-      { hasText: expectedVisibility }
+      { hasText: expectedVisibility },
     );
     await visibilityColumnFirstData.waitFor({ state: 'visible' });
     return visibilityColumnFirstData;
@@ -412,6 +412,40 @@ class DashboardNotesTabPage {
     const frame = this.getCopyNotesFrame();
     const cancelButton = frame.locator(DashboardNotesTabLocators.cancelButton);
     await cancelButton.click();
+  }
+
+  /**
+   * Download and assert Excel file
+   * @returns {Promise<boolean>}
+   */
+  async downloadAndAssertExcel() {
+    const exportToExcelButton = this.page.locator(DashboardNotesTabLocators.exportToExcelButton);
+    await exportToExcelButton.waitFor({ state: 'visible' });
+
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      exportToExcelButton.click(),
+    ]);
+    const suggestedFilename = await download.suggestedFilename();
+    await this.page.waitForLoadState('networkidle');
+    return suggestedFilename.includes('Notes') && suggestedFilename.endsWith('.xlsx');
+  }
+
+  /**
+   * Download and assert PDF file
+   * @returns {Promise<boolean>}
+   */
+  async downloadAndAssertPDF() {
+    const exportToPDFButton = this.page.locator(DashboardNotesTabLocators.exportToPDFButton);
+    await exportToPDFButton.waitFor({ state: 'visible' });
+
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      exportToPDFButton.click(),
+    ]);
+    const suggestedFilename = await download.suggestedFilename();
+    await this.page.waitForLoadState('networkidle');
+    return suggestedFilename.includes('Notes') && suggestedFilename.endsWith('.pdf');
   }
 }
 

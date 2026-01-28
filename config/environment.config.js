@@ -30,7 +30,7 @@ function validateEnvVars(env) {
         `   1. TEST_ENV is set to: ${env}\n` +
         `   2. All ${envUpper}_* variables are configured\n` +
         `   3. No typos in variable names\n\n` +
-        `💡 See README.md for setup instructions\n`
+        `💡 See README.md for setup instructions\n`,
     );
   }
 }

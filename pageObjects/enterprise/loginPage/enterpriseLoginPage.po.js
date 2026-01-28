@@ -20,7 +20,7 @@ class EnterpriseLoginPage {
           `   Current TEST_ENV: ${config.env}\n` +
           `   Expected variable: ${config.env.toUpperCase()}_ENTERPRISE_LOGIN_URL\n\n` +
           `📝 Please check your .env file and ensure it's properly configured.\n` +
-          `💡 See README.md for setup instructions.\n`
+          `💡 See README.md for setup instructions.\n`,
       );
     }
   }
@@ -50,7 +50,7 @@ class EnterpriseLoginPage {
         const urlString = url.toString();
         return !urlString.includes('Login.aspx') || urlString.includes('uPostLogin.aspx');
       },
-      { timeout: 60000 }
+      { timeout: 60000 },
     );
 
     // Wait a moment for the page to stabilize after login

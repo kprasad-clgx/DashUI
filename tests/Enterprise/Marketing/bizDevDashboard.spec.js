@@ -29,7 +29,7 @@ test('Biz Dev Dashboard Page validation', async ({ authenticatedPage }) => {
   await expect(await bizDevDashboardPage.verifyEmployeeLabelVisible()).toContainText('Employee');
   await expect(await bizDevDashboardPage.verifyEmployeeValueVisible()).toBeVisible();
   await expect(await bizDevDashboardPage.verifyEmployeeValueVisible()).toHaveText(
-    'All Items Selected'
+    'All Items Selected',
   );
   await expect(await bizDevDashboardPage.verifyEmployeeSetButtonVisible()).toBeVisible();
   await expect(await bizDevDashboardPage.verifyEmployeeSetButtonVisible()).toHaveValue('Set');
@@ -39,7 +39,7 @@ test('Biz Dev Dashboard Page validation', async ({ authenticatedPage }) => {
   await expect(await bizDevDashboardPage.verifyDivisionLabelVisible()).toContainText('Division');
   await expect(await bizDevDashboardPage.verifyDivisionValueVisible()).toBeVisible();
   await expect(await bizDevDashboardPage.verifyDivisionValueVisible()).toHaveText(
-    'All Items Selected'
+    'All Items Selected',
   );
   await expect(await bizDevDashboardPage.verifyDivisionSetButtonVisible()).toBeVisible();
   await expect(await bizDevDashboardPage.verifyDivisionSetButtonVisible()).toHaveValue('Set');
@@ -49,7 +49,7 @@ test('Biz Dev Dashboard Page validation', async ({ authenticatedPage }) => {
   await expect(await bizDevDashboardPage.verifyOfficeLabelVisible()).toContainText('Office');
   await expect(await bizDevDashboardPage.verifyOfficeValueVisible()).toBeVisible();
   await expect(await bizDevDashboardPage.verifyOfficeValueVisible()).toHaveText(
-    'All Items Selected'
+    'All Items Selected',
   );
   await expect(await bizDevDashboardPage.verifyOfficeSetButtonVisible()).toBeVisible();
   await expect(await bizDevDashboardPage.verifyOfficeSetButtonVisible()).toHaveValue('Set');
@@ -63,7 +63,7 @@ test('Biz Dev Dashboard Page validation', async ({ authenticatedPage }) => {
 
   // Assert "This Month" is selected after reload
   await expect(await bizDevDashboardPage.verifyTimeFrameSelected('This Month')).toHaveValue(
-    'This Month'
+    'This Month',
   );
 
   // Select random employee from dropdown
@@ -71,7 +71,7 @@ test('Biz Dev Dashboard Page validation', async ({ authenticatedPage }) => {
 
   // Assert the selected employee is shown in the dropdown
   await expect(await bizDevDashboardPage.verifyEmployeeSelected(selectedEmployee)).toHaveValue(
-    selectedEmployee
+    selectedEmployee,
   );
 
   // Wait for network to stabilize

@@ -4,33 +4,33 @@ export class CreateClaimCloseClaimPage {
 
     // Compliance Task Tab locators
     this.selectAllCheckbox = page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_ComplianceTasks_userControl_ComplianceManagerGridView_ctl00_ctl02_ctl02_SelectColumnSelectCheckBox'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_ComplianceTasks_userControl_ComplianceManagerGridView_ctl00_ctl02_ctl02_SelectColumnSelectCheckBox',
     );
 
     this.rejectReasonDropdown = page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_ComplianceTasks_userControl_ReviewStatusRadComboBox_Input'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_ComplianceTasks_userControl_ReviewStatusRadComboBox_Input',
     );
 
     this.rejectReasonOptions = page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_ComplianceTasks_userControl_ReviewStatusRadComboBox_DropDown .rcbList .rcbItem'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_ComplianceTasks_userControl_ReviewStatusRadComboBox_DropDown .rcbList .rcbItem',
     );
 
     this.rejectButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_ComplianceTasks_userControl_ReasonButton'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_ComplianceTasks_userControl_ReasonButton',
     );
 
     this.complianceTaskRows = page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_ComplianceTasks_userControl_ComplianceManagerGridView_ctl00'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_ComplianceTasks_userControl_ComplianceManagerGridView_ctl00',
     );
 
     // Close Job locators
     this.closeJobButton = page.locator(
       '#DivisionActionsPanel button.buttonCore.primaryButton.divisionButtonStyle',
-      { hasText: 'Close Job' }
+      { hasText: 'Close Job' },
     );
 
     this.modalWrapper = page.locator(
-      '#RadWindowWrapper_ctl00_ContentPlaceHolder1_RadWindow_Common'
+      '#RadWindowWrapper_ctl00_ContentPlaceHolder1_RadWindow_Common',
     );
 
     this.iframeSelector = 'iframe[name="RadWindow_Common"]';
@@ -38,7 +38,7 @@ export class CreateClaimCloseClaimPage {
     // Reopen Job locators
     this.reopenJobButton = page.locator(
       '#DivisionActionsPanel button.buttonCore.primaryButton.divisionButtonStyle',
-      { hasText: 'Reopen Job' }
+      { hasText: 'Reopen Job' },
     );
 
     this.jobTabLinkPanel = page.locator('#JobTabLinkPanel');
@@ -134,7 +134,7 @@ export class CreateClaimCloseClaimPage {
     await reasonDropdownArrow.click();
 
     const reasonOptions = modalFrame.locator(
-      '#ReasonForClosingRadComboBox_DropDown .rcbList .rcbItem'
+      '#ReasonForClosingRadComboBox_DropDown .rcbList .rcbItem',
     );
     await reasonOptions.first().waitFor({ state: 'visible', timeout: 10000 });
     const reasonOptionCount = await reasonOptions.count();
@@ -147,7 +147,7 @@ export class CreateClaimCloseClaimPage {
     await dplsReasonDropdownArrow.click();
 
     const dplsReasonOptions = modalFrame.locator(
-      '#DplsReasonForClosingRadComboBox_DropDown .rcbList .rcbItem'
+      '#DplsReasonForClosingRadComboBox_DropDown .rcbList .rcbItem',
     );
     await dplsReasonOptions.first().waitFor({ state: 'visible', timeout: 10000 });
     const dplsReasonOptionCount = await dplsReasonOptions.count();
@@ -156,7 +156,7 @@ export class CreateClaimCloseClaimPage {
 
     // Click Close Job
     const modalCloseButton = modalFrame.locator(
-      'input#CloseReopenButton.buttonCore.primaryButton[type="submit"][value="Close Job"]'
+      'input#CloseReopenButton.buttonCore.primaryButton[type="submit"][value="Close Job"]',
     );
     await modalCloseButton.waitFor({ state: 'visible', timeout: 10000 });
     await modalCloseButton.click();

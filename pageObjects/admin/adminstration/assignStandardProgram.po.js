@@ -40,7 +40,7 @@ class AssignStandardProgramPage {
     await expect(assignProgramModal).toBeVisible({ timeout: 10000 });
 
     const assignProgramIframe = assignProgramModal.frameLocator(
-      AssignStandardProgramLocators.assignProgramIframe
+      AssignStandardProgramLocators.assignProgramIframe,
     );
     await expect(assignProgramIframe.locator('body')).toBeVisible({ timeout: 10000 });
 
@@ -50,7 +50,7 @@ class AssignStandardProgramPage {
   // Verify Please Assign Program label
   async verifyPleaseAssignProgramLabel(assignProgramIframe) {
     const pleaseAssignProgramDropdown = assignProgramIframe.locator(
-      AssignStandardProgramLocators.pleaseAssignProgramLabel
+      AssignStandardProgramLocators.pleaseAssignProgramLabel,
     );
     await expect(pleaseAssignProgramDropdown).toBeVisible({ timeout: 10000 });
   }
@@ -58,7 +58,7 @@ class AssignStandardProgramPage {
   // Verify Choose Program dropdown
   async verifyChooseProgramDropdown(assignProgramIframe) {
     const chooseProgramDropdown = assignProgramIframe.locator(
-      AssignStandardProgramLocators.chooseProgramInput
+      AssignStandardProgramLocators.chooseProgramInput,
     );
     await expect(chooseProgramDropdown).toBeVisible({ timeout: 10000 });
   }
@@ -91,7 +91,7 @@ class AssignStandardProgramPage {
   // Click assign program button
   async clickAssignProgramButton(assignProgramIframe) {
     const assignProgramButton = assignProgramIframe.locator(
-      AssignStandardProgramLocators.assignProgramButton
+      AssignStandardProgramLocators.assignProgramButton,
     );
     await expect(assignProgramButton).toBeVisible({ timeout: 10000 });
     await assignProgramButton.click();
@@ -106,7 +106,7 @@ class AssignStandardProgramPage {
   // Verify assigned program
   async verifyAssignedProgram(programName) {
     const assignedProgramVerification = this.page.locator(
-      AssignStandardProgramLocators.assignedProgramVerification
+      AssignStandardProgramLocators.assignedProgramVerification,
     );
     const assignedProgramText = await assignedProgramVerification.textContent();
     expect(assignedProgramText).toContain(programName);

@@ -132,6 +132,42 @@ class DashboardSurveyTabPage {
   async verifyCustomerServiceSurveyFormTitle() {
     return this.page.locator(DashboardSurveyTabPageLocators.customerServiceSurveyForm);
   }
+
+  /**
+   * Download and assert Excel file
+   * @returns {Promise<boolean>}
+   */
+  async downloadAndAssertExcel() {
+    const exportToExcelButton = this.page.locator(
+      DashboardSurveyTabPageLocators.exportToExcelButton,
+    );
+    await exportToExcelButton.waitFor({ state: 'visible' });
+
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      exportToExcelButton.click(),
+    ]);
+    const suggestedFilename = await download.suggestedFilename();
+    await this.page.waitForLoadState('networkidle');
+    return suggestedFilename.includes('Surveys') && suggestedFilename.endsWith('.xlsx');
+  }
+
+  /**
+   * Download and assert PDF file
+   * @returns {Promise<boolean>}
+   */
+  async downloadAndAssertPDF() {
+    const exportToPDFButton = this.page.locator(DashboardSurveyTabPageLocators.exportToPDFButton);
+    await exportToPDFButton.waitFor({ state: 'visible' });
+
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      exportToPDFButton.click(),
+    ]);
+    const suggestedFilename = await download.suggestedFilename();
+    await this.page.waitForLoadState('networkidle');
+    return suggestedFilename.includes('Surveys') && suggestedFilename.endsWith('.pdf');
+  }
 }
 
 export default DashboardSurveyTabPage;

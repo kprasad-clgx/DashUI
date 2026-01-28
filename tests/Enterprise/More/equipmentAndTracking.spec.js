@@ -19,7 +19,7 @@ test('Equipment And Tracking in More FG', async ({ authenticatedPage }) => {
 
   // Validate Equipment Currently Billed Tab
   await equipmentAndTrackingPage.validateEquipmentCurrentlyBilledTab(
-    equipmentCurrentlyBilledHeaders
+    equipmentCurrentlyBilledHeaders,
   );
 
   // Define Equipment Available Tab headers
@@ -43,6 +43,6 @@ test('Equipment And Tracking in More FG', async ({ authenticatedPage }) => {
 
   // Validate Equipment Coming Available Tab
   await equipmentAndTrackingPage.validateEquipmentComingAvailableTab(
-    equipmentComingAvailableHeaders
+    equipmentComingAvailableHeaders,
   );
 });

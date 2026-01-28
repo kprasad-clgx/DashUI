@@ -78,7 +78,7 @@ class EnterpriseAccountSettingsPage {
    */
   async assertAccountingLogoCardVisible() {
     await expect(
-      this.page.locator(EnterpriseAccountSettingsLocators.accountingLogoCard)
+      this.page.locator(EnterpriseAccountSettingsLocators.accountingLogoCard),
     ).toBeVisible();
   }
 
@@ -88,8 +88,8 @@ class EnterpriseAccountSettingsPage {
   async assertAllowPastDateCheckboxVisible() {
     await expect(
       this.page.locator(
-        EnterpriseAccountSettingsLocators.accountSettingsAllowPastDateForInvoicesCheckbox
-      )
+        EnterpriseAccountSettingsLocators.accountSettingsAllowPastDateForInvoicesCheckbox,
+      ),
     ).toBeVisible();
   }
 

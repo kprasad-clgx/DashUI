@@ -124,7 +124,7 @@ class EnterpriseJobCostingPage {
    */
   async clickAllCategoryCostButton() {
     const allCategoryCostLocator = this.page.locator(
-      EnterpriseJobCostingLocators.allCategoryCostLocator
+      EnterpriseJobCostingLocators.allCategoryCostLocator,
     );
     await expect(allCategoryCostLocator).toBeVisible();
     await allCategoryCostLocator.click();
@@ -184,7 +184,7 @@ class EnterpriseJobCostingPage {
 
     // Wait for loading indicator to disappear
     const paidToLoadingIndicator = this.page.locator(
-      EnterpriseJobCostingLocators.paidToLoadingIndicator
+      EnterpriseJobCostingLocators.paidToLoadingIndicator,
     );
     if (await paidToLoadingIndicator.isVisible({ timeout: 10000 }).catch(() => false)) {
       await paidToLoadingIndicator.waitFor({ state: 'hidden', timeout: 10000 });
@@ -245,7 +245,7 @@ class EnterpriseJobCostingPage {
    */
   async selectTransactionType(transactionType) {
     const transactionTypeDropdown = this.page.locator(
-      EnterpriseJobCostingLocators.transactionTypeDropdown
+      EnterpriseJobCostingLocators.transactionTypeDropdown,
     );
     await expect(transactionTypeDropdown).toBeVisible();
     await transactionTypeDropdown.click();
@@ -257,7 +257,7 @@ class EnterpriseJobCostingPage {
    */
   async clickSaveButton() {
     const allCategoryCostSaveBtn = this.page.locator(
-      EnterpriseJobCostingLocators.allCategoryCostSaveBtn
+      EnterpriseJobCostingLocators.allCategoryCostSaveBtn,
     );
     await expect(allCategoryCostSaveBtn).toBeVisible();
     await allCategoryCostSaveBtn.click();
@@ -276,7 +276,7 @@ class EnterpriseJobCostingPage {
    */
   async clickonBackToJobCostingButton() {
     const backtoAccountingBtn = this.page.locator(
-      EnterpriseJobCostingLocators.backToJobCostingButton
+      EnterpriseJobCostingLocators.backToJobCostingButton,
     );
     await backtoAccountingBtn.waitFor({ state: 'visible', timeout: 10000 });
     await expect(backtoAccountingBtn).click();
@@ -288,7 +288,7 @@ class EnterpriseJobCostingPage {
    */
   async assertJobCostingJobNumberContains(expectedJobNumber) {
     const jobCostingForJobNumberLocator = this.page.locator(
-      EnterpriseJobCostingLocators.jobCostingForJobNumberLocator
+      EnterpriseJobCostingLocators.jobCostingForJobNumberLocator,
     );
     const jobCostingForJobNumberText = await jobCostingForJobNumberLocator.textContent();
     expect(jobCostingForJobNumberText).toContain(expectedJobNumber);
@@ -299,7 +299,7 @@ class EnterpriseJobCostingPage {
    */
   async assertCategoryAllCostTableLabel() {
     const categoryAllCostTableLabelLocator = this.page.locator(
-      EnterpriseJobCostingLocators.categoryAllCostTableLabelLocator
+      EnterpriseJobCostingLocators.categoryAllCostTableLabelLocator,
     );
     await expect(categoryAllCostTableLabelLocator).toBeVisible();
     await expect(categoryAllCostTableLabelLocator).toHaveText('Category: All Category Costs');

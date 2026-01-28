@@ -66,13 +66,13 @@ class AddIndividualCustomerPage {
   // ==================== Assertion Methods ====================
   async assertFirstName(expected) {
     await expect(this.page.locator(AddIndividualCustomerLocators.firstNameInput)).toHaveValue(
-      expected
+      expected,
     );
   }
 
   async assertLastName(expected) {
     await expect(this.page.locator(AddIndividualCustomerLocators.lastNameInput)).toHaveValue(
-      expected
+      expected,
     );
   }
 
@@ -82,7 +82,7 @@ class AddIndividualCustomerPage {
 
   async assertContactType(expected) {
     await expect(this.page.locator(AddIndividualCustomerLocators.contactTypeDropdown)).toHaveValue(
-      expected
+      expected,
     );
   }
 

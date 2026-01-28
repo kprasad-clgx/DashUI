@@ -30,6 +30,12 @@ const JobSettingLocators = {
   tagsHeader: '.sectionHeaderText',
   typeOfLossHeader: '.sectionHeaderText',
   workOrderMasterHeader: '.sectionHeaderText',
+  addNewDivisionRecordButton:
+    '#ctl00_ContentPlaceHolder1_gvDivision_ctl00_ctl02_ctl00_InitInsertButton',
+  divisionGridHeader: '#ctl00_ContentPlaceHolder1_gvDivision_ctl00_Header a',
+  firstEditButton: '#ctl00_ContentPlaceHolder1_gvDivision_ctl00__0 a:has-text("Edit")',
+  divisionNameLabel: 'td',
+  cancelButton: 'input[type="button"][value="Cancel"].btn-yellow',
 };
 
 class JobSettingPage {
@@ -83,6 +89,15 @@ class JobSettingPage {
     });
     await divisionHeader.waitFor({ state: 'visible' });
     return divisionHeader;
+  }
+
+  // Click on Division
+  async clickDivisionSection() {
+    const divisionHeader = this.page.locator(JobSettingLocators.divisionHeader, {
+      hasText: 'Division',
+    });
+    await divisionHeader.click();
+    await this.page.waitForLoadState('networkidle');
   }
 
   // Verify Lien Rights section header is visible
@@ -146,6 +161,53 @@ class JobSettingPage {
     });
     await workOrderMasterHeader.waitFor({ state: 'visible' });
     return workOrderMasterHeader;
+  }
+
+  // Verify Add New Division Record button is visible
+  async verifyAddNewDivisionRecordButtonVisible() {
+    const addNewButton = this.page.locator(JobSettingLocators.addNewDivisionRecordButton);
+    await addNewButton.waitFor({ state: 'visible' });
+    return addNewButton;
+  }
+
+  // Verify Division grid headers
+  async verifyDivisionGridHeaders(expectedHeaders) {
+    for (const headerText of expectedHeaders) {
+      const headerLocator = this.page.locator(
+        `#ctl00_ContentPlaceHolder1_gvDivision_ctl00_Header a :has-text('${headerText}')`,
+      );
+      await headerLocator.waitFor({ state: 'visible', timeout: 5000 });
+    }
+  }
+
+  // Click on first edit button in Division grid
+  async clickFirstEditButton() {
+    const firstEditButton = this.page.locator(JobSettingLocators.firstEditButton);
+    await firstEditButton.click();
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  // Verify Division Name label is visible
+  async verifyDivisionNameLabelVisible() {
+    const cellLocator = this.page.locator(JobSettingLocators.divisionNameLabel, {
+      hasText: /^\s*Division Name:\s*$/,
+    });
+    await cellLocator.waitFor({ state: 'visible', timeout: 15000 });
+    return cellLocator;
+  }
+
+  // Verify Cancel button is visible
+  async verifyCancelButtonVisible() {
+    const cancelButton = this.page.locator(JobSettingLocators.cancelButton);
+    await cancelButton.waitFor({ state: 'visible' });
+    return cancelButton;
+  }
+
+  // Click Cancel button
+  async clickCancelButton() {
+    const cancelButton = this.page.locator(JobSettingLocators.cancelButton);
+    await cancelButton.click();
+    await this.page.waitForLoadState('networkidle');
   }
 }
 

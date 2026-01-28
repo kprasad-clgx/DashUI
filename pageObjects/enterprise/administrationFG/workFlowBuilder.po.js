@@ -289,7 +289,7 @@ class WorkFlowBuilderPage {
     await actionTitleInput.fill(workflowName);
 
     const actionDescriptionInput = addWorkModalFrame.locator(
-      WorkFlowBuilderLocators.actionDescriptionInput
+      WorkFlowBuilderLocators.actionDescriptionInput,
     );
     await expect(actionDescriptionInput).toBeVisible();
     await actionDescriptionInput.click();
@@ -299,7 +299,7 @@ class WorkFlowBuilderPage {
   // Select random action trigger
   async selectRandomActionTrigger(addWorkModalFrame) {
     const actionTriggerDropdown = addWorkModalFrame.locator(
-      WorkFlowBuilderLocators.actionTriggerDropdown
+      WorkFlowBuilderLocators.actionTriggerDropdown,
     );
     await expect(actionTriggerDropdown).toBeVisible({ timeout: 5000 });
     await actionTriggerDropdown.click();
@@ -315,7 +315,7 @@ class WorkFlowBuilderPage {
   // Select random action event
   async selectRandomActionEvent(addWorkModalFrame) {
     const actionEventDropdown = addWorkModalFrame.locator(
-      WorkFlowBuilderLocators.actionEventDropdown
+      WorkFlowBuilderLocators.actionEventDropdown,
     );
     await expect(actionEventDropdown).toBeVisible({ timeout: 10000 });
     await actionEventDropdown.click();
@@ -331,7 +331,7 @@ class WorkFlowBuilderPage {
   // Select random assigned to type
   async selectRandomAssignedToType(addWorkModalFrame) {
     const assignedToTypeDropdown = addWorkModalFrame.locator(
-      WorkFlowBuilderLocators.assignedToTypeDropdown
+      WorkFlowBuilderLocators.assignedToTypeDropdown,
     );
     await expect(assignedToTypeDropdown).toBeVisible({ timeout: 10000 });
     await assignedToTypeDropdown.click();
@@ -347,7 +347,7 @@ class WorkFlowBuilderPage {
   // Select random assigned to
   async selectRandomAssignedTo(addWorkModalFrame) {
     const assignedToDropdown = addWorkModalFrame.locator(
-      WorkFlowBuilderLocators.assignedToDropdown
+      WorkFlowBuilderLocators.assignedToDropdown,
     );
     await expect(assignedToDropdown).toBeVisible({ timeout: 10000 });
     await assignedToDropdown.click();
@@ -363,7 +363,7 @@ class WorkFlowBuilderPage {
   // Fill assignment delay
   async fillAssignmentDelay(addWorkModalFrame, assignmentDelayDigit) {
     const assignmentDelayInput = addWorkModalFrame.locator(
-      WorkFlowBuilderLocators.assignmentDelayInput
+      WorkFlowBuilderLocators.assignmentDelayInput,
     );
     await expect(assignmentDelayInput).toBeVisible({ timeout: 5000 });
     await assignmentDelayInput.click();
@@ -373,7 +373,7 @@ class WorkFlowBuilderPage {
   // Select random assignment delay unit
   async selectRandomAssignmentDelayUnit(addWorkModalFrame) {
     const assignmentDelayUnitDropdown = addWorkModalFrame.locator(
-      WorkFlowBuilderLocators.assignmentDelayUnitDropdown
+      WorkFlowBuilderLocators.assignmentDelayUnitDropdown,
     );
     await expect(assignmentDelayUnitDropdown).toBeVisible({ timeout: 5000 });
     await assignmentDelayUnitDropdown.click();
@@ -388,7 +388,7 @@ class WorkFlowBuilderPage {
   // Fill must complete within
   async fillMustCompleteWithin(addWorkModalFrame, mustCompleteWithinDigit) {
     const mustCompleteWithinInput = addWorkModalFrame.locator(
-      WorkFlowBuilderLocators.mustCompleteWithinInput
+      WorkFlowBuilderLocators.mustCompleteWithinInput,
     );
     await expect(mustCompleteWithinInput).toBeVisible({ timeout: 5000 });
     await mustCompleteWithinInput.click();
@@ -398,7 +398,7 @@ class WorkFlowBuilderPage {
   // Select random must complete within unit
   async selectRandomMustCompleteWithinUnit(addWorkModalFrame) {
     const mustCompleteWithinUnitDropdown = addWorkModalFrame.locator(
-      WorkFlowBuilderLocators.mustCompleteWithinUnitDropdown
+      WorkFlowBuilderLocators.mustCompleteWithinUnitDropdown,
     );
     await expect(mustCompleteWithinUnitDropdown).toBeVisible({ timeout: 5000 });
     await mustCompleteWithinUnitDropdown.click();
@@ -413,7 +413,7 @@ class WorkFlowBuilderPage {
   // Select required completion action
   async selectRequiredCompletionAction(addWorkModalFrame) {
     const requiredCompleteActionDropdown = addWorkModalFrame.locator(
-      WorkFlowBuilderLocators.requiredCompleteActionDropdown
+      WorkFlowBuilderLocators.requiredCompleteActionDropdown,
     );
     await expect(requiredCompleteActionDropdown).toBeVisible({ timeout: 5000 });
     await requiredCompleteActionDropdown.click();
@@ -431,7 +431,7 @@ class WorkFlowBuilderPage {
   // Select random associated completion date
   async selectRandomAssociatedCompletionDate(addWorkModalFrame) {
     const associatedCompletionDateDropdown = addWorkModalFrame.locator(
-      WorkFlowBuilderLocators.associatedCompletionDateDropdown
+      WorkFlowBuilderLocators.associatedCompletionDateDropdown,
     );
     await expect(associatedCompletionDateDropdown).toBeVisible({ timeout: 5000 });
     await associatedCompletionDateDropdown.click();
@@ -445,7 +445,7 @@ class WorkFlowBuilderPage {
   // Select random notification type
   async selectRandomNotificationType(addWorkModalFrame) {
     const notificationCheckboxes = addWorkModalFrame.locator(
-      WorkFlowBuilderLocators.notificationCheckboxes
+      WorkFlowBuilderLocators.notificationCheckboxes,
     );
     const notificationCount = await notificationCheckboxes.count();
     const randomNotificationIndex = Math.floor(Math.random() * notificationCount);
@@ -455,7 +455,7 @@ class WorkFlowBuilderPage {
   // Select random division
   async selectRandomDivision(addWorkModalFrame) {
     const divisionCheckboxes = addWorkModalFrame.locator(
-      WorkFlowBuilderLocators.divisionCheckboxes
+      WorkFlowBuilderLocators.divisionCheckboxes,
     );
     const divisionCount = await divisionCheckboxes.count();
     const randomDivisionIndex = Math.floor(Math.random() * divisionCount);
@@ -465,7 +465,7 @@ class WorkFlowBuilderPage {
   // Select random loss type
   async selectRandomLossType(addWorkModalFrame) {
     const lossTypeCheckboxes = addWorkModalFrame.locator(
-      WorkFlowBuilderLocators.lossTypeCheckboxes
+      WorkFlowBuilderLocators.lossTypeCheckboxes,
     );
     const lossTypeCount = await lossTypeCheckboxes.count();
     const randomLossTypeIndex = Math.floor(Math.random() * lossTypeCount);
@@ -501,7 +501,7 @@ class WorkFlowBuilderPage {
   async verifyWorkflowButtons(addWorkModalFrame) {
     const saveButton = addWorkModalFrame.locator(WorkFlowBuilderLocators.saveButton);
     const saveAndAddNotificationButton = addWorkModalFrame.locator(
-      WorkFlowBuilderLocators.saveAndAddNotificationButton
+      WorkFlowBuilderLocators.saveAndAddNotificationButton,
     );
     const cancelButton = addWorkModalFrame.locator(WorkFlowBuilderLocators.cancelButton);
 
@@ -521,19 +521,19 @@ class WorkFlowBuilderPage {
   // Search workflow by name
   async searchWorkflowByName(workflowName) {
     const addNewWorkflowGridButton = this.page.locator(
-      WorkFlowBuilderLocators.addNewWorkflowGridButton
+      WorkFlowBuilderLocators.addNewWorkflowGridButton,
     );
     await expect(addNewWorkflowGridButton).toBeVisible({ timeout: 10000 });
 
     const actionTitleGridSearchInput = this.page.locator(
-      WorkFlowBuilderLocators.actionTitleGridSearchInput
+      WorkFlowBuilderLocators.actionTitleGridSearchInput,
     );
     await expect(actionTitleGridSearchInput).toBeVisible({ timeout: 5000 });
     await actionTitleGridSearchInput.click();
     await actionTitleGridSearchInput.fill(workflowName);
 
     const actionTitleGridSearchButton = this.page.locator(
-      WorkFlowBuilderLocators.actionTitleGridSearchButton
+      WorkFlowBuilderLocators.actionTitleGridSearchButton,
     );
     await expect(actionTitleGridSearchButton).toBeVisible({ timeout: 5000 });
     await actionTitleGridSearchButton.click();
@@ -557,6 +557,30 @@ class WorkFlowBuilderPage {
     const gridRows = this.page.locator(WorkFlowBuilderLocators.gridRows);
     await expect(gridRows.first()).toBeVisible({ timeout: 10000 });
     await expect(gridRows).toHaveCount(1);
+  }
+
+  // Delete workflow by name
+  async deleteWorkflow(workflowName) {
+    // Accepts a row locator directly, clicks the delete button in that row
+    // Example usage: await deleteWorkflow(row)
+    const row = workflowName; // here, workflowName is actually a row locator
+    const deleteButton = row.locator('input[type="image"][title="Delete Workflow and Children"]');
+    await deleteButton.waitFor({ state: 'visible', timeout: 10000 });
+    await deleteButton.click();
+    // Handle confirm dialog if present
+    try {
+      await this.page.waitForEvent('dialog', { timeout: 10000 }).then((dialog) => dialog.accept());
+    } catch (e) {
+      // No dialog appeared, continue
+    }
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  // Verify workflow does not exist in grid
+  async verifyWorkflowDoesNotExistInGrid() {
+    await this.page.waitForLoadState('domcontentloaded');
+    const gridRows = this.page.locator(WorkFlowBuilderLocators.gridRows);
+    await expect(gridRows).toHaveCount(0);
   }
 }
 

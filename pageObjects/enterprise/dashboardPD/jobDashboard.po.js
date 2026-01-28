@@ -23,6 +23,13 @@ const JobDashboardLocators = {
 
   // Filters
   filterLabels: '#ctl00_ContentPlaceHolder1_empdropdown strong',
+  employeeDropdownArrow: '#ctl00_ContentPlaceHolder1_ddlEmployee_Arrow',
+  employeeDropdownList: '#ctl00_ContentPlaceHolder1_ddlEmployee_DropDown .rcbList .rcbItem',
+  divisionDropdownArrow: '#ctl00_ContentPlaceHolder1_ddlDivision_Arrow',
+  divisionDropdownList: '#ctl00_ContentPlaceHolder1_ddlDivision_DropDown .rcbList .rcbItem',
+  officeDropdownArrow: '#ctl00_ContentPlaceHolder1_ddlOffice_Arrow',
+  officeDropdownList: '#ctl00_ContentPlaceHolder1_ddlOffice_DropDown .rcbList .rcbItem',
+  goButton: '#ctl00_ContentPlaceHolder1_btnSubmit',
 };
 
 class JobDashboardPage {
@@ -89,7 +96,7 @@ class JobDashboardPage {
     await this.clickTileAndVerify(
       'Pending Sales',
       'Pending Sales',
-      JobDashboardLocators.pendingSalesHeading
+      JobDashboardLocators.pendingSalesHeading,
     );
     await this.page.goBack();
     await this.page.waitForLoadState('networkidle');
@@ -102,7 +109,7 @@ class JobDashboardPage {
     await this.clickTileAndVerify(
       'Pre Production',
       'Pre Production',
-      JobDashboardLocators.preProductionHeading
+      JobDashboardLocators.preProductionHeading,
     );
     await this.page.goBack();
     await this.page.waitForLoadState('networkidle');
@@ -115,7 +122,7 @@ class JobDashboardPage {
     await this.clickTileAndVerify(
       'Work in Progress',
       'Work in Progress',
-      JobDashboardLocators.workInProgressHeading
+      JobDashboardLocators.workInProgressHeading,
     );
     await this.page.goBack();
     await this.page.waitForLoadState('networkidle');
@@ -146,7 +153,7 @@ class JobDashboardPage {
     await this.clickTileAndVerify(
       'Invoice Pending',
       'Invoice Pending',
-      JobDashboardLocators.invoicePendingHeading
+      JobDashboardLocators.invoicePendingHeading,
     );
     await this.page.goBack();
     await this.page.waitForLoadState('networkidle');
@@ -159,7 +166,7 @@ class JobDashboardPage {
     await this.clickTileAndVerify(
       'Accounts Receivable',
       'Accounts Receivable',
-      JobDashboardLocators.accountsReceivableHeading
+      JobDashboardLocators.accountsReceivableHeading,
     );
     await this.page.goBack();
     await this.page.waitForLoadState('networkidle');
@@ -172,7 +179,7 @@ class JobDashboardPage {
     await this.clickTileAndVerify(
       'Waiting for Final Closure',
       'Waiting for Final Closure',
-      JobDashboardLocators.waitingForFinalClosureHeading
+      JobDashboardLocators.waitingForFinalClosureHeading,
     );
     await this.page.goBack();
     await this.page.waitForLoadState('networkidle');
@@ -195,7 +202,7 @@ class JobDashboardPage {
     await this.clickTileAndVerify(
       'Jobs Lacking Interaction',
       'Open Jobs Lacking Interaction',
-      JobDashboardLocators.jobsLackingInteractionHeading
+      JobDashboardLocators.jobsLackingInteractionHeading,
     );
     await this.page.goBack();
     await this.page.waitForLoadState('networkidle');
@@ -213,6 +220,77 @@ class JobDashboardPage {
       });
       await expect(filterLocator).toBeVisible();
     }
+  }
+
+  /**
+   * Select a random employee from dropdown
+   * @param {Function} getRandomNumber - Random number generator function
+   */
+  async selectRandomEmployee(getRandomNumber) {
+    const employeeDropdown = this.page.locator(JobDashboardLocators.employeeDropdownArrow);
+    await employeeDropdown.first().waitFor({ state: 'visible', timeout: 5000 });
+    await employeeDropdown.click();
+
+    const dropdownList = this.page.locator(JobDashboardLocators.employeeDropdownList);
+    await dropdownList.first().waitFor({ state: 'visible', timeout: 5000 });
+
+    const employeeCount = await dropdownList.count();
+    const randomIndex = getRandomNumber(0, employeeCount - 1);
+    const randomEmployee = dropdownList.nth(randomIndex);
+    await randomEmployee.click();
+  }
+
+  /**
+   * Select a random division from dropdown
+   * @param {Function} getRandomNumber - Random number generator function
+   */
+  async selectRandomDivision(getRandomNumber) {
+    const divisionDropdown = this.page.locator(JobDashboardLocators.divisionDropdownArrow);
+    await divisionDropdown.first().waitFor({ state: 'visible', timeout: 5000 });
+    await divisionDropdown.click();
+
+    const divisionList = this.page.locator(JobDashboardLocators.divisionDropdownList);
+    await divisionList.first().waitFor({ state: 'visible', timeout: 5000 });
+
+    const divisionCount = await divisionList.count();
+    const randomDivisionIndex = getRandomNumber(0, divisionCount - 1);
+    const randomDivision = divisionList.nth(randomDivisionIndex);
+    await randomDivision.click();
+  }
+
+  /**
+   * Select a random office from dropdown
+   * @param {Function} getRandomNumber - Random number generator function
+   */
+  async selectRandomOffice(getRandomNumber) {
+    const officeDropdown = this.page.locator(JobDashboardLocators.officeDropdownArrow);
+    await officeDropdown.first().waitFor({ state: 'visible', timeout: 5000 });
+    await officeDropdown.click();
+
+    const officeList = this.page.locator(JobDashboardLocators.officeDropdownList);
+    await officeList.first().waitFor({ state: 'visible', timeout: 5000 });
+
+    const officeCount = await officeList.count();
+    const randomOfficeIndex = getRandomNumber(0, officeCount - 1);
+    const randomOffice = officeList.nth(randomOfficeIndex);
+    await randomOffice.click();
+  }
+
+  /**
+   * Click Go button and assert network request is made
+   */
+  async clickGoButtonAndAssertNetworkRequest() {
+    const goButton = this.page.locator(JobDashboardLocators.goButton);
+    await goButton.first().waitFor({ state: 'visible', timeout: 5000 });
+
+    const [request] = await Promise.all([
+      this.page.waitForRequest(
+        (req) => req.url().includes('JobDashboard') && req.method() === 'POST',
+        { timeout: 15000 },
+      ),
+      goButton.click(),
+    ]);
+    expect(request).toBeTruthy();
   }
 }
 

@@ -185,7 +185,7 @@ export class TimesheetsAllOptionsPage {
     await this.timesheetsMenuHover.hover();
     await this.usageReportMenuItem.waitFor({ state: 'visible', timeout: 5000 });
     await this.usageReportMenuItem.click();
-    await this.page.waitForLoadState('networkidle');
+    await this.getUsageReportButton.waitFor({ state: 'visible', timeout: 20000 });
   }
 
   async validateGetUsageReportButton() {

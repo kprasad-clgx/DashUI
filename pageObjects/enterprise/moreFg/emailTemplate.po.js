@@ -6,10 +6,10 @@ export class EmailTemplatePage {
     this.moreMenuHover = page.locator("span:has-text('More...')").first();
     this.emailTemplateBuilderMenuItem = page.getByText('E-mail Template Builder', { exact: true });
     this.emailTemplateBuilderHeading = page.locator(
-      '#ctl00_ContentPlaceHolder1_lblEmailTemplateBuilder'
+      '#ctl00_ContentPlaceHolder1_lblEmailTemplateBuilder',
     );
     this.backToMarketingDashboardButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_btnBackToMarketing'
+      '#ctl00_ContentPlaceHolder1_btnBackToMarketing',
     );
     this.gridHeaderLocator = page.locator('#ctl00_ContentPlaceHolder1_grdFB_ctl00 .rgHeader');
     this.selectBoxMinus = page.locator('span.rtMinus[unselectable="on"]');
@@ -68,7 +68,7 @@ export class EmailTemplatePage {
   async validateAllButtons(allButtons) {
     for (const buttonValue of allButtons) {
       const buttonLocator = this.page.locator(
-        `#ctl00_ContentPlaceHolder1_MainPnl input.btn[value="${buttonValue}"]`
+        `#ctl00_ContentPlaceHolder1_MainPnl input.btn[value="${buttonValue}"]`,
       );
       await expect(buttonLocator).toBeVisible();
     }

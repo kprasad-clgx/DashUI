@@ -253,7 +253,7 @@ class DashboardPhotosTabPage {
         );
       },
       PhotosTabLocators.uploadButton,
-      { timeout: 15000 }
+      { timeout: 15000 },
     );
 
     // 3. Scroll the button into view in case it's offscreen
@@ -264,7 +264,7 @@ class DashboardPhotosTabPage {
     const isEnabled = await uploadButton.isEnabled();
     const isVisible = await uploadButton.isVisible();
     console.log(
-      `Before click: Upload button text: ${buttonText}, enabled: ${isEnabled}, visible: ${isVisible}`
+      `Before click: Upload button text: ${buttonText}, enabled: ${isEnabled}, visible: ${isVisible}`,
     );
 
     // 5. Check for overlays or blockers above the button
@@ -277,7 +277,7 @@ class DashboardPhotosTabPage {
           if (!el) return null;
           return el.outerHTML;
         },
-        { x: buttonBox.x + buttonBox.width / 2, y: buttonBox.y + buttonBox.height / 2 }
+        { x: buttonBox.x + buttonBox.width / 2, y: buttonBox.y + buttonBox.height / 2 },
       );
       console.log('Element at button center:', overlayElement);
     } else {
@@ -296,7 +296,7 @@ class DashboardPhotosTabPage {
       await uploadButton.hover();
       await this.page.mouse.move(
         buttonBox.x + buttonBox.width / 2,
-        buttonBox.y + buttonBox.height / 2
+        buttonBox.y + buttonBox.height / 2,
       );
       await this.page.mouse.down();
       await this.page.mouse.up();
@@ -480,6 +480,14 @@ class DashboardPhotosTabPage {
     return albumModalFrame;
   }
 
+  // Enter New Albume Name in modal
+  async enterNewAlbumName(modalFrame, albumName) {
+    const albumNameInput = modalFrame.locator('#AlbumNameTextBox');
+    await albumNameInput.waitFor({ state: 'visible' });
+    await albumNameInput.fill(''); // Clear existing text
+    await albumNameInput.fill(albumName);
+  }
+
   // Verify Create Album button is visible in modal
   async verifyCreateAlbumButtonVisible(modalFrame) {
     const createAlbumButton = modalFrame.locator(PhotosTabLocators.createAlbumButton);
@@ -501,6 +509,14 @@ class DashboardPhotosTabPage {
     await cancelButton.click();
   }
 
+  // Click Add Album button in modal
+  async clickCreateAlbumButtonInModal(modalFrame) {
+    const createAlbumButton = modalFrame.locator(PhotosTabLocators.createAlbumButton);
+    await createAlbumButton.waitFor({ state: 'visible' });
+    await createAlbumButton.click();
+    await this.page.waitForLoadState('networkidle');
+  }
+
   // Verify album modal iframe is closed
   async verifyAlbumModalClosed() {
     const iframeLocator = this.page.locator(PhotosTabLocators.albumModalIframe);
@@ -513,6 +529,24 @@ class DashboardPhotosTabPage {
     await manageButton.waitFor({ state: 'visible' });
     await manageButton.click();
     await this.page.waitForLoadState('networkidle');
+  }
+
+  // Verify Newly created Album is present
+  async verifyAlbumCreatedAndVisible(albumName) {
+    const albumLocator = this.page
+      .locator('#ctl00_ContentPlaceHolder1_ctl00_DivAlbums .album_cat_bor_bot a')
+      .filter({ hasText: albumName });
+    await albumLocator.waitFor({ state: 'visible' });
+    return albumLocator;
+  }
+
+  // Click on Newly created Album
+  async clickOnCreatedAlbum(albumName) {
+    const albumLocator = this.page
+      .locator('#ctl00_ContentPlaceHolder1_ctl00_DivAlbums .album_cat_bor_bot a')
+      .filter({ hasText: albumName });
+    await albumLocator.waitFor({ state: 'visible' });
+    await albumLocator.click();
   }
 
   // Verify Select All button is visible
@@ -555,6 +589,18 @@ class DashboardPhotosTabPage {
     const deleteAlbumButton = this.page.locator(PhotosTabLocators.deleteAlbumButton);
     await deleteAlbumButton.waitFor({ state: 'visible' });
     return deleteAlbumButton;
+  }
+
+  // Click on Delete Album button
+  async clickDeleteAlbumButton() {
+    const deleteAlbumButton = this.page.locator(PhotosTabLocators.deleteAlbumButton);
+    await deleteAlbumButton.waitFor({ state: 'visible' });
+    await deleteAlbumButton.click();
+    // Handle alert popup
+    this.page.on('dialog', async (dialog) => {
+      await dialog.accept();
+    });
+    await this.page.waitForLoadState('networkidle');
   }
 
   // Verify Download Photos button is disabled
@@ -616,7 +662,7 @@ class DashboardPhotosTabPage {
         return btn && !btn.disabled;
       },
       PhotosTabLocators.downloadPhotosButton,
-      { timeout: 15000 }
+      { timeout: 15000 },
     );
 
     const isEnabled = await downloadButton.isEnabled();
@@ -648,7 +694,7 @@ class DashboardPhotosTabPage {
     const guidPattern = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\.zip$/i;
     if (!guidPattern.test(fileName)) {
       throw new Error(
-        `Expected file name in GUID format with .zip extension, but got: "${fileName}"`
+        `Expected file name in GUID format with .zip extension, but got: "${fileName}"`,
       );
     }
 
@@ -672,7 +718,7 @@ class DashboardPhotosTabPage {
   // Click on Back To Slideboard button
   async clickBackToSlideboardButton() {
     const backToSlideboardButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_BackToSlideBoardButton'
+      '#ctl00_ContentPlaceHolder1_BackToSlideBoardButton',
     );
     await backToSlideboardButton.waitFor({ state: 'visible' });
     await backToSlideboardButton.click();
@@ -682,7 +728,7 @@ class DashboardPhotosTabPage {
   // Click On Refresh Photos Button on slideboard
   async clickRefreshPhotosButton() {
     const refreshPhotosButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Photos_userControl_ctl00_RefreshPhotoControlButton'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Photos_userControl_ctl00_RefreshPhotoControlButton',
     );
     await refreshPhotosButton.waitFor({ state: 'visible' });
     await refreshPhotosButton.click();

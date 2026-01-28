@@ -27,7 +27,7 @@ test('Add New Standard Programs', async ({ authenticatedPage }) => {
     modalIframe,
     programName,
     getRandomNumber(1, 9),
-    getRandomNumber(1, 9)
+    getRandomNumber(1, 9),
   );
 
   // Check allow program requirement checkbox

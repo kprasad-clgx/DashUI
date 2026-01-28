@@ -1,5 +1,6 @@
-import { test } from '../../../fixtures/enterpriseFixtures.js';
+import { test, expect } from '../../../fixtures/enterpriseFixtures.js';
 import JobDashboardPage from '../../../pageObjects/enterprise/dashboardPD/jobDashboard.po.js';
+const { getRandomNumber } = await import('../../../utils/randomNumber.js');
 
 test('Job Dashboard Page', async ({ authenticatedPage }) => {
   const page = authenticatedPage;
@@ -29,4 +30,12 @@ test('Job Dashboard Page', async ({ authenticatedPage }) => {
 
   // Assert filter labels are visible
   await jobDashboardPage.assertFilterLabelsVisible();
+
+  // Select random employee, division, and office
+  await jobDashboardPage.selectRandomEmployee(getRandomNumber);
+  await jobDashboardPage.selectRandomDivision(getRandomNumber);
+  await jobDashboardPage.selectRandomOffice(getRandomNumber);
+
+  // Click Go button and assert network request
+  await jobDashboardPage.clickGoButtonAndAssertNetworkRequest();
 });

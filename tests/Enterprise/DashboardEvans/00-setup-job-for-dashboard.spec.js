@@ -17,7 +17,7 @@ test('Setup - Create Job for DashboardEvans Tests', async ({ authenticatedPage }
   await createJobPage.selectCustomer(
     newJobData.customerName,
     newJobData.customerFirstName,
-    newJobData.customerLastName
+    newJobData.customerLastName,
   );
 
   // Generate a unique job name
@@ -26,7 +26,7 @@ test('Setup - Create Job for DashboardEvans Tests', async ({ authenticatedPage }
   await createJobPage.createUniqueJobName(uniqueJobName);
   await createJobPage.checkSameAsCustomerAddress(
     newJobData.customerFirstName,
-    newJobData.customerLastName
+    newJobData.customerLastName,
   );
   await createJobPage.checkWaterMitigation();
   await createJobPage.fillLossDescription(newJobData.lossDescription);
@@ -43,6 +43,6 @@ test('Setup - Create Job for DashboardEvans Tests', async ({ authenticatedPage }
     jobNumber,
     jobNumberWithName,
     'testData/enterprise/enterpriseCompanySettings/DashboardAccountingNotes.json',
-    uniqueJobName
+    uniqueJobName,
   );
 });

@@ -26,7 +26,7 @@ class VerifyNotesDownloadPage {
     const downloadPromise = this.page.waitForEvent('download');
 
     const exportExcelBtn = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_MyNotesUserControl_imageButtonExportToExcell'
+      '#ctl00_ContentPlaceHolder1_MyNotesUserControl_imageButtonExportToExcell',
     );
     await exportExcelBtn.click();
 

@@ -135,7 +135,7 @@ class StandardProgramPage {
     await effectiveDateInput.fill(formattedDate);
 
     const accountReceivableInput = modalIframe.locator(
-      StandardProgramLocators.accountReceivableInput
+      StandardProgramLocators.accountReceivableInput,
     );
     await expect(accountReceivableInput).toBeVisible({ timeout: 10000 });
     await accountReceivableInput.click();
@@ -205,14 +205,14 @@ class StandardProgramPage {
 
   async searchUnpublishedProgram(programName) {
     const searchInput = this.page.locator(
-      StandardProgramLocators.unpublishedProgramNameSearchInput
+      StandardProgramLocators.unpublishedProgramNameSearchInput,
     );
     await expect(searchInput).toBeVisible({ timeout: 10000 });
     await searchInput.click();
     await searchInput.fill(programName);
 
     const filterButton = this.page.locator(
-      StandardProgramLocators.unpublishedProgramNameFilterButton
+      StandardProgramLocators.unpublishedProgramNameFilterButton,
     );
     await expect(filterButton).toBeVisible({ timeout: 10000 });
     await filterButton.click();
@@ -345,7 +345,7 @@ class StandardProgramPage {
     await searchInput.fill(programName);
 
     const filterButton = this.page.locator(
-      StandardProgramLocators.publishedProgramNameFilterButton
+      StandardProgramLocators.publishedProgramNameFilterButton,
     );
     await expect(filterButton).toBeVisible({ timeout: 10000 });
     await filterButton.click();

@@ -13,7 +13,7 @@ test('Verify Equipment Page', async ({ authenticatedPage }) => {
 
   // Verify Equipment Details header has correct text
   await expect(await equipmentPage.verifyEquipmentDetailsHeaderText()).toHaveText(
-    'Equipment Details'
+    'Equipment Details',
   );
 
   // Verify Add New Equipment button is visible
@@ -34,8 +34,3 @@ test('Verify Equipment Page', async ({ authenticatedPage }) => {
   // Verify Status column header is visible
   await expect(await equipmentPage.verifyStatusHeaderVisible()).toBeVisible();
 });
-
-// Storage state persists session - no logout needed
-/* test.afterEach(async ({ page, context }) => {
-  // Logout and cleanup
-}); */

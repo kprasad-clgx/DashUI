@@ -66,7 +66,7 @@ class DashboardDatesTabPage {
   // Click on Date of loss Current Date Select button
   async clickDateOfLossCurrentDateSelectButton() {
     const dateOfLossCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_17'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_17',
     );
     await dateOfLossCurrentDateSelectButton.waitFor({ state: 'visible' });
     await dateOfLossCurrentDateSelectButton.click();
@@ -82,7 +82,7 @@ class DashboardDatesTabPage {
   // Click on Date Contacted Current Date Select button
   async clickDateContactedCurrentDateSelectButton() {
     const dateContactedCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_1'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_1',
     );
     await dateContactedCurrentDateSelectButton.waitFor({ state: 'visible' });
     await dateContactedCurrentDateSelectButton.click();
@@ -91,7 +91,7 @@ class DashboardDatesTabPage {
   // Click on Date Inspected Current Date Select button
   async clickDateInspectedCurrentDateSelectButton() {
     const dateInspectedCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_2'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_2',
     );
     await dateInspectedCurrentDateSelectButton.waitFor({ state: 'visible' });
     await dateInspectedCurrentDateSelectButton.click();
@@ -100,7 +100,7 @@ class DashboardDatesTabPage {
   // Verify Date of Work Authorization label is visible
   async verifyDateOfWorkAuthorizationLabelVisible() {
     const dateOfWorkAuthorizationLabel = this.page.locator(
-      DashboardDatesTabLocators.dateOfWorkAuthorizationLabel
+      DashboardDatesTabLocators.dateOfWorkAuthorizationLabel,
     );
     await dateOfWorkAuthorizationLabel.waitFor({ state: 'visible' });
     return dateOfWorkAuthorizationLabel;
@@ -109,7 +109,7 @@ class DashboardDatesTabPage {
   // Click on Date of Work Authorization Current Date Select button
   async clickDateOfWorkAuthorizationCurrentDateSelectButton() {
     const dateOfWorkAuthorizationCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_4'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_4',
     );
     await dateOfWorkAuthorizationCurrentDateSelectButton.waitFor({ state: 'visible' });
     await dateOfWorkAuthorizationCurrentDateSelectButton.click();
@@ -118,7 +118,7 @@ class DashboardDatesTabPage {
   // Verify Date Estimate Sent label is visible
   async verifyDateEstimateSentLabelVisible() {
     const dateEstimateSentLabel = this.page.locator(
-      DashboardDatesTabLocators.dateEstimateSentLabel
+      DashboardDatesTabLocators.dateEstimateSentLabel,
     );
     await dateEstimateSentLabel.waitFor({ state: 'visible' });
     return dateEstimateSentLabel;
@@ -127,7 +127,7 @@ class DashboardDatesTabPage {
   // Click on Date Estimate Sent Current Date Select button
   async clickDateEstimateSentCurrentDateSelectButton() {
     const dateEstimateSentCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_3'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_3',
     );
     await dateEstimateSentCurrentDateSelectButton.waitFor({ state: 'visible' });
     await dateEstimateSentCurrentDateSelectButton.click();
@@ -136,7 +136,7 @@ class DashboardDatesTabPage {
   // Click on Date Estimate Approved Current Date Select button
   async clickDateEstimateApprovedCurrentDateSelectButton() {
     const dateEstimateApprovedCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_5'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_5',
     );
     await dateEstimateApprovedCurrentDateSelectButton.waitFor({ state: 'visible' });
     await dateEstimateApprovedCurrentDateSelectButton.click();
@@ -145,7 +145,7 @@ class DashboardDatesTabPage {
   // Click on Date Inventoried Current Date Select button
   async clickDateInventoriedCurrentDateSelectButton() {
     const dateInventoriedCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_11'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_11',
     );
     await dateInventoriedCurrentDateSelectButton.waitFor({ state: 'visible' });
     await dateInventoriedCurrentDateSelectButton.click();
@@ -161,7 +161,7 @@ class DashboardDatesTabPage {
   // Click on Target Start Date Current Date Select button
   async clickTargetStartDateCurrentDateSelectButton() {
     const targetStartDateCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_10005'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_10005',
     );
     await targetStartDateCurrentDateSelectButton.waitFor({ state: 'visible' });
     await targetStartDateCurrentDateSelectButton.click();
@@ -177,7 +177,7 @@ class DashboardDatesTabPage {
   // Verify Provider Reason for Closing label is visible
   async verifyProviderReasonForClosingLabelVisible() {
     const providerReasonForClosingLabel = this.page.locator(
-      DashboardDatesTabLocators.providerReasonForClosingLabel
+      DashboardDatesTabLocators.providerReasonForClosingLabel,
     );
     await providerReasonForClosingLabel.waitFor({ state: 'visible' });
     return providerReasonForClosingLabel;
@@ -193,7 +193,7 @@ class DashboardDatesTabPage {
   // Verify Into Production Date label is visible
   async verifyIntoProductionDateLabelVisible() {
     const intoProductionDateLabel = this.page.locator(
-      DashboardDatesTabLocators.intoProductionDateLabel
+      DashboardDatesTabLocators.intoProductionDateLabel,
     );
     await intoProductionDateLabel.waitFor({ state: 'visible' });
     return intoProductionDateLabel;
@@ -202,7 +202,7 @@ class DashboardDatesTabPage {
   // Click on Into Production Date Current Date Select button
   async clickIntoProductionDateCurrentDateSelectButton() {
     const intoProductionDateCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_13'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_13',
     );
     await intoProductionDateCurrentDateSelectButton.waitFor({ state: 'visible' });
     await intoProductionDateCurrentDateSelectButton.click();
@@ -218,7 +218,7 @@ class DashboardDatesTabPage {
   // Click on Date Started Current Date Select button
   async clickDateStartedCurrentDateSelectButton() {
     const dateStartedCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_6'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_6',
     );
     await dateStartedCurrentDateSelectButton.waitFor({ state: 'visible' });
     await dateStartedCurrentDateSelectButton.click();
@@ -234,7 +234,7 @@ class DashboardDatesTabPage {
   // Click on Date of Majority Completed Current Date Select button
   async clickDateCompletedCurrentDateSelectButton() {
     const dateCompletedCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_7'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_7',
     );
 
     await dateCompletedCurrentDateSelectButton.waitFor({ state: 'visible' });
@@ -251,7 +251,7 @@ class DashboardDatesTabPage {
   // Date of Target Completed Current date select button
   async clickDateTargetCurrentDateSelectButton() {
     const dateTargetCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_8'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_8',
     );
     await dateTargetCurrentDateSelectButton.waitFor({ state: 'visible' });
     await dateTargetCurrentDateSelectButton.click();
@@ -267,7 +267,7 @@ class DashboardDatesTabPage {
   // Click on Date Paid Current Date Select button
   async clickDatePaidCurrentDateSelectButton() {
     const datePaidCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_9'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_9',
     );
     await datePaidCurrentDateSelectButton.waitFor({ state: 'visible' });
     await datePaidCurrentDateSelectButton.click();
@@ -283,7 +283,7 @@ class DashboardDatesTabPage {
   // Date invoiced Current date select button
   async clickDateInvoicedCurrentDateSelectButton() {
     const dateInvoicedCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_14'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_14',
     );
     await dateInvoicedCurrentDateSelectButton.waitFor({ state: 'visible' });
     await dateInvoicedCurrentDateSelectButton.click();
@@ -292,7 +292,7 @@ class DashboardDatesTabPage {
   // Date Closed Current date select button
   async clickDateClosedCurrentDateSelectButton() {
     const dateClosedCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_10'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_10',
     );
     await dateClosedCurrentDateSelectButton.waitFor({ state: 'visible' });
     await dateClosedCurrentDateSelectButton.click();
@@ -301,7 +301,7 @@ class DashboardDatesTabPage {
   // Bid only date Closed Current date select button
   async clickBidOnlyDateClosedCurrentDateSelectButton() {
     const bidOnlyDateClosedCurrentDateSelectButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_1014'
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_1014',
     );
     await bidOnlyDateClosedCurrentDateSelectButton.waitFor({ state: 'visible' });
     await bidOnlyDateClosedCurrentDateSelectButton.click();

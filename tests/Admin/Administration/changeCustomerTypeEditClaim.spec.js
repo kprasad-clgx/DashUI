@@ -43,6 +43,6 @@ test('Change User Rights To See Company Customer Option on Edit Claim Page', asy
   const switchCustomerTypeLabel = await roleBasedSecurityPage.verifySwitchCustomerTypeLabel();
   await expect(switchCustomerTypeLabel).toBeVisible();
   await expect(switchCustomerTypeLabel).toHaveText(
-    'Click the Company Customer radio button to change the customer type'
+    'Click the Company Customer radio button to change the customer type',
   );
 });

@@ -148,7 +148,7 @@ class AcceptClaimCloseClaimPage {
 
     // Select Estimator
     const estimatorDropdownArrow = dropDownIFrame.locator(
-      CloseClaimLocators.estimatorDropdownArrow
+      CloseClaimLocators.estimatorDropdownArrow,
     );
     await estimatorDropdownArrow.waitFor({ state: 'visible', timeout: 10000 });
     await estimatorDropdownArrow.click();
@@ -162,7 +162,7 @@ class AcceptClaimCloseClaimPage {
 
     // Select Coordinator
     const coordinatorDropdownArrow = dropDownIFrame.locator(
-      CloseClaimLocators.coordinatorDropdownArrow
+      CloseClaimLocators.coordinatorDropdownArrow,
     );
     await coordinatorDropdownArrow.waitFor({
       state: 'visible',
@@ -171,7 +171,7 @@ class AcceptClaimCloseClaimPage {
     await coordinatorDropdownArrow.click();
 
     const coordinatorDropdownList = dropDownIFrame.locator(
-      CloseClaimLocators.coordinatorDropdownList
+      CloseClaimLocators.coordinatorDropdownList,
     );
     await coordinatorDropdownList.waitFor({ state: 'visible', timeout: 10000 });
 
@@ -238,13 +238,13 @@ class AcceptClaimCloseClaimPage {
 
     // Select Referred By
     const referredByDropdownArrow = editClaimIFrame.locator(
-      CloseClaimLocators.referredByDropdownArrow
+      CloseClaimLocators.referredByDropdownArrow,
     );
     await referredByDropdownArrow.waitFor({ state: 'visible', timeout: 10000 });
     await referredByDropdownArrow.click();
 
     const referredByDropdownList = editClaimIFrame.locator(
-      CloseClaimLocators.referredByDropdownList
+      CloseClaimLocators.referredByDropdownList,
     );
     await referredByDropdownList.waitFor({ state: 'visible', timeout: 10000 });
 
@@ -255,13 +255,13 @@ class AcceptClaimCloseClaimPage {
 
     // Select Reported By
     const reportedByDropdownArrow = editClaimIFrame.locator(
-      CloseClaimLocators.reportedByDropdownArrow
+      CloseClaimLocators.reportedByDropdownArrow,
     );
     await reportedByDropdownArrow.waitFor({ state: 'visible', timeout: 10000 });
     await reportedByDropdownArrow.click();
 
     const reportedByDropdownList = editClaimIFrame.locator(
-      CloseClaimLocators.reportedByDropdownList
+      CloseClaimLocators.reportedByDropdownList,
     );
     await reportedByDropdownList.waitFor({ state: 'visible', timeout: 10000 });
 

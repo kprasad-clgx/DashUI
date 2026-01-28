@@ -104,7 +104,7 @@ class EquipmentPage {
   async verifySecondaryEquipmentTypeHeaderVisible() {
     const secondaryEquipmentTypeHeader = this.page.locator(
       EquipmentLocators.secondaryEquipmentTypeHeader,
-      { hasText: /^Secondary Equipment Type$/ }
+      { hasText: /^Secondary Equipment Type$/ },
     );
     await secondaryEquipmentTypeHeader.waitFor({ state: 'visible' });
     return secondaryEquipmentTypeHeader;

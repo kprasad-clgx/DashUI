@@ -30,7 +30,7 @@ class DashboardComplianceTasksTabPage {
   async navigateToComplianceTasksTab() {
     const complianceTasksTab = this.page.locator(
       DashboardComplianceTasksTabPageLocators.complianceTasksTab,
-      { hasText: 'Compliance Tasks' }
+      { hasText: 'Compliance Tasks' },
     );
     await complianceTasksTab.waitFor({ state: 'visible', timeout: 5000 });
     await complianceTasksTab.click();

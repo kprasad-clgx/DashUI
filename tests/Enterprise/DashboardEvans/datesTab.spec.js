@@ -30,7 +30,7 @@ test('Dates Tab Validation', async ({ authenticatedPage }) => {
 
   // Verify Date of Work Authorization label is visible
   await expect(
-    await dashboardDatesTabPage.verifyDateOfWorkAuthorizationLabelVisible()
+    await dashboardDatesTabPage.verifyDateOfWorkAuthorizationLabelVisible(),
   ).toBeVisible();
 
   // Click on Date of Work Authorization Current Date Select button
@@ -62,7 +62,7 @@ test('Dates Tab Validation', async ({ authenticatedPage }) => {
 
   // Verify Provider Reason for Closing label is visible
   await expect(
-    await dashboardDatesTabPage.verifyProviderReasonForClosingLabelVisible()
+    await dashboardDatesTabPage.verifyProviderReasonForClosingLabelVisible(),
   ).toBeVisible();
 
   // Verify Put on Hold Job button is visible

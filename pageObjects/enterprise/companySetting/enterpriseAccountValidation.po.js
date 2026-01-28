@@ -75,7 +75,7 @@ class EnterpriseAccountValidationPage {
    */
   async waitAndClickAccountingReportPOButton() {
     const accountingReportPOBtn = this.page.locator(
-      EnterpriseAccountValidationLocators.accountingReportPOBtn
+      EnterpriseAccountValidationLocators.accountingReportPOBtn,
     );
     await accountingReportPOBtn.waitFor({ state: 'visible', timeout: 10000 });
     await accountingReportPOBtn.click();
@@ -88,7 +88,7 @@ class EnterpriseAccountValidationPage {
    */
   async downloadAccountingReportWithPOs() {
     const accountingReportPOBtn = this.page.locator(
-      EnterpriseAccountValidationLocators.accountingReportPOBtn
+      EnterpriseAccountValidationLocators.accountingReportPOBtn,
     );
 
     const [download] = await Promise.all([

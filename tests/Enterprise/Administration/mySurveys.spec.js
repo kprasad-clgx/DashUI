@@ -61,8 +61,3 @@ test('My Survey Page', async ({ authenticatedPage }) => {
   const refreshGridButton = await mySurveysPage.verifyRefreshGridButton();
   await expect(refreshGridButton).toBeVisible();
 });
-
-// Storage state persists session - no logout needed
-/* test.afterEach(async ({ page, context }) => {
-  // Logout and cleanup
-}); */

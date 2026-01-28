@@ -17,13 +17,14 @@ test('Create Job', async ({ authenticatedPage }) => {
   await createJobPage.selectCustomer(
     newJobData.customerName,
     newJobData.customerFirstName,
-    newJobData.customerLastName
+    newJobData.customerLastName,
   );
   await createJobPage.checkSameAsCustomerAddress(
     newJobData.customerFirstName,
-    newJobData.customerLastName
+    newJobData.customerLastName,
   );
   await createJobPage.checkWaterMitigation();
+  await createJobPage.fillPolicyInformation();
   await createJobPage.fillLossDescription(newJobData.lossDescription);
 
   // Click on Save and Go to Job Slideboard

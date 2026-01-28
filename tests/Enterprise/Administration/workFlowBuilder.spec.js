@@ -73,7 +73,7 @@ test('Add New Workflow validation', async ({ authenticatedPage }) => {
   // Fill workflow title and description
   await workFlowBuilderPage.fillWorkflowTitleAndDescription(
     addWorkModalFrame,
-    automatedWorkflowName
+    automatedWorkflowName,
   );
 
   // Select random action trigger
@@ -138,9 +138,12 @@ test('Add New Workflow validation', async ({ authenticatedPage }) => {
 
   // Verify workflow exists in grid
   await workFlowBuilderPage.verifyWorkflowExistsInGrid();
-});
 
-// Storage state persists session - no logout needed
-/* test.afterEach(async ({ page, context }) => {
-  // Logout and cleanup
-}); */
+  await page.waitForLoadState('networkidle');
+
+  // Delete the created workflow to clean up
+  await workFlowBuilderPage.deleteWorkflow(automatedWorkflowName);
+
+  // Verify workflow is deleted
+  await workFlowBuilderPage.verifyWorkflowDoesNotExistInGrid(automatedWorkflowName);
+});

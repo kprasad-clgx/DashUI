@@ -1,4 +1,4 @@
-import { test } from '../../../fixtures/enterpriseFixtures.js';
+import { test, expect } from '../../../fixtures/enterpriseFixtures.js';
 import { EquipmentPage } from '../../../pageObjects/enterprise/moreFg/equipment.po.js';
 
 test('Equipment Page in More FG', async ({ authenticatedPage }) => {
@@ -16,9 +16,6 @@ test('Equipment Page in More FG', async ({ authenticatedPage }) => {
 
   // Validate Move Date Label
   await equipmentPage.validateMoveDateLabel();
-
-  // Validate Add New Equipment Button
-  await equipmentPage.validateAddNewEquipmentButton();
 
   // Define grid headers
   const expectedHeaders = [
@@ -42,6 +39,37 @@ test('Equipment Page in More FG', async ({ authenticatedPage }) => {
   // Validate Grid Headers
   await equipmentPage.validateGridHeaders(expectedHeaders);
 
+  // Validate Add New Equipment Button
+  await equipmentPage.validateAddNewEquipmentButton();
+
+  // Click on Add New Equipment Button and validate navigation
+  await equipmentPage.addNewEquipmentButton.click();
+  await page.waitForLoadState('networkidle');
+  await expect(page).toHaveURL(/.*eEditEquipment\.aspx.*/);
+
+  // Details in Equipment Edit Page
+  await expect(page.locator('span.rtsTxt', { hasText: 'Details' })).toBeVisible();
+
   // Validate Export Buttons
   await equipmentPage.validateExportButtons();
+
+  await page.waitForLoadState('networkidle');
+
+  // Click on Export to Excel Button and assert file name
+  const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    await equipmentPage.exportToExcelButton.click(),
+  ]);
+  const fileName = download.suggestedFilename();
+  expect(fileName).toBe('EquipmentDetails.xlsx');
+
+  await page.waitForLoadState('networkidle');
+
+  // Click on Export to PDF Button and assert file name
+  const [pdfDownload] = await Promise.all([
+    page.waitForEvent('download'),
+    await equipmentPage.exportToPDFButton.click(),
+  ]);
+  const pdfFileName = pdfDownload.suggestedFilename();
+  expect(pdfFileName).toBe('EquipmentDetails.pdf');
 });

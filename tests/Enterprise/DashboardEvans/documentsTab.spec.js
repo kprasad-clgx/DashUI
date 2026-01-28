@@ -13,6 +13,29 @@ test('Documents Tab Validation', async ({ authenticatedPage }) => {
   // Navigate to Documents tab
   await dashboardDocumentsTabPage.navigateToDocumentsTab();
 
+  // Array of Document Categories Options Headers
+  const documentCategoriesOptionsHeaders = [
+    'Accounting',
+    'AP',
+    'Accounts Receivable',
+    'DPLS',
+    'Contracts and Agreements',
+    'Email Attachment Documents',
+    'Estimates',
+    'Misc Documents',
+    'Moisture_Mapping',
+    'Others',
+    'Signed Change Orders',
+    'Written Notes and sketches',
+  ];
+
+  // Verify Document Categories Options Headers
+  for (const headerText of documentCategoriesOptionsHeaders) {
+    await expect(
+      await dashboardDocumentsTabPage.verifyDocumentCategoriesOptionHeaderVisible(headerText),
+    ).toBeVisible();
+  }
+
   // Verify Create Category button is visible
   await expect(await dashboardDocumentsTabPage.verifyCreateCategoryButtonVisible()).toBeVisible();
 
@@ -21,7 +44,7 @@ test('Documents Tab Validation', async ({ authenticatedPage }) => {
 
   // Verify Manage Job Documents button is visible
   await expect(
-    await dashboardDocumentsTabPage.verifyManageJobDocumentsButtonVisible()
+    await dashboardDocumentsTabPage.verifyManageJobDocumentsButtonVisible(),
   ).toBeVisible();
 
   // Click Create Category button
@@ -47,7 +70,7 @@ test('Documents Tab Validation', async ({ authenticatedPage }) => {
 
   // Verify Documents Categories Table header is visible
   await expect(
-    await dashboardDocumentsTabPage.verifyDocumentsCategoriesTableHeaderVisible()
+    await dashboardDocumentsTabPage.verifyDocumentsCategoriesTableHeaderVisible(),
   ).toBeVisible();
 
   // Verify Accounting album in Document Categories is visible
@@ -58,7 +81,7 @@ test('Documents Tab Validation', async ({ authenticatedPage }) => {
 
   // Verify Signed Change Orders album in Document Categories is visible
   await expect(
-    await dashboardDocumentsTabPage.verifySignedChangeOrdersAlbumVisible()
+    await dashboardDocumentsTabPage.verifySignedChangeOrdersAlbumVisible(),
   ).toBeVisible();
 
   // Click Upload Document button
@@ -69,4 +92,10 @@ test('Documents Tab Validation', async ({ authenticatedPage }) => {
 
   // Click on close(X) button on upload popup
   await dashboardDocumentsTabPage.clickUploadPopupCloseButton();
+
+  // Click on Manage Job Documents button
+  await dashboardDocumentsTabPage.clickManageJobDocumentsButton();
+
+  // Verify on Manage Job Documents is redirected to Manage Job Documents page
+  expect(await dashboardDocumentsTabPage.verifyOnManageJobDocumentsPage()).toBeTruthy();
 });

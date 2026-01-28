@@ -47,7 +47,7 @@ class AccountReceivableTrackingPage {
    */
   async assertAllRadioButtonsVisible() {
     const radioButtonGroupLocator = this.page.locator(
-      AccountReceivableTrackingLocators.radioButtonGroup
+      AccountReceivableTrackingLocators.radioButtonGroup,
     );
 
     const expectedRadioOptions = ['Show All', 'Show Requested', 'Show Processed', 'Show Rejected'];

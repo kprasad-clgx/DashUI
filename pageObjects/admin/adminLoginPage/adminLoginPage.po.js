@@ -27,7 +27,7 @@ class LoginPage {
           `   Current TEST_ENV: ${config.env}\n` +
           `   Expected variable: ${config.env.toUpperCase()}_ADMIN_LOGIN_URL\n\n` +
           `📝 Please check your .env file and ensure it's properly configured.\n` +
-          `💡 See README.md for setup instructions.\n`
+          `💡 See README.md for setup instructions.\n`,
       );
     }
   }

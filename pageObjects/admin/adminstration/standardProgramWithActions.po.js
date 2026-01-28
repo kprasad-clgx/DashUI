@@ -2,6 +2,8 @@ import { expect } from '@playwright/test';
 
 const StandardProgramWithActionsLocators = {
   // Requirements related locators
+  firstUnpublishedProgramRow:
+    '#ctl00_ContentPlaceHolder1_StandardProgramControl_GridView_UnPublishedPrograms_ctl00 > tbody > tr',
   viewRequirementsLink: 'a[title="View Requirements"]',
   addNewProgramRequirementButton: '#Button_AddNewRequirement',
   addNewProgramRequirementModal:
@@ -53,9 +55,12 @@ class StandardProgramWithActionsPage {
     this.page = page;
   }
 
-  async clickViewRequirements(firstGridRow) {
+  async clickViewRequirements() {
+    const firstGridRow = this.page
+      .locator(StandardProgramWithActionsLocators.firstUnpublishedProgramRow)
+      .first();
     const viewRequirementsLink = firstGridRow.locator(
-      StandardProgramWithActionsLocators.viewRequirementsLink
+      StandardProgramWithActionsLocators.viewRequirementsLink,
     );
     await expect(viewRequirementsLink).toBeVisible({ timeout: 10000 });
     await viewRequirementsLink.click();
@@ -64,7 +69,7 @@ class StandardProgramWithActionsPage {
 
   async clickAddNewProgramRequirement() {
     const addNewProgramRequirementButton = this.page.locator(
-      StandardProgramWithActionsLocators.addNewProgramRequirementButton
+      StandardProgramWithActionsLocators.addNewProgramRequirementButton,
     );
     await expect(addNewProgramRequirementButton).toBeVisible({ timeout: 10000 });
     await addNewProgramRequirementButton.click();
@@ -73,19 +78,19 @@ class StandardProgramWithActionsPage {
 
   async verifyAddNewProgramRequirementModal() {
     const addNewProgramRequirementModal = this.page.locator(
-      StandardProgramWithActionsLocators.addNewProgramRequirementModal
+      StandardProgramWithActionsLocators.addNewProgramRequirementModal,
     );
     await expect(addNewProgramRequirementModal).toBeVisible({ timeout: 10000 });
 
     const addRequirementModalHeader = addNewProgramRequirementModal.locator(
       StandardProgramWithActionsLocators.addRequirementModalHeader,
-      { hasText: 'Add New Program Requirement' }
+      { hasText: 'Add New Program Requirement' },
     );
     await expect(addRequirementModalHeader).toBeVisible();
     await expect(addRequirementModalHeader).toHaveText('Add New Program Requirement');
 
     const addRequirementModalIframe = addNewProgramRequirementModal.frameLocator(
-      StandardProgramWithActionsLocators.addRequirementModalIframe
+      StandardProgramWithActionsLocators.addRequirementModalIframe,
     );
     await expect(addRequirementModalIframe.locator('body')).toBeVisible({ timeout: 10000 });
 
@@ -94,7 +99,7 @@ class StandardProgramWithActionsPage {
 
   async fillRequirementDetails(addRequirementModalIframe, requirementName, timeFrame) {
     const requirementNameInput = addRequirementModalIframe.locator(
-      StandardProgramWithActionsLocators.requirementNameInput
+      StandardProgramWithActionsLocators.requirementNameInput,
     );
     await expect(requirementNameInput).toBeVisible({ timeout: 10000 });
     await requirementNameInput.click();
@@ -102,7 +107,7 @@ class StandardProgramWithActionsPage {
 
     // Robust wait for the input to be attached and visible
     const timeFrameInput = addRequirementModalIframe.locator(
-      StandardProgramWithActionsLocators.timeFrameInput
+      StandardProgramWithActionsLocators.timeFrameInput,
     );
     await timeFrameInput.waitFor({ state: 'attached', timeout: 10000 });
     await expect(timeFrameInput).toBeVisible({ timeout: 10000 });
@@ -112,24 +117,24 @@ class StandardProgramWithActionsPage {
 
   async selectAllStatesForRequirement(addRequirementModalIframe) {
     const appliesToStateEditLocator = addRequirementModalIframe.locator(
-      StandardProgramWithActionsLocators.appliesToStateEditLocator
+      StandardProgramWithActionsLocators.appliesToStateEditLocator,
     );
     await expect(appliesToStateEditLocator).toBeVisible({ timeout: 10000 });
     await appliesToStateEditLocator.click();
 
     // Wait for the modal to be visible instead of networkidle
     const selectStateModalReq = addRequirementModalIframe.locator(
-      StandardProgramWithActionsLocators.selectStateModalReq
+      StandardProgramWithActionsLocators.selectStateModalReq,
     );
     await expect(selectStateModalReq).toBeVisible({ timeout: 10000 });
 
     const stateSourceListReq = selectStateModalReq.locator(
-      StandardProgramWithActionsLocators.stateSourceListReq
+      StandardProgramWithActionsLocators.stateSourceListReq,
     );
     await expect(stateSourceListReq.first()).toBeVisible({ timeout: 10000 });
 
     const allToRightButtonInReq = selectStateModalReq.locator(
-      StandardProgramWithActionsLocators.allToRightButtonInReq
+      StandardProgramWithActionsLocators.allToRightButtonInReq,
     );
     await expect(allToRightButtonInReq).toBeVisible({ timeout: 10000 });
     await allToRightButtonInReq.click();
@@ -143,16 +148,16 @@ class StandardProgramWithActionsPage {
 
   async selectRequirementType(
     addRequirementModalIframe,
-    requirementType = 'Initial Customer Contact'
+    requirementType = 'Initial Customer Contact',
   ) {
     const requirementTypeDropdown = addRequirementModalIframe.locator(
-      StandardProgramWithActionsLocators.requirementTypeDropdown
+      StandardProgramWithActionsLocators.requirementTypeDropdown,
     );
     await expect(requirementTypeDropdown).toBeVisible({ timeout: 10000 });
     await requirementTypeDropdown.click();
 
     const requirementTypeDropdownList = addRequirementModalIframe.locator(
-      StandardProgramWithActionsLocators.requirementTypeDropdownList
+      StandardProgramWithActionsLocators.requirementTypeDropdownList,
     );
     await expect(requirementTypeDropdownList).toBeVisible({ timeout: 10000 });
 
@@ -165,16 +170,16 @@ class StandardProgramWithActionsPage {
 
   async selectRequirementCategory(
     addRequirementModalIframe,
-    requirementCategory = 'Service Standards'
+    requirementCategory = 'Service Standards',
   ) {
     const requirementCategoryDropdown = addRequirementModalIframe.locator(
-      StandardProgramWithActionsLocators.requirementCategoryDropdown
+      StandardProgramWithActionsLocators.requirementCategoryDropdown,
     );
     await expect(requirementCategoryDropdown).toBeVisible({ timeout: 10000 });
     await requirementCategoryDropdown.click();
 
     const requirementCategoryDropdownList = addRequirementModalIframe.locator(
-      StandardProgramWithActionsLocators.requirementCategoryDropdownList
+      StandardProgramWithActionsLocators.requirementCategoryDropdownList,
     );
     await expect(requirementCategoryDropdownList).toBeVisible({ timeout: 10000 });
 
@@ -187,7 +192,7 @@ class StandardProgramWithActionsPage {
 
   async saveRequirement(addNewProgramRequirementModal) {
     const saveButtonReq = addNewProgramRequirementModal.locator(
-      StandardProgramWithActionsLocators.saveButtonReq
+      StandardProgramWithActionsLocators.saveButtonReq,
     );
     await expect(saveButtonReq).toBeVisible({ timeout: 10000 });
     await saveButtonReq.click();
@@ -203,7 +208,7 @@ class StandardProgramWithActionsPage {
   async clickViewActionItems(requirementsGrid) {
     const firstRequirementRow = requirementsGrid.locator('tr.rgRow').first();
     const viewActionItemsLink = firstRequirementRow.locator(
-      StandardProgramWithActionsLocators.viewActionItemsLink
+      StandardProgramWithActionsLocators.viewActionItemsLink,
     );
     await expect(viewActionItemsLink).toBeVisible({ timeout: 10000 });
     await viewActionItemsLink.click();
@@ -212,7 +217,7 @@ class StandardProgramWithActionsPage {
 
   async clickAddNewActionItem() {
     const addNewActionItemButton = this.page.locator(
-      StandardProgramWithActionsLocators.addNewActionItemButton
+      StandardProgramWithActionsLocators.addNewActionItemButton,
     );
     await expect(addNewActionItemButton).toBeVisible({ timeout: 10000 });
     await addNewActionItemButton.click();
@@ -221,19 +226,19 @@ class StandardProgramWithActionsPage {
 
   async verifyAddNewActionItemModal() {
     const addNewActionItemModal = this.page.locator(
-      StandardProgramWithActionsLocators.addNewActionItemModal
+      StandardProgramWithActionsLocators.addNewActionItemModal,
     );
     await expect(addNewActionItemModal).toBeVisible({ timeout: 10000 });
 
     const addActionItemModalHeader = addNewActionItemModal.locator(
       StandardProgramWithActionsLocators.addActionItemModalHeader,
-      { hasText: 'Add New Action Item' }
+      { hasText: 'Add New Action Item' },
     );
     await expect(addActionItemModalHeader).toBeVisible();
     await expect(addActionItemModalHeader).toHaveText('Add New Action Item');
 
     const addActionItemModalIframe = addNewActionItemModal.frameLocator(
-      StandardProgramWithActionsLocators.addActionItemModalIframe
+      StandardProgramWithActionsLocators.addActionItemModalIframe,
     );
     await expect(addActionItemModalIframe.locator('body')).toBeVisible({ timeout: 20000 });
 
@@ -242,14 +247,14 @@ class StandardProgramWithActionsPage {
 
   async fillActionItemDetails(addActionItemModalIframe, actionItemName) {
     const actionItemTitleInput = addActionItemModalIframe.locator(
-      StandardProgramWithActionsLocators.actionItemTitleInput
+      StandardProgramWithActionsLocators.actionItemTitleInput,
     );
     await expect(actionItemTitleInput).toBeVisible({ timeout: 10000 });
     await actionItemTitleInput.click();
     await actionItemTitleInput.fill(actionItemName);
 
     const actionItemDescriptionInput = addActionItemModalIframe.locator(
-      StandardProgramWithActionsLocators.actionItemDescriptionInput
+      StandardProgramWithActionsLocators.actionItemDescriptionInput,
     );
     await expect(actionItemDescriptionInput).toBeVisible({ timeout: 10000 });
     await actionItemDescriptionInput.click();
@@ -258,7 +263,7 @@ class StandardProgramWithActionsPage {
 
   async selectRandomActionTrigger(addActionItemModalIframe) {
     const actionTriggerDropdown = addActionItemModalIframe.locator(
-      StandardProgramWithActionsLocators.actionTriggerDropdown
+      StandardProgramWithActionsLocators.actionTriggerDropdown,
     );
     await expect(actionTriggerDropdown).toBeVisible({ timeout: 5000 });
     await actionTriggerDropdown.click();
@@ -273,7 +278,7 @@ class StandardProgramWithActionsPage {
 
   async selectRandomActionEvent(addActionItemModalIframe) {
     const actionEventDropdown = addActionItemModalIframe.locator(
-      StandardProgramWithActionsLocators.actionEventDropdown
+      StandardProgramWithActionsLocators.actionEventDropdown,
     );
     await expect(actionEventDropdown).toBeVisible({ timeout: 10000 });
     await actionEventDropdown.click();
@@ -288,7 +293,7 @@ class StandardProgramWithActionsPage {
 
   async selectRandomDefaultAssignee(addActionItemModalIframe) {
     const defaultAssigneeDropdown = addActionItemModalIframe.locator(
-      StandardProgramWithActionsLocators.defaultAssigneeDropdown
+      StandardProgramWithActionsLocators.defaultAssigneeDropdown,
     );
     await expect(defaultAssigneeDropdown).toBeVisible({ timeout: 10000 });
     await defaultAssigneeDropdown.click();
@@ -303,7 +308,7 @@ class StandardProgramWithActionsPage {
 
   async fillAssignmentDelay(addActionItemModalIframe, assignmentDelayDigit) {
     const assignmentDelayInput = addActionItemModalIframe.locator(
-      StandardProgramWithActionsLocators.assignmentDelayInput
+      StandardProgramWithActionsLocators.assignmentDelayInput,
     );
     await expect(assignmentDelayInput).toBeVisible({ timeout: 5000 });
     await assignmentDelayInput.click();
@@ -312,7 +317,7 @@ class StandardProgramWithActionsPage {
 
   async selectRandomAssignmentDelayUnit(addActionItemModalIframe) {
     const assignmentDelayUnitDropdown = addActionItemModalIframe.locator(
-      StandardProgramWithActionsLocators.assignmentDelayUnitDropdown
+      StandardProgramWithActionsLocators.assignmentDelayUnitDropdown,
     );
     await expect(assignmentDelayUnitDropdown).toBeVisible({ timeout: 5000 });
     await assignmentDelayUnitDropdown.click();
@@ -327,7 +332,7 @@ class StandardProgramWithActionsPage {
 
   async fillMustCompleteWithin(addActionItemModalIframe, mustCompleteWithinDigit) {
     const mustCompleteWithinInput = addActionItemModalIframe.locator(
-      StandardProgramWithActionsLocators.mustCompleteWithinInput
+      StandardProgramWithActionsLocators.mustCompleteWithinInput,
     );
     await expect(mustCompleteWithinInput).toBeVisible({ timeout: 5000 });
     await mustCompleteWithinInput.click();
@@ -336,7 +341,7 @@ class StandardProgramWithActionsPage {
 
   async selectRandomMustCompleteWithinUnit(addActionItemModalIframe) {
     const mustCompleteWithinUnitDropdown = addActionItemModalIframe.locator(
-      StandardProgramWithActionsLocators.mustCompleteWithinUnitDropdown
+      StandardProgramWithActionsLocators.mustCompleteWithinUnitDropdown,
     );
     await expect(mustCompleteWithinUnitDropdown).toBeVisible({ timeout: 5000 });
     await mustCompleteWithinUnitDropdown.click();
@@ -352,7 +357,7 @@ class StandardProgramWithActionsPage {
 
   async selectMarkCompletedRequiredCompletionAction(addActionItemModalIframe) {
     const requiredCompletionActionDropdown = addActionItemModalIframe.locator(
-      '#DropDown_RequiredCompletionAction_Arrow'
+      '#DropDown_RequiredCompletionAction_Arrow',
     );
     await expect(requiredCompletionActionDropdown).toBeVisible({ timeout: 5000 });
     await requiredCompletionActionDropdown.click();
@@ -368,13 +373,13 @@ class StandardProgramWithActionsPage {
 
   async verifyActionItemButtons(addActionItemModalIframe) {
     const actionSaveButton = addActionItemModalIframe.locator(
-      StandardProgramWithActionsLocators.actionSaveButton
+      StandardProgramWithActionsLocators.actionSaveButton,
     );
     const actionSaveAndAddNotificationButton = addActionItemModalIframe.locator(
-      StandardProgramWithActionsLocators.actionSaveAndAddNotificationButton
+      StandardProgramWithActionsLocators.actionSaveAndAddNotificationButton,
     );
     const actionCancelButton = addActionItemModalIframe.locator(
-      StandardProgramWithActionsLocators.actionCancelButton
+      StandardProgramWithActionsLocators.actionCancelButton,
     );
 
     await expect(actionSaveButton).toBeVisible();
@@ -384,19 +389,19 @@ class StandardProgramWithActionsPage {
 
   async saveActionItem(addActionItemModalIframe) {
     const actionSaveButton = addActionItemModalIframe.locator(
-      StandardProgramWithActionsLocators.actionSaveButton
+      StandardProgramWithActionsLocators.actionSaveButton,
     );
     await actionSaveButton.click();
     // Check the modal wrapper is hidden, not the FrameLocator
     const addNewActionItemModal = this.page.locator(
-      StandardProgramWithActionsLocators.addNewActionItemModal
+      StandardProgramWithActionsLocators.addNewActionItemModal,
     );
     await expect(addNewActionItemModal).toBeHidden({ timeout: 20000 });
   }
 
   async clickBackToRequirements() {
     const backToRequirementsButton = this.page.locator(
-      StandardProgramWithActionsLocators.backToRequirementsButton
+      StandardProgramWithActionsLocators.backToRequirementsButton,
     );
     await expect(backToRequirementsButton).toBeVisible({ timeout: 10000 });
     await backToRequirementsButton.click();
@@ -405,7 +410,7 @@ class StandardProgramWithActionsPage {
 
   async clickBackToPrograms() {
     const backToProgramsButton = this.page.locator(
-      StandardProgramWithActionsLocators.backToProgramsButton
+      StandardProgramWithActionsLocators.backToProgramsButton,
     );
     await expect(backToProgramsButton).toBeVisible({ timeout: 20000 });
     await backToProgramsButton.click();

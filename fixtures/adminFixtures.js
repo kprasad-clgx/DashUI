@@ -25,7 +25,7 @@ export const test = base.extend({
       const adminLoginPage = new AdminLoginPage(page);
       await adminLoginPage.login(
         config.admin.credentials.username,
-        config.admin.credentials.password
+        config.admin.credentials.password,
       );
 
       // Save new auth state

@@ -62,7 +62,7 @@ class ResetPurchaseOrderPage {
   // Verify Convert Purchase Order to Work Order button is visible and is submit type
   async verifyConvertPurchaseOrderToWorkOrderButton() {
     const button = this.page.locator(
-      ResetPurchaseOrderLocators.convertPurchaseOrderToWorkOrderButton
+      ResetPurchaseOrderLocators.convertPurchaseOrderToWorkOrderButton,
     );
     await button.waitFor({ state: 'visible' });
     return button;

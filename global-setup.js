@@ -30,7 +30,7 @@ async function globalSetup() {
     await enterpriseLoginPage.login(
       config.enterprise.credentials.companyId,
       config.enterprise.credentials.username,
-      config.enterprise.credentials.password
+      config.enterprise.credentials.password,
     );
 
     // Login successful, save enterprise authentication state
@@ -55,7 +55,7 @@ async function globalSetup() {
     await adminLoginPage.navigate();
     await adminLoginPage.login(
       config.admin.credentials.username,
-      config.admin.credentials.password
+      config.admin.credentials.password,
     );
 
     // Login successful, save admin authentication state

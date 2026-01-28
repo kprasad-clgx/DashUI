@@ -52,7 +52,9 @@ class BizDevDashboardPage {
     // Hover over the Marketing menu
     await this.page.locator(BizDevDashboardLocators.marketingTab).hover();
     // Wait for the Biz Dev Dashboard submenu item to be visible
-    await this.page.locator(BizDevDashboardLocators.bizDevDashboardSubTab).waitFor({ state: 'visible', timeout: 10000 });
+    await this.page
+      .locator(BizDevDashboardLocators.bizDevDashboardSubTab)
+      .waitFor({ state: 'visible', timeout: 10000 });
     // Click on Biz Dev Dashboard
     await this.page.locator(BizDevDashboardLocators.bizDevDashboardSubTab).click();
     await this.page.waitForLoadState('networkidle');
@@ -67,7 +69,7 @@ class BizDevDashboardPage {
   async verifyDashboardLabelsVisible(labels) {
     for (const labelText of labels) {
       const labelLocator = this.page.locator(
-        `${BizDevDashboardLocators.dashboardLabel}:has-text('${labelText}')`
+        `${BizDevDashboardLocators.dashboardLabel}:has-text('${labelText}')`,
       );
       await labelLocator.waitFor({ state: 'visible', timeout: 5000 });
     }
@@ -150,7 +152,7 @@ class BizDevDashboardPage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  async verifyTimeFrameSelected(optionText) {
+  async verifyTimeFrameSelected() {
     const dropdown = this.page.locator(BizDevDashboardLocators.timeFrameDropdown);
     await dropdown.waitFor({ state: 'visible' });
     return dropdown;
@@ -170,13 +172,13 @@ class BizDevDashboardPage {
     return text.trim();
   }
 
-  async verifyEmployeeSelected(value) {
+  async verifyEmployeeSelected() {
     const dropdown = this.page.locator(BizDevDashboardLocators.employeeDropdown);
     await dropdown.waitFor({ state: 'visible' });
     return dropdown;
   }
 
-  async waitForNetworkIdle(timeout = 120000) {
+  async waitForNetworkIdle(timeout = 60000) {
     try {
       await this.page.waitForLoadState('networkidle', { timeout });
     } catch (e) {

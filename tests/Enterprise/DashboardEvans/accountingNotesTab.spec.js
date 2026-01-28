@@ -26,7 +26,7 @@ test('Dashboard Accounting Notes Tab Validation', async ({ authenticatedPage }) 
 
   // Verify Assigned To column header is visible
   await expect(
-    await dashboardAccountingNotesPage.verifyAssignedToColumnHeaderVisible()
+    await dashboardAccountingNotesPage.verifyAssignedToColumnHeaderVisible(),
   ).toBeVisible();
 
   // Verify Added By column header is visible

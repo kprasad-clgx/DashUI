@@ -1,7 +1,7 @@
 import { test, expect } from '../../../fixtures/enterpriseFixtures.js';
 import JobSettingPage from '../../../pageObjects/enterprise/administrationFG/jobSetting.po.js';
 
-test('Job Settings Page', async ({ authenticatedPage }) => {
+test('Job Settings Page, Edit division', async ({ authenticatedPage }) => {
   const page = authenticatedPage;
   const jobSettingPage = new JobSettingPage(page);
 
@@ -37,9 +37,28 @@ test('Job Settings Page', async ({ authenticatedPage }) => {
 
   // Verify Work Order Master section header is visible
   await expect(await jobSettingPage.verifyWorkOrderMasterHeaderVisible()).toBeVisible();
-});
 
-// Storage state persists session - no logout needed
-/* test.afterEach(async ({ page, context }) => {
-  // Logout and cleanup
-}); */
+  // Click on Division section to expand
+  await jobSettingPage.clickDivisionSection();
+
+  // Verify Add New Record in Division section button is visible
+  await expect(await jobSettingPage.verifyAddNewDivisionRecordButtonVisible()).toBeVisible();
+
+  // Grid Header Array
+  const expectedDivisionGridHeaders = ['Division Name', 'Division Type', 'Prefix', 'Suffix'];
+
+  // Verify Division Grid Headers are visible and have correct text
+  await jobSettingPage.verifyDivisionGridHeaders(expectedDivisionGridHeaders);
+
+  // Click on First Edit button in grid
+  await jobSettingPage.clickFirstEditButton();
+
+  // Verify Division Name Label is visible
+  await expect(await jobSettingPage.verifyDivisionNameLabelVisible()).toBeVisible({
+    timeout: 15000,
+  });
+
+  // Verify Cancel button is visible and click it to exit edit mode
+  await expect(await jobSettingPage.verifyCancelButtonVisible()).toBeVisible();
+  await jobSettingPage.clickCancelButton();
+});

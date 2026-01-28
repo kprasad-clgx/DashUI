@@ -17,11 +17,11 @@ test('Setup - Create Job for Company Settings Tests', async ({ authenticatedPage
   await createJobPage.selectCustomer(
     newJobData.customerName,
     newJobData.customerFirstName,
-    newJobData.customerLastName
+    newJobData.customerLastName,
   );
   await createJobPage.checkSameAsCustomerAddress(
     newJobData.customerFirstName,
-    newJobData.customerLastName
+    newJobData.customerLastName,
   );
   await createJobPage.checkWaterMitigation();
   await createJobPage.fillLossDescription(newJobData.lossDescription);

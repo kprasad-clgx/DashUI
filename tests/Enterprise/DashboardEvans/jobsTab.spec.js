@@ -60,4 +60,48 @@ test('Jobs Tab Validation', async ({ authenticatedPage }) => {
 
   // Click on Cancel button
   await jobsTabPage.clickCancelButton();
+
+  await page.waitForLoadState('networkidle');
+
+  // Export to excel button on grid
+  const exportToExcelButton = page.locator(
+    '#ctl00_ContentPlaceHolder1_dockJobTabs_C_JobTasks_userControl_gvActionItem_ctl00_ctl02_ctl00_ExportToExcelButton',
+  );
+  await expect(exportToExcelButton).toBeVisible();
+
+  // Click and assert download
+  const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    exportToExcelButton.click(),
+  ]);
+  const suggestedFilename = await download.suggestedFilename();
+  expect(
+    suggestedFilename.includes('Job_Tasks') && suggestedFilename.endsWith('.xlsx'),
+  ).toBeTruthy();
+
+  await page.waitForLoadState('networkidle');
+
+  // Refresh button on grid
+  const refreshButton = page.locator(
+    '#ctl00_ContentPlaceHolder1_dockJobTabs_C_JobTasks_userControl_gvActionItem_ctl00_ctl02_ctl00_RefreshGridButton',
+  );
+  await expect(refreshButton).toBeVisible();
+
+  await page.waitForLoadState('networkidle');
+
+  // Export to PDF button on grid
+  const exportToPDFButton = page.locator(
+    '#ctl00_ContentPlaceHolder1_dockJobTabs_C_JobTasks_userControl_gvActionItem_ctl00_ctl02_ctl00_ExportToPdfButton',
+  );
+  await expect(exportToPDFButton).toBeVisible();
+
+  // Click and assert download
+  const [pdfDownload] = await Promise.all([
+    page.waitForEvent('download'),
+    exportToPDFButton.click(),
+  ]);
+  const pdfSuggestedFilename = await pdfDownload.suggestedFilename();
+  expect(
+    pdfSuggestedFilename.includes('Job_Tasks') && pdfSuggestedFilename.endsWith('.pdf'),
+  ).toBeTruthy();
 });

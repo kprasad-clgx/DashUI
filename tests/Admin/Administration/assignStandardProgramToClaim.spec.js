@@ -30,7 +30,7 @@ test('Assign Newly Created Standard Program to Claim', async ({ authenticatedPag
     modalIframe,
     programName,
     getRandomNumber(1, 9),
-    getRandomNumber(1, 9)
+    getRandomNumber(1, 9),
   );
 
   // Check allow program requirement checkbox

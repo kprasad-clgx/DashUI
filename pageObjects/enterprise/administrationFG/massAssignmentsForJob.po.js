@@ -188,6 +188,40 @@ class MassAssignmentsForJobPage {
     await button.waitFor({ state: 'visible' });
     return button;
   }
+
+  /**
+   * Download and assert PDF file
+   * @returns {Promise<string>} - The downloaded PDF filename
+   */
+  async downloadAndAssertPDF() {
+    const exportPdfButton = this.page.locator(MassAssignmentsForJobLocators.exportToPDFButton);
+    await exportPdfButton.waitFor({ state: 'visible' });
+
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      exportPdfButton.click(),
+    ]);
+
+    const pdfFilename = await download.suggestedFilename();
+    return pdfFilename;
+  }
+
+  /**
+   * Download and assert Excel file
+   * @returns {Promise<string>} - The downloaded Excel filename
+   */
+  async downloadAndAssertExcel() {
+    const exportExcelButton = this.page.locator(MassAssignmentsForJobLocators.exportToExcelButton);
+    await exportExcelButton.waitFor({ state: 'visible' });
+
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      exportExcelButton.click(),
+    ]);
+
+    const excelFilename = await download.suggestedFilename();
+    return excelFilename;
+  }
 }
 
 export { MassAssignmentsForJobPage, MassAssignmentsForJobLocators };

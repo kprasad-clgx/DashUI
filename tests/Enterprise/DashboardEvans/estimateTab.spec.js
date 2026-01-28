@@ -21,7 +21,7 @@ test('Estimate Tab Validation', async ({ authenticatedPage }) => {
 
   // Verify Estimate Number column header is visible
   await expect(
-    await dashboardEstimateTabPage.verifyEstimateNumberColumnHeaderVisible()
+    await dashboardEstimateTabPage.verifyEstimateNumberColumnHeaderVisible(),
   ).toBeVisible();
 
   // Verify Added By column header is visible
@@ -32,4 +32,8 @@ test('Estimate Tab Validation', async ({ authenticatedPage }) => {
 
   // Verify Profit column header is visible
   await expect(await dashboardEstimateTabPage.verifyProfitColumnHeaderVisible()).toBeVisible();
+
+  // Click on Export to Excel button and assert file download
+  const downloadSuccess = await dashboardEstimateTabPage.clickExportToExcelAndAssertDownload();
+  expect(downloadSuccess).toBeTruthy();
 });

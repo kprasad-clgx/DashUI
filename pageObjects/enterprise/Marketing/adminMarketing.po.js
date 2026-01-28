@@ -28,7 +28,9 @@ class AdminMarketingPage {
     // Hover over the Marketing menu
     await this.page.locator(AdminMarketingLocators.marketingTab).hover();
     // Wait for the Admin Marketing submenu item to be visible
-    await this.page.locator(AdminMarketingLocators.adminMarketingSubTab).waitFor({ state: 'visible', timeout: 10000 });
+    await this.page
+      .locator(AdminMarketingLocators.adminMarketingSubTab)
+      .waitFor({ state: 'visible', timeout: 10000 });
     // Click on Admin Marketing
     await this.page.locator(AdminMarketingLocators.adminMarketingSubTab).click();
     await this.page.waitForLoadState('networkidle');
@@ -43,7 +45,7 @@ class AdminMarketingPage {
   async verifyDashboardLabelsVisible(labels) {
     for (const labelText of labels) {
       const labelLocator = this.page.locator(
-        `${AdminMarketingLocators.marketingDashboardLabel}:has-text('${labelText}')`
+        `${AdminMarketingLocators.marketingDashboardLabel}:has-text('${labelText}')`,
       );
       await labelLocator.waitFor({ state: 'visible', timeout: 5000 });
     }
@@ -58,7 +60,7 @@ class AdminMarketingPage {
   async verifyAdminMarketingLabelsVisible(labels) {
     for (const labelText of labels) {
       const labelLocator = this.page.locator(
-        `${AdminMarketingLocators.adminMarketingLabel}:has-text('${labelText}')`
+        `${AdminMarketingLocators.adminMarketingLabel}:has-text('${labelText}')`,
       );
       await labelLocator.waitFor({ state: 'visible', timeout: 5000 });
     }

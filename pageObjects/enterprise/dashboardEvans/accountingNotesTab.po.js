@@ -32,7 +32,7 @@ class DashboardAccountingNotesPage {
   async navigateToAccountingNotesTab() {
     const tabAccountingNotes = this.page.locator(
       DashboardAccountingNotesLocators.tabAccountingNotes,
-      { hasText: 'Accounting Notes' }
+      { hasText: 'Accounting Notes' },
     );
     await tabAccountingNotes.waitFor({ state: 'visible', timeout: 5000 });
     await tabAccountingNotes.click();
@@ -42,7 +42,7 @@ class DashboardAccountingNotesPage {
   // Verify Export to Excel button is visible
   async verifyExportToExcelButtonVisible() {
     const exportToExcelButton = this.page.locator(
-      DashboardAccountingNotesLocators.exportToExcelButton
+      DashboardAccountingNotesLocators.exportToExcelButton,
     );
     await exportToExcelButton.waitFor({ state: 'visible' });
     return exportToExcelButton;
@@ -66,7 +66,7 @@ class DashboardAccountingNotesPage {
   async verifyAssignedToColumnHeaderVisible() {
     const assignedToColumnHeader = this.page.locator(
       DashboardAccountingNotesLocators.assignedToColumnHeader,
-      { hasText: 'Assigned To' }
+      { hasText: 'Assigned To' },
     );
     await assignedToColumnHeader.waitFor({ state: 'visible' });
     return assignedToColumnHeader;
@@ -76,7 +76,7 @@ class DashboardAccountingNotesPage {
   async verifyAddedByColumnHeaderVisible() {
     const addedByColumnHeader = this.page.locator(
       DashboardAccountingNotesLocators.addedByColumnHeader,
-      { hasText: 'Added By' }
+      { hasText: 'Added By' },
     );
     await addedByColumnHeader.waitFor({ state: 'visible' });
     return addedByColumnHeader;

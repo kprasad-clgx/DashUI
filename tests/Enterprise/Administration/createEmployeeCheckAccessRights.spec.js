@@ -96,7 +96,7 @@ test('Check Disabled Employee does not secuirty Rights from group settings', asy
 
   // Verify success message
   const successMessage = await employeePage.verifySuccessMessage(
-    'Employee details updated successfully.'
+    'Employee details updated successfully.',
   );
   await expect(successMessage).toHaveText('Employee details updated successfully.');
 
@@ -192,13 +192,13 @@ test('Check Disabled Employee does not secuirty Rights from group settings', asy
   // Verify User Group Access text is visible and has correct text
   await expect(await roleBasedSecurityPage.verifyUserGroupAccessText()).toBeVisible();
   await expect(await roleBasedSecurityPage.verifyUserGroupAccessText()).toHaveText(
-    'User Group Access'
+    'User Group Access',
   );
 
   // Verify Update button is disabled initially
   await expect(await roleBasedSecurityPage.verifyUpdateButton()).toHaveAttribute(
     'disabled',
-    'disabled'
+    'disabled',
   );
 
   // Verify Select Group dropdown is visible and enabled
@@ -213,11 +213,4 @@ test('Check Disabled Employee does not secuirty Rights from group settings', asy
 
   // Assert that the Username is not in Group security Employee Name Grid list
   await roleBasedSecurityPage.groupSecurityEmployeeNameSearchInput(uniqueFirstName);
-
-  //
 });
-
-// Storage state persists session - no logout needed
-/* test.afterEach(async ({ page, context }) => {
-  // Logout and cleanup
-}); */

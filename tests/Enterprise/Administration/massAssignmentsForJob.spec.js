@@ -75,42 +75,11 @@ test('Manage Assignments For Job Page', async ({ authenticatedPage }) => {
   await expect(exportToExcelButton).toBeVisible();
   await expect(exportToExcelButton).toHaveAttribute('type', 'button');
 
-  // Export To Pdf button locator
-  const exportPdfBtnLocator = page.locator(
-    '#ctl00_ContentPlaceHolder1_grdHome_ctl00_ctl02_ctl00_ExportToPDFButton'
-  );
-  await expect(exportPdfBtnLocator).toBeVisible();
-  await expect(exportPdfBtnLocator).toHaveAttribute('type', 'button');
-
-  // Click on Export to PDF button and verify any resulting behavior
-  const [download] = await Promise.all([
-    page.waitForEvent('download'),
-    exportPdfBtnLocator.click(),
-  ]);
-
-  // Assert the downloaded PDF file name
-  const pdfFilename = await download.suggestedFilename();
+  // Click on Export to PDF button and assert the downloaded file name
+  const pdfFilename = await massAssignmentsPage.downloadAndAssertPDF();
   expect(pdfFilename).toMatch(/^MassAssignmentForJob(\s\(\d+\))?\.pdf$/);
 
-  // Export To Excel button locator
-  const exportExcelBtnLocator = page.locator(
-    '#ctl00_ContentPlaceHolder1_grdHome_ctl00_ctl02_ctl00_ExportToExcelButton'
-  );
-  await expect(exportExcelBtnLocator).toBeVisible();
-  await expect(exportExcelBtnLocator).toHaveAttribute('type', 'button');
-
-  // Click on Export to Excel button and verify any resulting behavior
-  const [excelDownload] = await Promise.all([
-    page.waitForEvent('download'),
-    exportExcelBtnLocator.click(),
-  ]);
-
-  // Assert the downloaded Excel file name
-  const excelFilename = await excelDownload.suggestedFilename();
+  // Click on Export to Excel button and assert the downloaded file name
+  const excelFilename = await massAssignmentsPage.downloadAndAssertExcel();
   expect(excelFilename).toMatch(/^MassAssignmentForJob(\s\(\d+\))?\.xlsx?$/);
 });
-
-// Storage state persists session - no logout needed
-/* test.afterEach(async ({ page, context }) => {
-  // Logout and cleanup
-}); */

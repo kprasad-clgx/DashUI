@@ -14,104 +14,104 @@ test('Verify Company Setting Page', async ({ authenticatedPage }) => {
   await companySettingPage.assertCardVisibleAndHeaderText(
     EnterpriseCompanySettingLocators.accountingLogoCard,
     EnterpriseCompanySettingLocators.accountingLogoHeader,
-    'Accounting'
+    'Accounting',
   );
 
   // Step 3: Assert Change Logo card is visible with correct header
   await companySettingPage.assertCardVisibleAndHeaderText(
     EnterpriseCompanySettingLocators.changeLogoCard,
     EnterpriseCompanySettingLocators.changeLogoHeader,
-    'Change Logo'
+    'Change Logo',
   );
 
   // Step 4: Assert Company Display Name card is visible with correct header
   await companySettingPage.assertCardVisibleAndHeaderText(
     EnterpriseCompanySettingLocators.companyDisplayNameCard,
     EnterpriseCompanySettingLocators.companyDisplayNameHeader,
-    'Company Display Name'
+    'Company Display Name',
   );
 
   // Step 5: Assert Compensation Plans card is visible with correct header
   await companySettingPage.assertCardVisibleAndHeaderText(
     EnterpriseCompanySettingLocators.compensationPlansCard,
     EnterpriseCompanySettingLocators.compensationPlansHeader,
-    'Compensation Plans'
+    'Compensation Plans',
   );
 
   // Step 6: Assert Create Survey card is visible with correct header
   await companySettingPage.assertCardVisibleAndHeaderText(
     EnterpriseCompanySettingLocators.createSurveyCard,
     EnterpriseCompanySettingLocators.createSurveyHeader,
-    'Create Survey'
+    'Create Survey',
   );
 
   // Step 7: Assert Data Import Tool card is visible with correct header
   await companySettingPage.assertCardVisibleAndHeaderText(
     EnterpriseCompanySettingLocators.dataImportToolCard,
     EnterpriseCompanySettingLocators.dataImportToolHeader,
-    'Data Import Tool'
+    'Data Import Tool',
   );
 
   // Step 8: Assert Email Distribution card is visible with correct header
   await companySettingPage.assertCardVisibleAndHeaderText(
     EnterpriseCompanySettingLocators.emailDistributionCard,
     EnterpriseCompanySettingLocators.emailDistributionHeader,
-    'E-mail Distribution List'
+    'E-mail Distribution List',
   );
 
   // Step 9: Assert Equipment Type card is visible with correct header
   await companySettingPage.assertCardVisibleAndHeaderText(
     EnterpriseCompanySettingLocators.equipmentTypeCard,
     EnterpriseCompanySettingLocators.equipmentTypeHeader,
-    'Equipment Type'
+    'Equipment Type',
   );
 
   // Step 10: Assert Job Title card is visible with correct header
   await companySettingPage.assertCardVisibleAndHeaderText(
     EnterpriseCompanySettingLocators.jobTitleCard,
     EnterpriseCompanySettingLocators.jobTitleHeader,
-    'Job Title'
+    'Job Title',
   );
 
   // Step 11: Assert Location and Truck card is visible with correct header
   await companySettingPage.assertCardVisibleAndHeaderText(
     EnterpriseCompanySettingLocators.locationAndTruckCard,
     EnterpriseCompanySettingLocators.locationAndTruckHeader,
-    'Location and Truck'
+    'Location and Truck',
   );
 
   // Step 12: Assert Note Visibility Configuration card is visible with correct header
   await companySettingPage.assertCardVisibleAndHeaderText(
     EnterpriseCompanySettingLocators.newVisibilityConfigurationCard,
     EnterpriseCompanySettingLocators.newVisibilityConfigurationHeader,
-    'Note Visibility Configuration'
+    'Note Visibility Configuration',
   );
 
   // Step 13: Assert Notifications card is visible with correct header
   await companySettingPage.assertCardVisibleAndHeaderText(
     EnterpriseCompanySettingLocators.notificationsCard,
     EnterpriseCompanySettingLocators.notificationsHeader,
-    'Notifications'
+    'Notifications',
   );
 
   // Step 14: Assert Office card is visible with correct header
   await companySettingPage.assertCardVisibleAndHeaderText(
     EnterpriseCompanySettingLocators.officeCard,
     EnterpriseCompanySettingLocators.officeHeader,
-    'Office'
+    'Office',
   );
 
   // Step 15: Assert Preset Progress Notification card is visible with correct header
   await companySettingPage.assertCardVisibleAndHeaderText(
     EnterpriseCompanySettingLocators.presetProgressNotificationCard,
     EnterpriseCompanySettingLocators.presetProgressNotificationHeader,
-    'Preset Progress Notification'
+    'Preset Progress Notification',
   );
 
   // Step 16: Assert Standard Note card is visible with correct header
   await companySettingPage.assertCardVisibleAndHeaderText(
     EnterpriseCompanySettingLocators.standardNoteCard,
     EnterpriseCompanySettingLocators.standardNoteHeader,
-    'Standard Note'
+    'Standard Note',
   );
 });

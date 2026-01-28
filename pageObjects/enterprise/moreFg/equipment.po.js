@@ -10,14 +10,14 @@ export class EquipmentPage {
     this.backToEquipmentDashboardButton = page.locator('#ctl00_ContentPlaceHolder1_Button1');
     this.moveDateLabel = page.locator('#ctl00_ContentPlaceHolder1_Label3');
     this.addNewEquipmentButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_gvEquipment_ctl00_ctl02_ctl00_InitInsertButton'
+      '#ctl00_ContentPlaceHolder1_gvEquipment_ctl00_ctl02_ctl00_InitInsertButton',
     );
     this.gridCommonHeader = page.locator('#ctl00_ContentPlaceHolder1_gvEquipment_GridHeader  a');
     this.exportToExcelButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_gvEquipment_ctl00_ctl02_ctl00_ExportToExcelButton'
+      '#ctl00_ContentPlaceHolder1_gvEquipment_ctl00_ctl02_ctl00_ExportToExcelButton',
     );
     this.exportToPDFButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_gvEquipment_ctl00_ctl02_ctl00_ExportToPdfButton'
+      '#ctl00_ContentPlaceHolder1_gvEquipment_ctl00_ctl02_ctl00_ExportToPdfButton',
     );
   }
 

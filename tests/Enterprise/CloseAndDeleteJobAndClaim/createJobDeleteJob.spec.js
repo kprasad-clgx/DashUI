@@ -17,11 +17,11 @@ test('Create Job Enterprise and Delete it', async ({ authenticatedPage }) => {
   await createJobPage.selectCustomer(
     newJobData.customerName,
     newJobData.customerFirstName,
-    newJobData.customerLastName
+    newJobData.customerLastName,
   );
   await createJobPage.checkSameAsCustomerAddress(
     newJobData.customerFirstName,
-    newJobData.customerLastName
+    newJobData.customerLastName,
   );
   await createJobPage.checkWaterMitigation();
   await createJobPage.fillLossDescription(newJobData.lossDescription);
@@ -38,8 +38,3 @@ test('Create Job Enterprise and Delete it', async ({ authenticatedPage }) => {
   // Validate job deletion
   await deleteJobPage.validateJobDeleted();
 });
-
-// Storage state persists session - no logout needed
-/* test.afterEach(async ({ page, context }) => {
-  // Logout and cleanup
-}); */

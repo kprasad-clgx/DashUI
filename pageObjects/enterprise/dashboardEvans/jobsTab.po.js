@@ -133,7 +133,7 @@ class DashboardJobsTabPage {
   async verifyAssignResourcesLabelVisible() {
     const modalContent = this.page.locator(DashboardJobsTabLocators.modalContent);
     const assignResourcesLabel = modalContent.locator(
-      DashboardJobsTabLocators.assignResourcesLabel
+      DashboardJobsTabLocators.assignResourcesLabel,
     );
     await assignResourcesLabel.waitFor({ state: 'visible' });
     return assignResourcesLabel;
@@ -143,7 +143,7 @@ class DashboardJobsTabPage {
   async verifyAssignResourceButtonVisible() {
     const modalContent = this.page.locator(DashboardJobsTabLocators.modalContent);
     const assignResourceButton = modalContent.locator(
-      DashboardJobsTabLocators.assignResourceButton
+      DashboardJobsTabLocators.assignResourceButton,
     );
     await assignResourceButton.waitFor({ state: 'visible' });
     return assignResourceButton;
@@ -153,7 +153,7 @@ class DashboardJobsTabPage {
   async clickAssignResourceButton() {
     const modalContent = this.page.locator(DashboardJobsTabLocators.modalContent);
     const assignResourceButton = modalContent.locator(
-      DashboardJobsTabLocators.assignResourceButton
+      DashboardJobsTabLocators.assignResourceButton,
     );
     await assignResourceButton.waitFor({ state: 'visible' });
     await assignResourceButton.click();

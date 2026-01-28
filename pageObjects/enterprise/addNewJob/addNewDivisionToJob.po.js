@@ -36,7 +36,7 @@ class AddNewDivisionToJobPage {
    */
   async clickAddNewJobLinkButton() {
     const addNewJobLinkButton = this.page.locator(
-      AddNewDivisionToJobPageLocators.addNewJobLinkButton
+      AddNewDivisionToJobPageLocators.addNewJobLinkButton,
     );
     await addNewJobLinkButton.click();
   }
@@ -84,7 +84,7 @@ class AddNewDivisionToJobPage {
   async clickDivisionDropdownArrow() {
     const modalIframe = this.getModalIframe();
     const divisionDropdownArrow = modalIframe.locator(
-      AddNewDivisionToJobPageLocators.divisionDropdownArrow
+      AddNewDivisionToJobPageLocators.divisionDropdownArrow,
     );
     await divisionDropdownArrow.click();
   }
@@ -96,7 +96,7 @@ class AddNewDivisionToJobPage {
   async waitForDivisionDropdownOptions() {
     const modalIframe = this.getModalIframe();
     const divisionOptions = modalIframe.locator(
-      AddNewDivisionToJobPageLocators.divisionDropdownItems
+      AddNewDivisionToJobPageLocators.divisionDropdownItems,
     );
     return divisionOptions.first();
   }
@@ -107,7 +107,7 @@ class AddNewDivisionToJobPage {
   async selectRandomDivisionOption() {
     const modalIframe = this.getModalIframe();
     const divisionOptions = modalIframe.locator(
-      AddNewDivisionToJobPageLocators.divisionDropdownItems
+      AddNewDivisionToJobPageLocators.divisionDropdownItems,
     );
     const count = await divisionOptions.count();
     if (count === 0) throw new Error('No division options found in dropdown.');
@@ -168,7 +168,7 @@ class AddNewDivisionToJobPage {
   async verifyLastTabAdded() {
     // Directly locate the tab with 'rtsLast' class in the division tab strip
     const lastTab = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_dockDivision_C_tabStripDivision .rtsLast'
+      '#ctl00_ContentPlaceHolder1_dockDivision_C_tabStripDivision .rtsLast',
     );
     return lastTab;
   }

@@ -6,34 +6,34 @@ export class ComplianceManagerPage {
     this.moreMenuHover = page.locator("span:has-text('More...')").first();
     this.complianceManagerMenuItem = page.getByText('Compliance Manager', { exact: true }).first();
     this.complianceManagerPageTitle = page.locator(
-      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_Label_Heading'
+      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_Label_Heading',
     );
     this.employeeLabel = page.locator(
-      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_EmployeeLabel'
+      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_EmployeeLabel',
     );
     this.divisionLabel = page.locator(
-      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_DivisionLabel'
+      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_DivisionLabel',
     );
     this.officeLabel = page.locator(
-      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_OfficeLabel'
+      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_OfficeLabel',
     );
     this.reassignButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_ReassignEmployeeButton'
+      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_ReassignEmployeeButton',
     );
     this.refreshButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_ComplianceManagerGridView_ctl00_ctl02_ctl00_RefreshGridButton'
+      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_ComplianceManagerGridView_ctl00_ctl02_ctl00_RefreshGridButton',
     );
     this.exportToExcelButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_ComplianceManagerGridView_ctl00_ctl02_ctl00_ExportToExcelButton'
+      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_ComplianceManagerGridView_ctl00_ctl02_ctl00_ExportToExcelButton',
     );
     this.pendingTaskLabelRow = page.locator(
-      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_PendingImagesDiv span'
+      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_PendingImagesDiv span',
     );
     this.completedTaskRadioButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_StatusOptionsRadioButtonList_1'
+      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_StatusOptionsRadioButtonList_1',
     );
     this.completedTaskRow = page.locator(
-      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_CompletedImagesDiv .compliance_status_text'
+      '#ctl00_ContentPlaceHolder1_ComplianceMangerControl_CompletedImagesDiv .compliance_status_text',
     );
   }
 

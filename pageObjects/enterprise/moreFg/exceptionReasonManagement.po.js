@@ -9,13 +9,13 @@ export class ExceptionReasonManagementPage {
     });
     this.assignExceptionReasonButton = page.locator('#ctl00_ContentPlaceHolder1_AssignButton');
     this.refreshButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_ComplianceManagerGridView_ctl00_ctl02_ctl00_RefreshButton'
+      '#ctl00_ContentPlaceHolder1_ComplianceManagerGridView_ctl00_ctl02_ctl00_RefreshButton',
     );
     this.exportToExcelButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_ComplianceManagerGridView_ctl00_ctl02_ctl00_RefreshButton'
+      '#ctl00_ContentPlaceHolder1_ComplianceManagerGridView_ctl00_ctl02_ctl00_RefreshButton',
     );
     this.gridHeaderLocator = page.locator(
-      '#ctl00_ContentPlaceHolder1_ComplianceManagerGridView_GridHeader a'
+      '#ctl00_ContentPlaceHolder1_ComplianceManagerGridView_GridHeader a',
     );
   }
 

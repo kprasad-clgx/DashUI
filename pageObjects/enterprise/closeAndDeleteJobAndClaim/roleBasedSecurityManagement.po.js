@@ -48,7 +48,7 @@ class RoleBasedSecurityManagementPage {
       .click();
     await this.page.waitForLoadState('networkidle');
     const groupSecurityTile = this.page.locator(
-      RoleBasedSecurityManagementLocators.groupSecurityTile
+      RoleBasedSecurityManagementLocators.groupSecurityTile,
     );
     await groupSecurityTile.waitFor({ state: 'visible' });
     await groupSecurityTile.click();
@@ -98,7 +98,7 @@ class RoleBasedSecurityManagementPage {
 
     // Use correct locator for the employee name filter textbox
     const input = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_gvEmolpyee_ctl00_ctl02_ctl03_FilterTextBox_FirstName'
+      '#ctl00_ContentPlaceHolder1_gvEmolpyee_ctl00_ctl02_ctl03_FilterTextBox_FirstName',
     );
     await input.waitFor({ state: 'visible', timeout: 15000 });
     await input.click();
@@ -114,7 +114,7 @@ class RoleBasedSecurityManagementPage {
   async clickFilterButtonAndSelectContains() {
     // Use correct locator for the filter button
     const filterButton = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_gvEmolpyee_ctl00_ctl02_ctl03_Filter_FirstName'
+      '#ctl00_ContentPlaceHolder1_gvEmolpyee_ctl00_ctl02_ctl03_Filter_FirstName',
     );
     await filterButton.waitFor({ state: 'visible' });
     await filterButton.click();
@@ -131,7 +131,7 @@ class RoleBasedSecurityManagementPage {
   async assertUserRowCountIsZero() {
     // Only count data rows, not header/filter rows
     const rows = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_gvEmolpyee_ctl00 tbody.rgData .rgRow'
+      '#ctl00_ContentPlaceHolder1_gvEmolpyee_ctl00 tbody.rgData .rgRow',
     );
     await this.page.waitForLoadState('networkidle');
     const rowCount = await rows.count();

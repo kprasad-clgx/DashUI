@@ -22,14 +22,14 @@ class VerifySearchBoxJobNumberPage {
    */
   async searchByJobNumber(jobNumber) {
     const jobNumberSearchBox = this.page.locator(
-      EnterpriseAccountingDetailsLocators.jobNumberInput
+      EnterpriseAccountingDetailsLocators.jobNumberInput,
     );
     await jobNumberSearchBox.click();
     await jobNumberSearchBox.fill(jobNumber);
 
     // Wait for loading indicator to disappear
     const loadingIndicator = this.page.locator(
-      EnterpriseAccountingDetailsLocators.loadingIndicator
+      EnterpriseAccountingDetailsLocators.loadingIndicator,
     );
     if (await loadingIndicator.isVisible({ timeout: 10000 }).catch(() => false)) {
       await loadingIndicator.waitFor({ state: 'hidden', timeout: 10000 });
@@ -37,7 +37,7 @@ class VerifySearchBoxJobNumberPage {
 
     // Wait for the dropdown to appear and select the matching item
     const dropdownList = this.page.locator(
-      EnterpriseAccountingDetailsLocators.jobNumberDropdownList
+      EnterpriseAccountingDetailsLocators.jobNumberDropdownList,
     );
 
     // Wait for the specific item containing the job number to appear

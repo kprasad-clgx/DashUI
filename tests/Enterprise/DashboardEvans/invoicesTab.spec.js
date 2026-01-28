@@ -63,12 +63,12 @@ test('Invoices Tab Validation And Add New Data Validation', async ({ authenticat
 
   // Verify Invoice detail page Add New button is visible
   await expect(
-    await dashboardInvoicesTabPage.verifyInvoiceDetailAddNewButtonVisible()
+    await dashboardInvoicesTabPage.verifyInvoiceDetailAddNewButtonVisible(),
   ).toBeVisible();
 
   // Verify Invoice detail page Refresh button is visible
   await expect(
-    await dashboardInvoicesTabPage.verifyInvoiceDetailRefreshButtonVisible()
+    await dashboardInvoicesTabPage.verifyInvoiceDetailRefreshButtonVisible(),
   ).toBeVisible();
 
   // Verify Job Number column header is visible
@@ -83,25 +83,14 @@ test('Invoices Tab Validation And Add New Data Validation', async ({ authenticat
   // Verify Invoice Memo label is visible
   await expect(await dashboardInvoicesTabPage.verifyInvoiceMemoLabelVisible()).toBeVisible();
 
-  // Invoice Memeo input field locator
-  const invoiceMemoInput = page.locator(
-    '#ctl00_ContentPlaceHolder1_gvInvoices_ctl00_ctl02_ctl04_txtReceivableNotes'
-  );
-  await expect(invoiceMemoInput).toBeVisible();
-
-  // Enter Random Number  in Invoice Memo input field
-  await invoiceMemoInput.click();
-  await invoiceMemoInput.fill(randomNumber.toString());
+  // Enter Random Number in Invoice Memo input field
+  await dashboardInvoicesTabPage.fillInvoiceMemo(randomNumber);
 
   // Verify Invoice Amount label is visible
   await expect(await dashboardInvoicesTabPage.verifyInvoiceAmountLabelVisible()).toBeVisible();
 
   // Enter Random Number in invoice Amount input field
-  const invoiceAmountInput = page.locator(
-    '#ctl00_ContentPlaceHolder1_gvInvoices_ctl00_ctl02_ctl04_txtAmount'
-  );
-  await invoiceAmountInput.click();
-  await invoiceAmountInput.fill(randomNumber.toString());
+  await dashboardInvoicesTabPage.fillInvoiceAmount(randomNumber);
 
   // Verify Save button is visible and has correct type
   const saveButton = await dashboardInvoicesTabPage.verifySaveButtonVisible();
@@ -116,9 +105,8 @@ test('Invoices Tab Validation And Add New Data Validation', async ({ authenticat
   // Verify Back to Slide Board button is visible
   await expect(await dashboardInvoicesTabPage.verifyBackToSlideBoardButtonVisible()).toBeVisible();
 
-  // click on save button
-  await saveButton.click();
-  await page.waitForLoadState('networkidle');
+  // Click on save button
+  await dashboardInvoicesTabPage.clickSaveButton();
 
   // Click Back to Slide Board button
   await dashboardInvoicesTabPage.clickBackToSlideBoardButton();
@@ -134,21 +122,22 @@ test('Invoices Tab Validation And Add New Data Validation', async ({ authenticat
   // Click on refresh button to load newly added invoice
   await dashboardInvoicesTabPage.clickRefreshButton();
 
-  // Note input field locator for the newly added invoice
-  const noteInput = page.locator(
-    '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Invoices_userControl_gvInvoices_ctl00_ctl02_ctl03_FilterTextBox_ReceivableNote'
-  );
-  await noteInput.waitFor({ state: 'visible' });
-  await noteInput.click();
-  await noteInput.fill(randomNumber.toString());
-  await page.keyboard.press('Enter');
-  await page.waitForLoadState('networkidle');
+  // Filter by note with random number
+  await dashboardInvoicesTabPage.filterByNote(randomNumber);
 
   // Assert the count of invoice rows in the grid to be 1
-  const invoiceRows = page.locator(
-    '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Invoices_userControl_gvInvoices_GridData table.rgMasterTable > tbody > tr.rgRow, ' +
-      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Invoices_userControl_gvInvoices_GridData table.rgMasterTable > tbody > tr.rgAltRow'
-  );
-  await invoiceRows.first().waitFor({ state: 'visible', timeout: 5000 });
+  const invoiceRows = await dashboardInvoicesTabPage.assertInvoiceRowCount(1);
   await expect(invoiceRows).toHaveCount(1);
+
+  await page.waitForLoadState('networkidle');
+
+  // Click on Export to Excel button and assert file download
+  const downloadSuccess = await dashboardInvoicesTabPage.clickExportToExcelAndAssertDownload();
+  expect(downloadSuccess).toBeTruthy();
+
+  await page.waitForLoadState('networkidle');
+
+  // Click on Export to PDF button and assert file download
+  const pdfDownloadSuccess = await dashboardInvoicesTabPage.clickExportToPDFAndAssertDownload();
+  expect(pdfDownloadSuccess).toBeTruthy();
 });

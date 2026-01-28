@@ -26,7 +26,7 @@ export const test = base.extend({
       await enterpriseLoginPage.login(
         config.enterprise.credentials.companyId,
         config.enterprise.credentials.username,
-        config.enterprise.credentials.password
+        config.enterprise.credentials.password,
       );
 
       // Save new auth state

@@ -36,14 +36,14 @@ class EnterpriseAccountingDetailsPage {
     await searchBoxInput.fill(jobNumber);
 
     const loadingIndicator = this.page.locator(
-      EnterpriseAccountingDetailsLocators.loadingIndicator
+      EnterpriseAccountingDetailsLocators.loadingIndicator,
     );
     if (await loadingIndicator.isVisible({ timeout: 10000 }).catch(() => false)) {
       await loadingIndicator.waitFor({ state: 'hidden', timeout: 10000 });
     }
 
     const dropdownList = this.page.locator(
-      EnterpriseAccountingDetailsLocators.jobNumberDropdownList
+      EnterpriseAccountingDetailsLocators.jobNumberDropdownList,
     );
 
     // Wait for the specific item containing the full text to appear
@@ -78,7 +78,7 @@ class EnterpriseAccountingDetailsPage {
    */
   async waitAndClickAccountingReportButton() {
     const accountingReportLocator = this.page.locator(
-      EnterpriseAccountingDetailsLocators.accountingReportButton
+      EnterpriseAccountingDetailsLocators.accountingReportButton,
     );
     await accountingReportLocator.waitFor({ state: 'visible', timeout: 10000 });
     await accountingReportLocator.click();
@@ -90,7 +90,7 @@ class EnterpriseAccountingDetailsPage {
    */
   async getJobNumberText() {
     const jobNumberLocator = this.page.locator(
-      EnterpriseAccountingDetailsLocators.upperJobNumberLabel
+      EnterpriseAccountingDetailsLocators.upperJobNumberLabel,
     );
     return await jobNumberLocator.textContent();
   }
@@ -100,7 +100,7 @@ class EnterpriseAccountingDetailsPage {
    */
   async clickAccountingReportButton() {
     const accountingReportLocator = this.page.locator(
-      EnterpriseAccountingDetailsLocators.accountingReportButton
+      EnterpriseAccountingDetailsLocators.accountingReportButton,
     );
     await accountingReportLocator.click();
     await this.page.waitForLoadState('networkidle');
@@ -119,7 +119,7 @@ class EnterpriseAccountingDetailsPage {
    */
   async clickBackToAccountingDetails() {
     const backButton = this.page.locator(
-      EnterpriseAccountingDetailsLocators.backToAccountingDetailsButton
+      EnterpriseAccountingDetailsLocators.backToAccountingDetailsButton,
     );
     await backButton.click();
     await this.page.waitForLoadState('networkidle');

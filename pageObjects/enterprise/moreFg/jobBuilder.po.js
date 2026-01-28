@@ -9,10 +9,10 @@ export class JobBuilderPage {
     });
     this.jobTemplateBuilderHeading = page.locator('#ctl00_ContentPlaceHolder1_lblFBBuilder');
     this.gridHeaderLocator = page.locator(
-      '#ctl00_ContentPlaceHolder1_TemplatesGridView_GridHeader a'
+      '#ctl00_ContentPlaceHolder1_TemplatesGridView_GridHeader a',
     );
     this.addNewJobTemplateButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_AddNewJobTemplateButton'
+      '#ctl00_ContentPlaceHolder1_AddNewJobTemplateButton',
     );
     this.saveTemplateButton = page.locator('#ctl00_ContentPlaceHolder1_SaveTemplateButton');
     this.resetEditorButton = page.locator('#ctl00_ContentPlaceHolder1_ResetEditorButton');
@@ -21,13 +21,13 @@ export class JobBuilderPage {
     this.deleteFileButton = page.locator('#ctl00_ContentPlaceHolder1_DeleteTemplateButton');
     this.clearSectionButton = page.locator('#ctl00_ContentPlaceHolder1_ClearSelectionButton');
     this.addNewEmailTemplateButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_AddNewEmailTemplateButton'
+      '#ctl00_ContentPlaceHolder1_AddNewEmailTemplateButton',
     );
     this.uploadToFranchiseesButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_UploadTemplateToFranchiseeButton'
+      '#ctl00_ContentPlaceHolder1_UploadTemplateToFranchiseeButton',
     );
     this.exportEditorContentToPDFButton = page.locator(
-      '#ctl00_ContentPlaceHolder1_ExportToPDFButton1'
+      '#ctl00_ContentPlaceHolder1_ExportToPDFButton1',
     );
     this.jobTemplateBuilderTableLocator = page.locator('#ctl00_ContentPlaceHolder1_FBTree .rtIn');
   }

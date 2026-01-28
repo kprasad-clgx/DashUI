@@ -13,4 +13,10 @@ test('Open Job Page', async ({ authenticatedPage }) => {
 
   // Assert all grid column headers are visible
   await openJobPage.assertAllGridHeadersVisible();
+
+  // Download and assert Excel file
+  await openJobPage.downloadAndAssertExcel();
+
+  // Download and assert PDF file
+  await openJobPage.downloadAndAssertPDF();
 });

@@ -59,7 +59,7 @@ class AddNewDivisionToClaimPage {
    */
   async clickAdminDivisionDropdown() {
     const adminDivisionDropdown = this.page.locator(
-      AddNewDivisionToClaimPageLocators.adminDivisionDropdown
+      AddNewDivisionToClaimPageLocators.adminDivisionDropdown,
     );
     await adminDivisionDropdown.click();
   }
@@ -99,7 +99,7 @@ class AddNewDivisionToClaimPage {
    */
   async clickFirstDivisionCheckbox() {
     const divisionCheckboxPanel = this.page.locator(
-      AddNewDivisionToClaimPageLocators.divisionCheckboxPanel
+      AddNewDivisionToClaimPageLocators.divisionCheckboxPanel,
     );
     const firstCheckbox = divisionCheckboxPanel.locator('input[type="checkbox"]').first();
     await firstCheckbox.click();
@@ -137,7 +137,7 @@ class AddNewDivisionToClaimPage {
   async clickProgramDropdownArrow() {
     const modalLocator = this.page.locator(AddNewDivisionToClaimPageLocators.modal);
     const programDropdownArrow = modalLocator.locator(
-      AddNewDivisionToClaimPageLocators.programDropdownArrow
+      AddNewDivisionToClaimPageLocators.programDropdownArrow,
     );
     await programDropdownArrow.click();
   }

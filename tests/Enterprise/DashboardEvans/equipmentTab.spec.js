@@ -24,17 +24,17 @@ test('Equipment Tab Validation', async ({ authenticatedPage }) => {
 
   // Verify Equipment Name column header is visible
   await expect(
-    await dashboardEquipmentTabPage.verifyEquipmentNameColumnHeaderVisible()
+    await dashboardEquipmentTabPage.verifyEquipmentNameColumnHeaderVisible(),
   ).toBeVisible();
 
   // Verify Equipment Type column header is visible
   await expect(
-    await dashboardEquipmentTabPage.verifyEquipmentTypeColumnHeaderVisible()
+    await dashboardEquipmentTabPage.verifyEquipmentTypeColumnHeaderVisible(),
   ).toBeVisible();
 
   // Verify Barcode Text column header is visible
   await expect(
-    await dashboardEquipmentTabPage.verifyBarcodeTextColumnHeaderVisible()
+    await dashboardEquipmentTabPage.verifyBarcodeTextColumnHeaderVisible(),
   ).toBeVisible();
 
   // Verify Start Date column header is visible
@@ -45,4 +45,16 @@ test('Equipment Tab Validation', async ({ authenticatedPage }) => {
 
   // Verify Days on Job column header is visible
   await expect(await dashboardEquipmentTabPage.verifyDaysOnJobColumnHeaderVisible()).toBeVisible();
+
+  await page.waitForLoadState('networkidle');
+
+  // Click on Export to Excel button and Assert file download
+  const downloadSuccess = await dashboardEquipmentTabPage.clickExportToExcelAndAssertDownload();
+  expect(downloadSuccess).toBeTruthy();
+
+  await page.waitForLoadState('networkidle');
+
+  // Click on Export to PDF button and Assert file download
+  const pdfDownloadSuccess = await dashboardEquipmentTabPage.clickExportToPDFAndAssertDownload();
+  expect(pdfDownloadSuccess).toBeTruthy();
 });

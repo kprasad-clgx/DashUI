@@ -11,7 +11,7 @@ test('Admin Marketing Page validation', async ({ authenticatedPage }) => {
   // Assert Marketing Dashboard Page Title is visible and correct
   await expect(await adminMarketingPage.verifyDashboardTitleVisible()).toBeVisible();
   await expect(await adminMarketingPage.verifyDashboardTitleVisible()).toHaveText(
-    'Marketing Dashboard'
+    'Marketing Dashboard',
   );
 
   // Array of labels to validate in Marketing Dashboard section
@@ -29,7 +29,7 @@ test('Admin Marketing Page validation', async ({ authenticatedPage }) => {
   // Assert Admin Marketing Header is visible and correct
   await expect(await adminMarketingPage.verifyAdminMarketingHeaderVisible()).toBeVisible();
   await expect(await adminMarketingPage.verifyAdminMarketingHeaderVisible()).toHaveText(
-    'Admin Marketing'
+    'Admin Marketing',
   );
 
   // Array of labels to verify in Admin Marketing section

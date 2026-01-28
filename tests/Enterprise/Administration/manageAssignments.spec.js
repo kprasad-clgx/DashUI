@@ -52,8 +52,3 @@ test('Manage Assignments Page', async ({ authenticatedPage }) => {
   const lossAddressGridHeader = await manageAssignmentsPage.verifyLossAddressGridHeader();
   await expect(lossAddressGridHeader).toBeVisible();
 });
-
-// Storage state persists session - no logout needed
-/* test.afterEach(async ({ page, context }) => {
-  // Logout and cleanup
-}); */

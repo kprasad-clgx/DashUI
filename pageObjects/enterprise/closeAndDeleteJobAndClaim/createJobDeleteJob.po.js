@@ -8,14 +8,15 @@ export class CreateJobDeleteJobPage {
     });
 
     this.modalWrapper = page.locator(
-      '#RadWindowWrapper_ctl00_ContentPlaceHolder1_RadWindow_Common'
+      '#RadWindowWrapper_ctl00_ContentPlaceHolder1_RadWindow_Common',
     );
 
     this.modalHeader = page.locator(
-      '#RadWindowWrapper_ctl00_ContentPlaceHolder1_RadWindow_Common em'
+      '#RadWindowWrapper_ctl00_ContentPlaceHolder1_RadWindow_Common em',
     );
 
     this.iframeSelector = 'iframe[name="RadWindow_Common"]';
+    this.jobAssignmentLink = page.locator('a#link_job_to_assignment');
   }
 
   async deleteJob() {
@@ -70,8 +71,17 @@ export class CreateJobDeleteJobPage {
     const currentUrl = this.page.url();
     if (!/Module\/User\/uPostLogin\.aspx$/.test(currentUrl)) {
       throw new Error(
-        `Expected URL to end with 'Module/User/uPostLogin.aspx' but got '${currentUrl}'`
+        `Expected URL to end with 'Module/User/uPostLogin.aspx' but got '${currentUrl}'`,
       );
     }
+  }
+
+  /**
+   * Verify job assignment link is visible after deletion
+   * @returns {Promise<import('@playwright/test').Locator>}
+   */
+  async verifyJobAssignmentLinkVisible() {
+    await this.jobAssignmentLink.waitFor({ state: 'visible' });
+    return this.jobAssignmentLink;
   }
 }

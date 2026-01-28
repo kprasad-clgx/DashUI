@@ -81,6 +81,11 @@ const EmployeeLocators = {
   gridTable: '#ctl00_ContentPlaceHolder1_gvEmplyees_ctl00',
   gridSearchInput: '#ctl00_ContentPlaceHolder1_gvEmplyees_ctl00_ctl02_ctl03_FilterTextBox_Name',
   editLinks: 'a.buttonThin.secondaryButton',
+  deactivateCheckbox: '#ctl00_ContentPlaceHolder1_chkInactive',
+  reassignModal: '#RadWindowWrapper_ctl00_ContentPlaceHolder1_window_Common',
+  reassignModalHeading: '#RadWindowWrapper_ctl00_ContentPlaceHolder1_window_Common em',
+  reassignIframe: 'iframe[name="window_Common"]',
+  reassignOkButton: 'input[type="submit"][value="OK"], button:has-text("OK")',
 };
 
 class EmployeePage {
@@ -426,6 +431,69 @@ class EmployeePage {
       hasText: 'Edit',
     });
     await editLink.first().click();
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  // Verify deactivate checkbox is visible
+  async verifyDeactivateCheckboxVisible() {
+    const checkbox = this.page.locator(EmployeeLocators.deactivateCheckbox);
+    await checkbox.waitFor({ state: 'visible' });
+    return checkbox;
+  }
+
+  // Verify deactivate checkbox is not checked
+  async verifyDeactivateCheckboxNotChecked() {
+    const checkbox = this.page.locator(EmployeeLocators.deactivateCheckbox);
+    await checkbox.waitFor({ state: 'visible' });
+    return checkbox;
+  }
+
+  // Check deactivate checkbox
+  async checkDeactivateCheckbox() {
+    const checkbox = this.page.locator(EmployeeLocators.deactivateCheckbox);
+    await checkbox.check();
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  // Verify reassign modal is visible
+  async verifyReassignModalVisible() {
+    const modal = this.page.locator(EmployeeLocators.reassignModal);
+    await modal.waitFor({ state: 'visible', timeout: 20000 });
+    return modal;
+  }
+
+  // Verify reassign modal heading
+  async verifyReassignModalHeading() {
+    const heading = this.page.locator(EmployeeLocators.reassignModalHeading);
+    await heading.waitFor({ state: 'visible' });
+    return heading;
+  }
+
+  // Verify reassign iframe is visible
+  async verifyReassignIframeVisible() {
+    const iframe = this.page.locator(EmployeeLocators.reassignIframe);
+    await iframe.waitFor({ state: 'visible', timeout: 20000 });
+    return iframe;
+  }
+
+  // Click OK button in reassign modal and handle dialog
+  async clickReassignOkButton() {
+    const reassignFrame = this.page.frameLocator(EmployeeLocators.reassignIframe);
+    const okButton = reassignFrame.locator(EmployeeLocators.reassignOkButton);
+    await okButton.waitFor({ state: 'visible', timeout: 10000 });
+
+    // Prepare to accept the alert dialog after modal closes
+    this.page.once('dialog', async (dialog) => {
+      await dialog.accept();
+    });
+
+    await okButton.click();
+  }
+
+  // Wait for reassign modal to close
+  async waitForReassignModalToClose() {
+    const modal = this.page.locator(EmployeeLocators.reassignModal);
+    await modal.waitFor({ state: 'hidden', timeout: 20000 });
     await this.page.waitForLoadState('networkidle');
   }
 }

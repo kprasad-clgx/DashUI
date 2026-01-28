@@ -15,7 +15,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
   const companyDisplayNameLabel = await companySettingsPage.verifyCompanyDisplayNameLabel();
   await expect(companyDisplayNameLabel).toBeVisible();
   await expect(companyDisplayNameLabel).toHaveText(
-    companySettingsExpectedValues.expectedLabels.companyDisplayName
+    companySettingsExpectedValues.expectedLabels.companyDisplayName,
   );
 
   // Note Visibility Configuration Name text locator
@@ -23,7 +23,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
     '#ctl00_ContentPlaceHolder1_CompanySettingsDIV .sectionHeaderText',
     {
       hasText: /^\s*Note Visibility Configuration$/,
-    }
+    },
   );
 
   // Assert that the locator is visible
@@ -34,7 +34,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
     '#ctl00_ContentPlaceHolder1_CompanySettingsDIV .sectionHeaderText',
     {
       hasText: /^\s*Notifications$/,
-    }
+    },
   );
 
   // Assert that the locator is visible
@@ -45,7 +45,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
     '#ctl00_ContentPlaceHolder1_CompanySettingsDIV .sectionHeaderText',
     {
       hasText: /^\s*Office$/,
-    }
+    },
   );
 
   // Assert that the locator is visible
@@ -56,7 +56,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
     '#ctl00_ContentPlaceHolder1_CompanySettingsDIV .sectionHeaderText',
     {
       hasText: /^\s*Standard Note$/,
-    }
+    },
   );
 
   // Assert that the locator is visible
@@ -100,7 +100,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
   const compensationPlansText = await companySettingsPage.verifyCompensationPlansText();
   await expect(compensationPlansText).toBeVisible();
   await expect(compensationPlansText).toHaveText(
-    companySettingsExpectedValues.expectedLabels.compensationPlans
+    companySettingsExpectedValues.expectedLabels.compensationPlans,
   );
 
   // Verify Compensation Plans Delete button is visible
@@ -162,7 +162,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
 
   // Quality Questionnaire text locator
   const qualityQuestionnaireTextLocator = page.locator(
-    '#ctl00_ContentPlaceHolder1_lbQualityQuestionaireHead'
+    '#ctl00_ContentPlaceHolder1_lbQualityQuestionaireHead',
   );
 
   // Assert that the locator is visible
@@ -178,7 +178,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
     '#ctl00_ContentPlaceHolder1_CompanySettingsDIV .sectionHeaderText',
     {
       hasText: /^Data Import Tool$/,
-    }
+    },
   );
 
   // Assert that the locator is visible
@@ -196,12 +196,12 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
 
   // Assert that the locator has correct text
   await expect(dataImportToolTextLocator).toHaveText(
-    companySettingsExpectedValues.expectedLabels.dataImport
+    companySettingsExpectedValues.expectedLabels.dataImport,
   );
 
   // CompanyContacts Donwload Template button locator
   const companyContactsDownloadTemplateBtn = page.locator(
-    '#ctl00_ContentPlaceHolder1_RadGridDataImport_ctl00_ctl04_DownloadTemplateButton'
+    '#ctl00_ContentPlaceHolder1_RadGridDataImport_ctl00_ctl04_DownloadTemplateButton',
   );
 
   // Assert that the locator is visible
@@ -212,7 +212,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
 
   // CompanyContacts View History button locator
   const companyContactsViewHistoryBtn = page.locator(
-    '#ctl00_ContentPlaceHolder1_RadGridDataImport_ctl00_ctl04_ViewHistoryButton'
+    '#ctl00_ContentPlaceHolder1_RadGridDataImport_ctl00_ctl04_ViewHistoryButton',
   );
 
   // Assert that the locator is visible
@@ -223,7 +223,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
 
   // CompanyContacts Start Import button locator
   const companyContactsStartImportBtn = page.locator(
-    '#ctl00_ContentPlaceHolder1_RadGridDataImport_ctl00_ctl04_StartImportButton'
+    '#ctl00_ContentPlaceHolder1_RadGridDataImport_ctl00_ctl04_StartImportButton',
   );
 
   // Assert that the locator is visible
@@ -240,7 +240,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
     '#ctl00_ContentPlaceHolder1_CompanySettingsDIV .sectionHeaderText',
     {
       hasText: /^\s*E-mail Distribution List$/,
-    }
+    },
   );
 
   // Assert that the locator is visible
@@ -252,7 +252,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
 
   // Distribution List text locator
   const distributionListTextLocator = page.locator(
-    '#ctl00_ContentPlaceHolder1_lblDistributionList'
+    '#ctl00_ContentPlaceHolder1_lblDistributionList',
   );
 
   // Assert that the locator is visible
@@ -272,7 +272,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
 
   // Add new Record button on E-mail locator
   const addNewRecordEMailBtn = page.locator(
-    '#ctl00_ContentPlaceHolder1_gvDistributionList_ctl00_ctl02_ctl00_InitInsertButton'
+    '#ctl00_ContentPlaceHolder1_gvDistributionList_ctl00_ctl02_ctl00_InitInsertButton',
   );
 
   // Assert that the locator is visible
@@ -281,7 +281,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
   // Grid Column Name Distribution List locator
   const distributionListGridHeaderLocator = page.locator(
     '#ctl00_ContentPlaceHolder1_gvDistributionList_GridHeader tr th a',
-    { hasText: /^Distribution List$/ }
+    { hasText: /^Distribution List$/ },
   );
 
   // Assert that the locator is visible
@@ -289,7 +289,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
 
   // Email distribution grid Refresh button locator
   const emailDistributionGridRefreshBtn = page.locator(
-    '#ctl00_ContentPlaceHolder1_gvDistributionList_ctl00_ctl02_ctl00_RebindGridButton'
+    '#ctl00_ContentPlaceHolder1_gvDistributionList_ctl00_ctl02_ctl00_RebindGridButton',
   );
 
   // Assert that the locator is visible
@@ -302,7 +302,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
     '#ctl00_ContentPlaceHolder1_CompanySettingsDIV .sectionHeaderText',
     {
       hasText: /^\s*Equipment Type$/,
-    }
+    },
   );
 
   // Assert that the locator is visible
@@ -320,12 +320,12 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
 
   // Assert that the locator has correct text
   await expect(equipmentTypeTextLocator).toHaveText(
-    companySettingsExpectedValues.expectedLabels.equipmentType
+    companySettingsExpectedValues.expectedLabels.equipmentType,
   );
 
   // Equipment Type Add New button locator
   const equipmentTypeAddNewBtn = page.locator(
-    '#ctl00_ContentPlaceHolder1_gvEquipmentType_ctl00_ctl02_ctl00_InitInsertButton'
+    '#ctl00_ContentPlaceHolder1_gvEquipmentType_ctl00_ctl02_ctl00_InitInsertButton',
   );
 
   // Assert that the locator is visible
@@ -333,7 +333,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
 
   // Equipment Type Refresh button locator
   const equipmentTypeRefreshBtn = page.locator(
-    '#ctl00_ContentPlaceHolder1_gvEquipmentType_ctl00_ctl02_ctl00_RebindGridButton'
+    '#ctl00_ContentPlaceHolder1_gvEquipmentType_ctl00_ctl02_ctl00_RebindGridButton',
   );
 
   // Assert that the locator is visible
@@ -342,7 +342,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
   // Equipment Type Grid Column Header locator
   const equipmentTypeGridHeaderLocator = page.locator(
     '#ctl00_ContentPlaceHolder1_gvEquipmentType_ctl00_Header th a',
-    { hasText: /^\s*Equipment Type$/ }
+    { hasText: /^\s*Equipment Type$/ },
   );
 
   // Assert that the locator is visible
@@ -355,7 +355,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
     '#ctl00_ContentPlaceHolder1_CompanySettingsDIV .sectionHeaderText',
     {
       hasText: /^\s*Job Title$/,
-    }
+    },
   );
 
   // Assert that the locator is visible
@@ -373,12 +373,12 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
 
   // Assert that the locator has correct text
   await expect(jobTitleTextLocator).toHaveText(
-    companySettingsExpectedValues.expectedLabels.jobTitle
+    companySettingsExpectedValues.expectedLabels.jobTitle,
   );
 
   // Add new Job Title button locator
   const addNewJobTitleBtn = page.locator(
-    '#ctl00_ContentPlaceHolder1_gvJobTitle_ctl00_ctl02_ctl00_InitInsertButton'
+    '#ctl00_ContentPlaceHolder1_gvJobTitle_ctl00_ctl02_ctl00_InitInsertButton',
   );
 
   // Assert that the locator is visible
@@ -387,7 +387,7 @@ test('Company Settings Page', async ({ authenticatedPage }) => {
   // Job Title Grid column header locator
   const jobTitleGridHeaderLocator = page.locator(
     '#ctl00_ContentPlaceHolder1_gvJobTitle_ctl00_Header th a',
-    { hasText: /^\s*Job Title$/ }
+    { hasText: /^\s*Job Title$/ },
   );
 
   // Assert that the locator is visible

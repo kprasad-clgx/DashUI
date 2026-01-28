@@ -158,12 +158,12 @@ class EnterpriseAddPaymentPage {
    */
   async selectFirstInvoice() {
     const invoiceNumberDropdown = this.page.locator(
-      EnterpriseAddPaymentLocators.invoiceNumberDropdown
+      EnterpriseAddPaymentLocators.invoiceNumberDropdown,
     );
     await invoiceNumberDropdown.click();
 
     const invoiceDropdownItems = this.page.locator(
-      EnterpriseAddPaymentLocators.invoiceDropdownItems
+      EnterpriseAddPaymentLocators.invoiceDropdownItems,
     );
     await invoiceDropdownItems.first().waitFor({ state: 'visible', timeout: 10000 });
     await invoiceDropdownItems.first().click();
@@ -200,7 +200,7 @@ class EnterpriseAddPaymentPage {
     });
 
     const todayCell = this.page.locator(
-      `#ctl00_ContentPlaceHolder1_gvPayments_ctl00_ctl02_ctl04_txtDateOfPayment_calendar td[title="${formattedTitle}"] a`
+      `#ctl00_ContentPlaceHolder1_gvPayments_ctl00_ctl02_ctl04_txtDateOfPayment_calendar td[title="${formattedTitle}"] a`,
     );
     await todayCell.waitFor({ state: 'visible', timeout: 10000 });
     await todayCell.click();
@@ -212,7 +212,7 @@ class EnterpriseAddPaymentPage {
    */
   async fillReferenceNumber(refNumber) {
     const referenceNumberInput = this.page.locator(
-      EnterpriseAddPaymentLocators.referenceNumberInput
+      EnterpriseAddPaymentLocators.referenceNumberInput,
     );
     await referenceNumberInput.fill(refNumber);
   }
@@ -304,7 +304,7 @@ class EnterpriseAddPaymentPage {
    */
   async assertReferenceNumberLabelVisible() {
     const referenceNumberLabel = this.page.locator(
-      EnterpriseAddPaymentLocators.referenceNumberLabel
+      EnterpriseAddPaymentLocators.referenceNumberLabel,
     );
     await referenceNumberLabel.isVisible();
   }

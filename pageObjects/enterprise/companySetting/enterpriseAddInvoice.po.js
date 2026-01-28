@@ -146,7 +146,7 @@ class EnterpriseAddInvoicePage {
     });
 
     const todayCell = this.page.locator(
-      `#ctl00_ContentPlaceHolder1_gvInvoices_ctl00_ctl02_ctl04_InvoiceDate_calendar td[title="${formattedTitle}"] a`
+      `#ctl00_ContentPlaceHolder1_gvInvoices_ctl00_ctl02_ctl04_InvoiceDate_calendar td[title="${formattedTitle}"] a`,
     );
     await todayCell.waitFor({ state: 'visible', timeout: 10000 });
     await todayCell.click();
@@ -240,7 +240,7 @@ class EnterpriseAddInvoicePage {
    */
   async assertInvoiceDetailsJobNumber(expectedJobNumber) {
     const invoiceDetailsJobNumberLocator = this.page.locator(
-      EnterpriseAddInvoiceLocators.invoiceDetailsJobNumberLocator
+      EnterpriseAddInvoiceLocators.invoiceDetailsJobNumberLocator,
     );
     const invoiceDetailsJobNumberText = await invoiceDetailsJobNumberLocator.textContent();
     expect(invoiceDetailsJobNumberText).toContain(expectedJobNumber);
@@ -322,7 +322,7 @@ class EnterpriseAddInvoicePage {
   async assertInvoiceFileName(download, jobNumber) {
     const fileName = await download.suggestedFilename();
     const pattern = new RegExp(
-      `^Job-Invoices-${jobNumber.replace(/-/g, '\\-')}(\\(\\d+\\))?\\.xls$`
+      `^Job-Invoices-${jobNumber.replace(/-/g, '\\-')}(\\(\\d+\\))?\\.xls$`,
     );
     expect(fileName).toMatch(pattern);
   }
