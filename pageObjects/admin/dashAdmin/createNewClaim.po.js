@@ -11,6 +11,7 @@ const CreateClaimLocators = {
   // Caller Section
   callerDropdownArrow: '#ctl00_ContentPlaceHolder1_ddlCaller_Arrow',
   callerDropdownList: '#ctl00_ContentPlaceHolder1_ddlCaller_DropDown .rcbList',
+  callerInput : '#ctl00_ContentPlaceHolder1_ddlCaller_Input',
 
   // Reported By Section
   reportedByDropdownArrow: '#ctl00_ContentPlaceHolder1_rcbReportedBy_Arrow',
@@ -85,17 +86,27 @@ class CreateClaimPage {
   }
 
   /**
-   * Fill caller dropdown - select second option
+   * Select caller from dropdown
+   * @param {string} callerName - The caller name to select
    */
-  async selectCaller() {
+  async selectCaller(callerName) {
     await this.page.locator(CreateClaimLocators.callerDropdownArrow).click();
     const callerDropdownList = this.page.locator(CreateClaimLocators.callerDropdownList);
     await expect(callerDropdownList).toBeVisible({ timeout: 10000 });
+    
+    const callerInput = this.page.locator(CreateClaimLocators.callerInput);
+    await callerInput.click();
+    
+    // Type caller name sequentially
+    await this.typeSequentially(callerInput, callerName, 500);
 
-    const secondCallerOption = callerDropdownList.locator('li.rcbItem').nth(1);
-    await secondCallerOption.waitFor({ state: 'visible', timeout: 10000 });
-    await secondCallerOption.click();
-    await expect(callerDropdownList).toBeHidden({ timeout: 10000 });
+    // Wait for dropdown options to be filtered and visible
+    const dropdownOptions = this.page.locator(`${CreateClaimLocators.callerDropdownList} > li`);
+    await dropdownOptions.first().waitFor({ state: 'visible', timeout: 15000 });
+    
+    // Select matching caller from dropdown that contains the caller name
+    const callerOption = dropdownOptions.filter({ hasText: new RegExp(callerName, 'i') });
+    await callerOption.first().click();
   }
 
   /**
@@ -393,7 +404,7 @@ class CreateClaimPage {
   }
 
   async createClaimAssertURL(claimData) {
-    await this.selectCaller(claimData.callerName);
+    await this.selectCaller(claimData.customer.callerName);
     await this.selectReportedBy();
     await this.selectInsuranceCompany(claimData.customer.client);
     await this.fillCustomerInformation(claimData.customer);
@@ -409,7 +420,7 @@ class CreateClaimPage {
   }
 
   async createClaimWork(claimData) {
-    await this.selectCaller(claimData.callerName);
+    await this.selectCaller(claimData.customer.callerName);
     await this.selectReportedBy();
     await this.selectInsuranceCompany(claimData.customer.client);
     await this.fillCustomerInformation(claimData.customer);
@@ -428,7 +439,7 @@ class CreateClaimPage {
    * @returns {Promise<string>} The unique customer last name used for the claim
    */
   async createClaimWorkflow(claimData) {
-    await this.selectCaller(claimData.callerName);
+    await this.selectCaller(claimData.customer.callerName);
     await this.selectReportedBy();
     await this.selectInsuranceCompany(claimData.customer.client);
     const uniqueLastName = await this.fillCustomerInformation(claimData.customer);
@@ -451,7 +462,7 @@ class CreateClaimPage {
    * @param {Object} claimData - Claim data object with customer and lossDescription
    */
   async createClaimAndEditWorkFlow(claimData) {
-    await this.selectCaller(claimData.callerName);
+    await this.selectCaller(claimData.customer.callerName);
     await this.selectReportedBy();
     await this.selectInsuranceCompany(claimData.customer.client);
     await this.fillCustomerInformation(claimData.customer);
