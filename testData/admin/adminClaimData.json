@@ -1,7 +1,7 @@
 {
   "claimDetails": {
     "customer": {
-      "callerName" : "caller99",
+      "callerName": "caller99",
       "client": "Automate Client",
       "firstName": "John",
       "lastName": "Doe",

@@ -1,0 +1,6 @@
+{
+  "actionTitle": "Test Workflow",
+  "description": "Automated test workflow",
+  "assignmentDelay": 30,
+  "mustCompleteWithin": 120
+}

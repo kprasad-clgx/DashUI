@@ -1,0 +1,12 @@
+{
+  "invoice": {
+    "dateOfInvoice": "12/08/2025",
+    "billToName": "Matthew",
+    "invoiceAmount": 10000.0,
+    "invoiceNumber": "INV-12345",
+    "terms": "Net 30",
+    "assignee": "admin",
+    "copyNoticeToEstimator": true,
+    "specialInstructions": "Please process ASAP"
+  }
+}

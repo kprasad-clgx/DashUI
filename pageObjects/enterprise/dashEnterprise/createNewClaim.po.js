@@ -177,7 +177,7 @@ export class CreateClaimPage {
   }
 
   // Select a customer from the dropdown and wait for fields to populate
-  async selectCustomer(dropdownText, firstName, lastName) {
+  async selectCustomer(fullName, firstName, lastName) {
     await expect(this.customerArrow).toBeEnabled();
     await this.customerArrow.click();
 
@@ -193,11 +193,11 @@ export class CreateClaimPage {
     );
     await expect(dropdown).toBeVisible({ timeout: 15000 });
 
-    // Find the first <li> whose first <td> contains the dropdownText
+    // Find the first <li> whose first <td> contains the fullName
     const customerOption = dropdown
       .locator('ul.rcbList > li')
       .filter({
-        has: this.page.locator('td').first().filter({ hasText: firstName }),
+        has: this.page.locator('td').first().filter({ hasText: fullName }),
       })
       .first();
 
@@ -206,8 +206,8 @@ export class CreateClaimPage {
 
     // Wait for customer data to load (field should not be placeholder)
     await expect(this.customerFirstName).not.toHaveValue('First Name', { timeout: 15000 });
-    await expect(this.customerFirstName).toHaveValue(lastName, { timeout: 15000 });
-    await expect(this.customerLastName).toHaveValue(firstName, { timeout: 15000 });
+    await expect(this.customerFirstName).toHaveValue(firstName, { timeout: 15000 });
+    await expect(this.customerLastName).toHaveValue(lastName, { timeout: 15000 });
   }
 
   // Fill in the customer's contact information
@@ -389,11 +389,7 @@ export class CreateClaimPage {
     await this.selectReportedBy();
     await this.selectProvider();
     await this.selectClient();
-    await this.selectCustomer(
-      claimDetails.dropdownText,
-      claimDetails.firstName,
-      claimDetails.lastName,
-    );
+    await this.selectCustomer(claimDetails.fullName, claimDetails.firstName, claimDetails.lastName);
     await this.checkSameAsIndividualAddress();
     await this.selectEstimator();
     await this.selectCoordinator();
@@ -414,11 +410,7 @@ export class CreateClaimPage {
     await this.selectReferredBy();
     await this.selectProvider();
     await this.selectClient();
-    await this.selectCustomer(
-      claimDetails.dropdownText,
-      claimDetails.firstName,
-      claimDetails.lastName,
-    );
+    await this.selectCustomer(claimDetails.fullName, claimDetails.firstName, claimDetails.lastName);
     await this.checkSameAsIndividualAddress();
     await this.selectEstimator();
     await this.selectCoordinator();
@@ -441,11 +433,7 @@ export class CreateClaimPage {
     const referredBy = await this.selectReferredBy();
     await this.selectProvider();
     await this.selectClient();
-    await this.selectCustomer(
-      claimDetails.dropdownText,
-      claimDetails.firstName,
-      claimDetails.lastName,
-    );
+    await this.selectCustomer(claimDetails.fullName, claimDetails.firstName, claimDetails.lastName);
     await this.checkSameAsIndividualAddress();
     await this.selectEstimator();
     await this.selectCoordinator();
@@ -454,7 +442,7 @@ export class CreateClaimPage {
     await this.selectRandomRequiredService();
     await this.setDateOfLoss(claimDetails.dateOfLoss);
     await this.enterLossDescription(claimDetails.lossDescription);
-    await this.yearBuiltInput(claimDetails.yearBuilt);
+    await this.enterYearBuilt(claimDetails.yearBuilt);
     await this.saveClaim();
     await this.selectProgram();
     await this.createClaim();

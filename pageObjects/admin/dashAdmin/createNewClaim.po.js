@@ -11,7 +11,7 @@ const CreateClaimLocators = {
   // Caller Section
   callerDropdownArrow: '#ctl00_ContentPlaceHolder1_ddlCaller_Arrow',
   callerDropdownList: '#ctl00_ContentPlaceHolder1_ddlCaller_DropDown .rcbList',
-  callerInput : '#ctl00_ContentPlaceHolder1_ddlCaller_Input',
+  callerInput: '#ctl00_ContentPlaceHolder1_ddlCaller_Input',
 
   // Reported By Section
   reportedByDropdownArrow: '#ctl00_ContentPlaceHolder1_rcbReportedBy_Arrow',
@@ -93,17 +93,17 @@ class CreateClaimPage {
     await this.page.locator(CreateClaimLocators.callerDropdownArrow).click();
     const callerDropdownList = this.page.locator(CreateClaimLocators.callerDropdownList);
     await expect(callerDropdownList).toBeVisible({ timeout: 10000 });
-    
+
     const callerInput = this.page.locator(CreateClaimLocators.callerInput);
     await callerInput.click();
-    
+
     // Type caller name sequentially
     await this.typeSequentially(callerInput, callerName, 500);
 
     // Wait for dropdown options to be filtered and visible
     const dropdownOptions = this.page.locator(`${CreateClaimLocators.callerDropdownList} > li`);
     await dropdownOptions.first().waitFor({ state: 'visible', timeout: 15000 });
-    
+
     // Select matching caller from dropdown that contains the caller name
     const callerOption = dropdownOptions.filter({ hasText: new RegExp(callerName, 'i') });
     await callerOption.first().click();

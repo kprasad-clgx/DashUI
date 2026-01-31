@@ -1,0 +1,16 @@
+{
+  "estimates": [
+    {
+      "type": "Main",
+      "amount": 45500.0,
+      "description": "Test estimate description",
+      "fileName": "Final_Draft.pdf"
+    },
+    {
+      "type": "Supplement",
+      "amount": 30500.0,
+      "description": "Supplemental estimate",
+      "fileName": "supplement.pdf"
+    }
+  ]
+}

@@ -294,7 +294,7 @@ class DashboardNotesTabPage {
    * @returns {Promise<void>}
    */
   async selectVisibilityAndChange(visibilityOption = 'Private') {
-    this.page.locator(DashboardNotesTabLocators.visibilityDropdown).click();
+    await this.page.locator(DashboardNotesTabLocators.visibilityDropdown).click();
     const dropdownList = this.page.locator(DashboardNotesTabLocators.dropdownList);
     // Wait for the dropdown list to be visible
     await dropdownList.waitFor({ state: 'visible', timeout: 10000 });

@@ -1,0 +1,10 @@
+{
+  "upload": {
+    "overrideAmount": 1500.0,
+    "dataEstimateFile": "original_small_estimate.pdf",
+    "finalDraftFile": "final_draft.pdf",
+    "billToContactIndex": 7,
+    "notes": "Uploading estimate via automated test.",
+    "description": "Automated test upload of estimate."
+  }
+}

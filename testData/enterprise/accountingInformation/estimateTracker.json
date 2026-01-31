@@ -1,0 +1,19 @@
+{
+  "tabs": [
+    {
+      "name": "Uploaded Only",
+      "noDataMessage": "Uploaded Only: no data",
+      "hasDataMessage": "Uploaded Only: data present"
+    },
+    {
+      "name": "Not Uploaded Only",
+      "noDataMessage": "Not Uploaded Only: no data",
+      "hasDataMessage": "Not Uploaded Only: data present"
+    },
+    {
+      "name": "Show All",
+      "noDataMessage": "Show All: no data",
+      "hasDataMessage": "Show All: data present"
+    }
+  ]
+}

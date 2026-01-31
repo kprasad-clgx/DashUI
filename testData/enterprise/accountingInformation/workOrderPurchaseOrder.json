@@ -1,0 +1,21 @@
+{
+  "workOrder": {
+    "workOrderDate": "12/15/2025"
+  },
+  "newWorkOrder": {
+    "categoryCode": "Test Category",
+    "summary": "Test Work Order Summary",
+    "budgetHoursOverride": "8",
+    "percentComplete": "20",
+    "userType": "Employee",
+    "assignee": "admin, admin",
+    "comments": "Test comments for new work order"
+  },
+  "milestone": {
+    "userType": "Employee",
+    "assignee": "admin, admin",
+    "description": "Test milestone description",
+    "estimatedStartDate": "12/15/2025",
+    "estimatedDueDate": "12/31/2025"
+  }
+}
