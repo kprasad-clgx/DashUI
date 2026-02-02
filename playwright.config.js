@@ -35,8 +35,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 1 : 0,
-  /* Run tests in parallel with 2 workers. */
-  workers: 2, // Run tests in parallel with 2 instances
+  /* Run tests in parallel - optimized for CI and local */
+  workers: process.env.CI ? 4 : 2, // Use 4 workers in CI, 2 locally
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI
     ? [
@@ -71,12 +71,15 @@ export default defineConfig({
     headless: true, // Set to true for headless mode
     viewport: browserConfig.viewport,
 
-    /* Custom user agent to avoid 403 Forbidden errors */
+    /* Common user agent */
     userAgent: browserConfig.userAgent,
 
     /* Ignore HTTPS errors - only for dev/test environments with self-signed certs */
     /* WARNING: Set to false for production-like environments */
     ignoreHTTPSErrors: browserConfig.ignoreHTTPSErrors,
+
+    /* Launch options for full-screen mode */
+    launchOptions: browserConfig.launchOptions,
 
     /* Action timeout for each Playwright action (click, fill, etc.) */
     actionTimeout: 60000, // 60 seconds - increased for slow-loading elements
@@ -91,7 +94,6 @@ export default defineConfig({
       name: 'admin-chromium',
       testMatch: '**/Admin/**/*.spec.js',
       use: {
-        ...devices['Desktop Chrome'],
         storageState: '.auth/admin.json',
       },
     },
@@ -99,7 +101,6 @@ export default defineConfig({
       name: 'enterprise-chromium',
       testMatch: '**/Enterprise/**/*.spec.js',
       use: {
-        ...devices['Desktop Chrome'],
         storageState: '.auth/enterprise.json',
       },
     },
@@ -107,8 +108,7 @@ export default defineConfig({
       name: 'mixed-chromium',
       testMatch: '**/EnterpriseAndAdmin/**/*.spec.js',
       use: {
-        ...devices['Desktop Chrome'],
-        // No storageState - will be loaded per context in fixture
+        storageState: '.auth/admin.json',
       },
     },
 

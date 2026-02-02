@@ -1,7 +1,7 @@
 import { test, expect } from '../../../fixtures/enterpriseFixtures.js';
 import DashboardPhotosTabPage from '../../../pageObjects/enterprise/dashboardEvans/photosTab.po.js';
 import dashboardAccountingNotesData from '../../../testData/enterprise/enterpriseCompanySettings/DashboardAccountingNotes.json' with { type: 'json' };
-import getRandomNumber from '../../../utils/randomNumber.js';
+import { getRandomNumber } from '../../../utils/randomNumber.js';
 import { searchJobNumber } from '../../../utils/searchJobNumber.js';
 
 test('Photos Tab Upload and Download Validation', async ({ authenticatedPage }) => {

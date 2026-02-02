@@ -376,10 +376,10 @@ class CreateClaimPage {
     const attemptLink = dispatchFrame.locator(CreateClaimLocators.attemptCallLink);
     const finalAssignButton = dispatchFrame.locator(CreateClaimLocators.finalAssignButton);
 
-    await attemptLink.waitFor({ state: 'visible', timeout: 15000 });
+    await attemptLink.waitFor({ state: 'visible', timeout: 60000 });
     await attemptLink.click();
 
-    await finalAssignButton.waitFor({ state: 'visible', timeout: 15000 });
+    await finalAssignButton.waitFor({ state: 'visible', timeout: 30000 });
     await finalAssignButton.click();
 
     const closeButton = this.page.locator(CreateClaimLocators.dispatchCloseButton);

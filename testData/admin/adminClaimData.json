@@ -1,8 +1,8 @@
 {
   "claimDetails": {
     "customer": {
-      "callerName": "caller99",
-      "client": "Automate Client",
+      "callerName": "Caller99",
+      "client": "Caller99",
       "firstName": "John",
       "lastName": "Doe",
       "address": "123 Main St",

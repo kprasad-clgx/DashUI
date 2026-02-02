@@ -58,10 +58,12 @@ class RankMarketingPage {
 
   async assertGridHeaders(expectedHeaders) {
     for (const labelText of expectedHeaders) {
-      const labelLocator = this.page.locator(
-        `${rankMarketingLocators.gridHeader} :has-text('${labelText}')`,
-      );
-      await labelLocator.waitFor({ state: 'visible', timeout: 5000 });
+      const labelLocator = this.page
+        .locator(rankMarketingLocators.gridHeader)
+        .getByText(labelText, {
+          exact: true,
+        });
+      await expect(labelLocator).toBeVisible();
     }
   }
 

@@ -33,6 +33,15 @@ function validateEnvVars(env) {
         `💡 See README.md for setup instructions\n`,
     );
   }
+
+  // Validate URL format
+  const urlVars = requiredVars.filter((v) => v.includes('URL'));
+  urlVars.forEach((varName) => {
+    const value = process.env[varName];
+    if (value && !value.match(/^https?:\/\/.+/)) {
+      throw new Error(`Invalid URL format for ${varName}: ${value}`);
+    }
+  });
 }
 
 /**

@@ -15,7 +15,7 @@ Follow these steps to set up the testing framework on a new machine:
 ```bash
 # 1. Clone the repository (if not already done)
 git clone <repository-url>
-cd DashUI_Framework
+cd DashUI
 
 # 2. Install dependencies
 npm install
@@ -30,26 +30,29 @@ npx playwright install --with-deps chromium
 
 ⚠️ **CRITICAL STEP** - Configure your environment variables:
 
-1. Open the `.env` file in the root directory
+1. **Create a `.env` file** in the root directory (if it doesn't exist)
 2. Set the `TEST_ENV` variable to your desired environment:
 
    ```dotenv
    TEST_ENV=stage  # Options: dkirc, stage, dev, qa, prod
    ```
 
-3. Verify the corresponding environment variables are set:
-   - For `TEST_ENV=stage`, ensure these variables have valid values:
+3. Add the corresponding environment variables with valid values:
+   - For `TEST_ENV=stage`, add these variables:
      ```dotenv
-     STAGE_ENTERPRISE_LOGIN_URL=https://...
-     STAGE_ADMIN_LOGIN_URL=https://...
-     STAGE_ENTERPRISE_COMPANY_ID=...
-     STAGE_ENTERPRISE_USERNAME=...
-     STAGE_ENTERPRISE_PASSWORD=...
-     STAGE_ADMIN_USERNAME=...
-     STAGE_ADMIN_PASSWORD=...
+     STAGE_ENTERPRISE_LOGIN_URL=https://your-enterprise-url
+     STAGE_ADMIN_LOGIN_URL=https://your-admin-url
+     STAGE_ENTERPRISE_COMPANY_ID=your-company-id
+     STAGE_ENTERPRISE_USERNAME=your-username
+     STAGE_ENTERPRISE_PASSWORD=your-password
+     STAGE_ADMIN_USERNAME=admin-username
+     STAGE_ADMIN_PASSWORD=admin-password
      ```
+   - For other environments (dkirc, dev, qa, prod), use the same pattern with the environment prefix
 
 4. **Save the file** after making changes
+
+**Note**: The `.env` file is automatically loaded by `global-setup.js` using `dotenv`. Never commit this file to version control.
 
 ### 4. Verify Setup
 
@@ -101,21 +104,83 @@ npx playwright install --with-deps chromium
 ## 📁 Project Structure
 
 ```
-DashUI_Framework/
-├── .env                    # Environment configuration (IMPORTANT!)
-├── .env.example           # Template for environment variables
-├── global-setup.js        # Authentication setup
+DashUI_FrameworkGit/
+├── .env                    # Environment configuration (IMPORTANT! - Create this file)
+├── azure-pipelines.yml    # CI/CD pipeline configuration
+├── eslint.config.js       # ESLint configuration
+├── global-setup.js        # Authentication setup (loads .env automatically)
+├── global-teardown.js     # Cleanup after test execution
 ├── playwright.config.js   # Playwright configuration
-├── package.json          # Dependencies
+├── package.json          # Dependencies and scripts
+├── README.md             # This file - Quick start guide
+├── zSetup                # Detailed setup guide for new machines
 ├── config/               # Configuration files
-│   ├── environment.config.js
-│   └── browser.config.js
+│   ├── browser.config.js       # Browser settings
+│   ├── environment.config.js   # Environment variables loader
+│   └── timeout.config.js       # Centralized timeout configuration
+├── docs/                 # Documentation
+│   ├── CI-CD-SETUP.md
+│   ├── NOTIFICATION_HANDLING.md
+│   ├── NOTIFICATION_IMPLEMENTATION.md
+│   ├── NOTIFICATION_QUICK_REFERENCE.md
+│   ├── POM_STANDARD.md
+│   └── GLOBAL_TEARDOWN_GUIDE.md
+├── e2e/                  # Example test files
+├── fixtures/             # Test fixtures (with auto notification handling)
+│   ├── adminFixtures.js
+│   ├── enterpriseFixtures.js
+│   └── mixedFixtures.js
+├── pageObjects/          # Page Object Models
+│   ├── admin/
+│   ├── enterprise/
+│   └── enterpriseAndAdmin/
+├── playwright-report/    # Generated HTML test reports
+├── scripts/              # Utility scripts
+│   ├── cleanup.js
+│   ├── find-unused-imports.js
+│   ├── setup.ps1
+│   ├── verify-imports.js
+│   └── verify-setup.js
+├── test-results/         # Test artifacts (screenshots, traces, videos)
+├── testData/             # Test data files (JSON)
+│   ├── admin/
+│   └── enterprise/
 ├── tests/                # Test files
 │   ├── Admin/
-│   └── Enterprise/
-├── pageObjects/          # Page Object Models
-├── fixtures/             # Test fixtures
-└── testData/             # Test data files
+│   ├── Enterprise/
+│   └── EnterpriseAndAdmin/
+└── utils/                # Utility helpers
+    ├── adminClaimGenerator.js
+    ├── enterpriseClaimGenerator.js
+    ├── enterpriseJobGenerator.js
+    ├── helpers.js
+    ├── notificationHelper.js
+    ├── randomNumber.js
+    └── searchJobNumber.js
+```
+
+## ✨ Key Features
+
+### 🔔 Automatic Notification Handling
+
+The framework includes **automatic notification dismissal** to prevent pop-ups from blocking test execution:
+
+- ✅ **Zero configuration required** - Works automatically on all tests
+- ✅ **3-layer protection** - Fixture level, navigation level, manual control
+- ✅ **8 detection strategies** - Finds notifications using multiple selectors
+- ✅ **Centralized timeout management** - Consistent timeout values across framework
+
+**Learn more:** See [Notification Handling Guide](docs/NOTIFICATION_HANDLING.md)
+
+**Quick example:**
+```javascript
+test('My test', async ({ authenticatedPage }) => {
+  const page = authenticatedPage;
+  // Notifications auto-dismissed ✅
+  
+  // Optional: Manual dismissal if needed
+  await page.notificationHelper.dismissAllNotifications();
+});
 ```
 
 ## 🧪 Running Tests
@@ -130,14 +195,23 @@ npm run test:enterprise
 # Run only admin tests
 npm run test:admin
 
+# Run only mixed tests (enterprise + admin)
+npm run test:mixed
+
 # Run with UI mode (interactive)
 npm run test:ui
 
 # Run in headed mode (see browser)
 npm run test:headed
 
+# Run tests for CI/CD (with multiple reporters)
+npm run test:ci
+
 # Run specific test file
 npx playwright test tests/Admin/Administration/homePageValidation.spec.js
+
+# Run with more workers (parallel execution)
+npx playwright test --workers=4
 ```
 
 ## 🌍 Environment Management
@@ -174,6 +248,31 @@ Reports are generated in:
 - `playwright-report/` - HTML reports
 - `test-results/` - Test artifacts and screenshots
 
+## � Utility Scripts
+
+```bash
+# Install all dependencies and browsers (complete setup)
+npm run setup
+
+# Verify your setup is correct
+npm run verify-setup
+
+# Clean up test artifacts
+npm run cleanup
+
+# Full cleanup (including Playwright cache)
+npm run cleanup:full
+
+# Clean only reports
+npm run cleanup:reports
+
+# Format code with Prettier
+npm run format
+
+# Lint and fix code with ESLint
+npm run lint
+```
+
 ## 🐛 Debugging
 
 ### Debug a specific test
@@ -188,6 +287,12 @@ npx playwright test --debug tests/Admin/Administration/homePageValidation.spec.j
 npx playwright test --trace on
 npx playwright show-trace trace.zip
 ```
+
+### Debug with VS Code
+
+1. Install the "Playwright Test for VSCode" extension
+2. Open the Testing panel (Test tube icon in sidebar)
+3. Click the debug icon next to any test
 
 ## 📝 Writing Tests
 

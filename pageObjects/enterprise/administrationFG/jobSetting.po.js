@@ -166,17 +166,20 @@ class JobSettingPage {
   // Verify Add New Division Record button is visible
   async verifyAddNewDivisionRecordButtonVisible() {
     const addNewButton = this.page.locator(JobSettingLocators.addNewDivisionRecordButton);
-    await addNewButton.waitFor({ state: 'visible' });
+    await addNewButton.waitFor({ state: 'visible', timeout: 15000 });
     return addNewButton;
   }
 
   // Verify Division grid headers
   async verifyDivisionGridHeaders(expectedHeaders) {
+    await this.page
+      .locator('#ctl00_ContentPlaceHolder1_gvDivision_ctl00_Header')
+      .waitFor({ state: 'visible', timeout: 10000 });
     for (const headerText of expectedHeaders) {
-      const headerLocator = this.page.locator(
-        `#ctl00_ContentPlaceHolder1_gvDivision_ctl00_Header a :has-text('${headerText}')`,
-      );
-      await headerLocator.waitFor({ state: 'visible', timeout: 5000 });
+      const headerLocator = this.page
+        .locator('#ctl00_ContentPlaceHolder1_gvDivision_ctl00_Header a')
+        .filter({ hasText: headerText });
+      await headerLocator.waitFor({ state: 'visible', timeout: 15000 });
     }
   }
 

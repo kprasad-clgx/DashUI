@@ -190,10 +190,10 @@ class EnterpriseJobCostingPage {
       await paidToLoadingIndicator.waitFor({ state: 'hidden', timeout: 10000 });
     }
 
-    // Wait for dropdown list and click first option
+    // Wait for dropdown list and click third option
     const paidToDropdownList = this.page.locator(EnterpriseJobCostingLocators.paidToDropdownList);
-    await paidToDropdownList.first().waitFor({ state: 'visible', timeout: 10000 });
-    await paidToDropdownList.first().click();
+    await paidToDropdownList.nth(2).waitFor({ state: 'visible', timeout: 10000 });
+    await paidToDropdownList.nth(2).click();
   }
 
   /**

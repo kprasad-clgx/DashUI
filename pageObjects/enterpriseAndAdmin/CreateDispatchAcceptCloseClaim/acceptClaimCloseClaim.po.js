@@ -292,6 +292,39 @@ class AcceptClaimCloseClaimPage {
     await this.page.waitForLoadState('networkidle');
   }
 
+  // Edit Job information
+  async editJobInformation() {
+    const jobInformationEditIcon = this.page.locator('#img_EditDivision');
+    await jobInformationEditIcon.waitFor({ state: 'visible', timeout: 10000 });
+    await jobInformationEditIcon.click();
+    await this.page.waitForLoadState('networkidle');
+
+    const editJobModal = this.page.locator(CloseClaimLocators.commonModal);
+    await editJobModal.waitFor({ state: 'visible', timeout: 25000 });
+
+    // Access the iframe
+    const editJobIFrame = this.page.frameLocator(CloseClaimLocators.commonIframe);
+    await expect(this.page.locator(CloseClaimLocators.commonIframe)).toBeVisible({
+      timeout: 20000,
+    });
+
+    const environmentDropdownArrow = editJobIFrame.locator('#comboBoxEnvironmentalCode_Arrow');
+    await environmentDropdownArrow.waitFor({ state: 'visible', timeout: 10000 });
+    await environmentDropdownArrow.click();
+
+    const environmentDropdownList = editJobIFrame.locator('#comboBoxEnvironmentalCode_DropDown .rcbList');
+    await environmentDropdownList.waitFor({ state: 'visible', timeout: 10000 });
+
+    const secondOption = environmentDropdownList.locator('li.rcbItem').nth(1);
+    await secondOption.click();
+
+    const saveJobModalButton = editJobIFrame.locator('#Button_Save_input');
+    await saveJobModalButton.waitFor({ state: 'visible', timeout: 10000 });
+    await saveJobModalButton.click();
+    await editJobModal.waitFor({ state: 'hidden', timeout: 15000 });
+    await this.page.waitForLoadState('networkidle');
+  }
+
   /**
    * Close job with random reasons
    */
@@ -382,6 +415,7 @@ class AcceptClaimCloseClaimPage {
     await this.clickViewAccept();
     await this.acceptClaimInModal();
     await this.assignEstimatorAndCoordinator();
+    await this.editJobInformation();
     await this.rejectComplianceTasks();
     await this.editClaimInformation();
     await this.closeJob();

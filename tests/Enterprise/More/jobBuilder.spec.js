@@ -1,7 +1,7 @@
 import { test } from '../../../fixtures/enterpriseFixtures.js';
 import { JobBuilderPage } from '../../../pageObjects/enterprise/moreFg/jobBuilder.po.js';
 
-test('Job Builder in More FG', async ({ authenticatedPage }) => {
+test('Job Builder in More', async ({ authenticatedPage }) => {
   const page = authenticatedPage;
   const jobBuilderPage = new JobBuilderPage(page);
 
@@ -54,7 +54,6 @@ test('Job Builder in More FG', async ({ authenticatedPage }) => {
     'Area Rugs Completed Date',
     'Referred By Address',
     'Company Display Name',
-    'External 1',
     'Customer Address',
     'Current Date',
   ];

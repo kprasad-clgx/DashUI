@@ -12,22 +12,16 @@ framework on a fresh machine. Follow each step carefully. This guide is up-to-da
 
 This framework requires the following dependencies (see package.json):
 
-- @playwright/test           # Playwright E2E test runner
-- dotenv                     # Loads environment variables from .env
-- prettier                   # Code formatter
-- eslint                     # Linting for code quality
-- eslint-config-prettier     # Prettier config for ESLint
-- eslint-plugin-import       # ESLint plugin for import rules
-- eslint-plugin-node         # ESLint plugin for Node.js rules
-- eslint-plugin-playwright   # Playwright best practices
-- glob                       # File pattern matching utility
-- @types/node                # TypeScript type definitions (dev only)
-
-All dependencies are installed automatically with `npm install`.
-- eslint-plugin-node         # ESLint plugin for Node.js rules
-- eslint-plugin-playwright   # ESLint plugin for Playwright best practices
-- glob                       # File pattern matching utility
-- @types/node                # TypeScript type definitions for Node.js (dev only)
+- @playwright/test           # Playwright E2E test runner (v1.56.1)
+- dotenv                     # Loads environment variables from .env (v17.2.3)
+- prettier                   # Code formatter (v3.7.4)
+- eslint                     # Linting for code quality (v9.39.2)
+- eslint-config-prettier     # Prettier config for ESLint (v10.1.8)
+- eslint-plugin-import       # ESLint plugin for import rules (v2.32.0)
+- eslint-plugin-node         # ESLint plugin for Node.js rules (v11.1.0)
+- eslint-plugin-playwright   # Playwright best practices (v2.5.0)
+- glob                       # File pattern matching utility (v13.0.0)
+- @types/node                # TypeScript type definitions for Node.js (v24.10.1)
 
 All dependencies are installed automatically with `npm install`.
 
@@ -80,16 +74,15 @@ All dependencies are installed automatically with `npm install`.
    - Extract the project folder to your desired location
    - Open Command Prompt or PowerShell
    - Navigate to the project folder:
-     > cd C:\path\to\DashUI_FRAMEWORK
+     > cd C:\path\to\DashUI_FrameworkGit
 
 ================================================================================
   STEP 3: CONFIGURE ENVIRONMENT VARIABLES
 ================================================================================
 
 3.1 Create the .env file:
-   - Create a new file named .env in the project root
-   - Create a new file named .env in the project root (see below for required variables)
-
+   - Create a new file named .env in the project root directory
+   - This file does NOT exist by default and must be created manually
 
 3.2 Edit the .env file with your credentials:
    - Open .env in a text editor
@@ -154,16 +147,28 @@ IMPORTANT: Never commit the .env file to version control as it contains sensitiv
 
 Ensure your project has the following structure:
 
-DashUI_FRAMEWORK/
+DashUI_FrameworkGit/
 ├── .env                          # Your environment variables (created in Step 3)
-├── .prettierrc                   # Code formatting configuration
-├── package.json                  # Project dependencies
+├── azure-pipelines.yml           # CI/CD pipeline configuration
+├── eslint.config.js              # ESLint configuration
+├── package.json                  # Project dependencies and scripts
 ├── playwright.config.js          # Playwright configuration
-├── global-setup.js               # Authentication setup
+├── global-setup.js               # Authentication setup (loads .env)
 ├── global-teardown.js            # Cleanup after tests
+├── README.md                     # Quick start guide
+├── zSetup                        # This detailed setup guide
 ├── config/                       # Configuration files
-│   ├── browser.config.js
-│   └── environment.config.js
+│   ├── browser.config.js         # Browser settings
+│   ├── environment.config.js     # Environment variables loader
+│   └── timeout.config.js         # Centralized timeout configuration
+├── docs/                         # Documentation files
+│   ├── CI-CD-SETUP.md
+│   ├── NOTIFICATION_HANDLING.md
+│   ├── NOTIFICATION_IMPLEMENTATION.md
+│   ├── NOTIFICATION_QUICK_REFERENCE.md
+│   ├── POM_STANDARD.md
+│   └── GLOBAL_TEARDOWN_GUIDE.md
+├── e2e/                          # Example test files
 ├── fixtures/                     # Test fixtures
 │   ├── adminFixtures.js
 │   ├── enterpriseFixtures.js
@@ -172,6 +177,14 @@ DashUI_FRAMEWORK/
 │   ├── admin/
 │   ├── enterprise/
 │   └── enterpriseAndAdmin/
+├── playwright-report/            # Generated test reports
+├── scripts/                      # Utility scripts
+│   ├── cleanup.js
+│   ├── find-unused-imports.js
+│   ├── setup.ps1
+│   ├── verify-imports.js
+│   └── verify-setup.js
+├── test-results/                 # Test artifacts
 ├── testData/                     # Test data files (JSON)
 │   ├── admin/
 │   └── enterprise/
@@ -179,7 +192,14 @@ DashUI_FRAMEWORK/
 │   ├── Admin/
 │   ├── Enterprise/
 │   └── EnterpriseAndAdmin/
-├── utils/                        # Utility functions
+└── utils/                        # Utility functions
+    ├── adminClaimGenerator.js
+    ├── enterpriseClaimGenerator.js
+    ├── enterpriseJobGenerator.js
+    ├── helpers.js
+    ├── notificationHelper.js
+    ├── randomNumber.js
+    └── searchJobNumber.js
 
 ================================================================================
   STEP 7: RUN YOUR FIRST TEST
@@ -282,20 +302,33 @@ DashUI_FRAMEWORK/
 
 10.2 Testing:
    > npm test                       # Run all tests
+   > npm run test:enterprise        # Run enterprise tests only
+   > npm run test:admin             # Run admin tests only
+   > npm run test:mixed             # Run mixed tests only
    > npm run test:headed            # Run with browser visible
    > npm run test:ui                # Run in UI mode
+   > npm run test:ci                # Run with CI reporters (html, json, list)
    > npx playwright test --debug    # Run in debug mode
    > npx playwright test --grep "test name"  # Run tests matching pattern
+   > npx playwright test --workers=4  # Run with 4 parallel workers
 
-10.3 Code Quality:
+10.3 Utility Scripts:
+   > npm run setup                  # Complete setup (install + browsers + verify)
+   > npm run verify-setup           # Verify framework setup is correct
+   > npm run cleanup                # Clean test artifacts
+   > npm run cleanup:full           # Full cleanup including Playwright cache
+   > npm run cleanup:reports        # Clean only report directories
    > npm run format                 # Format all code with Prettier
+   > npm run lint                   # Lint and fix code with ESLint
 
 10.4 Playwright:
    > npx playwright show-report     # View last test report
    > npx playwright codegen <url>   # Generate test code
    > npx playwright test --list     # List all tests
+   > npx playwright test --trace=on # Run with trace enabled
+   > npx playwright show-trace <file>  # View trace file
 
-10.5 Cleanup:
+10.5 Cleanup (Windows):
    - Delete test-results folder:
      > rmdir /s /q test-results     (Windows)
    - Delete playwright-report folder:
@@ -425,11 +458,12 @@ For experienced users, here's a quick start:
 
 1. Install Node.js (https://nodejs.org/)
 2. Clone/extract project
-3. cd DashUI_FRAMEWORK
-4. Create .env file with credentials (copy from .env.example)
+3. cd DashUI_FrameworkGit
+4. Create .env file with credentials (see Step 3 for required variables)
 5. npm install
-6. npx playwright install chromium
-7. npm test
+6. npm run test:install (or: npx playwright install --with-deps chromium)
+7. npm run verify-setup (optional but recommended)
+8. npm test
 
 That's it! Your framework is ready to run.
 

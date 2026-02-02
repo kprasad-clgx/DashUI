@@ -52,7 +52,7 @@ export class TimesheetsAllOptionsPage {
     await this.timesheetsMenuHover.hover();
     await this.timesheetsMenuItem.waitFor({ state: 'visible', timeout: 5000 });
     await this.timesheetsMenuItem.click();
-    await this.page.waitForLoadState('networkidle');
+    await this.timesheetsHeader.waitFor({ state: 'visible', timeout: 10000 });
   }
 
   async validateTimesheetsHeader() {
@@ -109,7 +109,7 @@ export class TimesheetsAllOptionsPage {
     await this.timesheetsMenuHover.hover();
     await this.settingsMenuItem.waitFor({ state: 'visible', timeout: 5000 });
     await this.settingsMenuItem.click();
-    await this.page.waitForLoadState('networkidle');
+    await this.generalSettingsHeader.waitFor({ state: 'visible', timeout: 10000 });
   }
 
   async validateGeneralSettingsHeader() {
@@ -123,12 +123,9 @@ export class TimesheetsAllOptionsPage {
 
   async navigateToActivityCodes() {
     await this.timesheetsMenuHover.hover();
-    await this.activityCodesMenuItem.waitFor({
-      state: 'visible',
-      timeout: 5000,
-    });
+    await this.activityCodesMenuItem.waitFor({ state: 'visible', timeout: 5000 });
     await this.activityCodesMenuItem.click();
-    await this.page.waitForLoadState('networkidle');
+    await this.activityCodesHeader.waitFor({ state: 'visible', timeout: 10000 });
   }
 
   async validateActivityCodesHeader() {
@@ -158,12 +155,9 @@ export class TimesheetsAllOptionsPage {
 
   async navigateToApproverSettings() {
     await this.timesheetsMenuHover.hover();
-    await this.approverSettingsMenuItem.waitFor({
-      state: 'visible',
-      timeout: 5000,
-    });
+    await this.approverSettingsMenuItem.waitFor({ state: 'visible', timeout: 5000 });
     await this.approverSettingsMenuItem.click();
-    await this.page.waitForLoadState('networkidle');
+    await this.approverSettingsHeader.waitFor({ state: 'visible', timeout: 10000 });
   }
 
   async validateApproverSettingsHeader() {

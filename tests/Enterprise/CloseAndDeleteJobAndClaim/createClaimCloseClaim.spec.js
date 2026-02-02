@@ -14,9 +14,12 @@ test('Create Claim Enterprise', async ({ authenticatedPage }) => {
 
   const jobNumber = await createClaimPage.createNewClaim(createNewClaimDetails);
 
-  // Refresh the page to ensure the new job appears in the dashboard
-  // await page.reload();
   await page.waitForLoadState('networkidle');
+
+  // Refresh the page to ensure the new job appears in the dashboard
+   await page.reload();
+   await page.waitForLoadState('networkidle');
+
 
   // Reject all compliance tasks
   await closeClaimPage.rejectAllComplianceTasks();

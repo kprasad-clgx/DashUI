@@ -408,11 +408,15 @@ class DashboardNotesTabPage {
    * Click Cancel button
    * @returns {Promise<void>}
    */
-  async clickCancelButton() {
-    const frame = this.getCopyNotesFrame();
-    const cancelButton = frame.locator(DashboardNotesTabLocators.cancelButton);
-    await cancelButton.click();
-  }
+ async clickCancelButton() {
+  // Use frameLocator for better iframe handling
+  const copyNotesIframe = this.page.frameLocator(DashboardNotesTabLocators.copyNotesIframe);
+  const cancelButton = copyNotesIframe.locator(DashboardNotesTabLocators.cancelButton);
+  
+  // Wait for button to be visible and clickable
+  await cancelButton.waitFor({ state: 'visible', timeout: 10000 });
+  await cancelButton.click();
+}
 
   /**
    * Download and assert Excel file

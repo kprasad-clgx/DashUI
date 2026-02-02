@@ -1,11 +1,11 @@
 import { test } from '../../../fixtures/enterpriseFixtures.js';
 import DirectEmailMarketingPage from '../../../pageObjects/enterprise/Marketing/directEmailMarketing.po.js';
 
-test('Biz Dev Dashboard Page validation', async ({ authenticatedPage }) => {
+test('Direct Email Marketing Page validation', async ({ authenticatedPage }) => {
   const page = authenticatedPage;
   const directEmailMarketingPage = new DirectEmailMarketingPage(page);
 
-  // Navigate to Biz Dev Dashboard page via menu
+  // Navigate to Direct Email Marketing page via menu
   await directEmailMarketingPage.navigateToDirectEmailMarketing();
 
   // Assertions using POM methods

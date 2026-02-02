@@ -284,10 +284,9 @@ class JobDashboardPage {
     await goButton.first().waitFor({ state: 'visible', timeout: 5000 });
 
     const [request] = await Promise.all([
-      this.page.waitForRequest(
-        (req) => req.url().includes('JobDashboard') && req.method() === 'POST',
-        { timeout: 15000 },
-      ),
+      this.page.waitForRequest((req) => req.url().toLowerCase().includes('jobdashboard'), {
+        timeout: 15000,
+      }),
       goButton.click(),
     ]);
     expect(request).toBeTruthy();

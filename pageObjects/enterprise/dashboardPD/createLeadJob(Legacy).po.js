@@ -20,7 +20,7 @@ class CreateLeadJobPage {
   async navigateToAccountsReceivableTracking() {
     await this.page.locator(createLeadJobPageLocators.dashboardsMenu).first().hover();
 
-    const createLeadJobOption = this.page.getByText('Create Lead/Job(Legacy)', {
+    const createLeadJobOption = this.page.getByText('Create Lead/Job (Legacy)', {
       exact: true,
     });
 

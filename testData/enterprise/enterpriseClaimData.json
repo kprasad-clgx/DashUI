@@ -2,7 +2,7 @@
   "claimDetails": {
     "dateOfLoss": "11/18/2025",
     "lossDescription": "Automated test claim loss description",
-    "dropdownText": "Enterprise, Automate",
+    "fullName": "Automate, Enterprise",
     "firstName": "Enterprise",
     "lastName": "Automate",
     "email": "AutomateEnterprise@example.com",

@@ -84,8 +84,14 @@ export class CreateJobCloseJobPage {
     );
     await expect(dropdown).toBeVisible({ timeout: 5000 });
 
-    // Click the first li that contains the expected last name in any td
-    await dropdown.locator('ul.rcbList > li').filter({ hasText: customerName }).first().click();
+    // Wait for dropdown options to be visible
+    const dropdownOptions = dropdown.locator('ul.rcbList > li');
+    await dropdownOptions.first().waitFor({ state: 'visible', timeout: 5000 });
+
+    // Check if customer name is present and click on it
+    const customerOption = dropdownOptions.filter({ hasText: new RegExp(customerName, 'i') });
+    await expect(customerOption.first()).toBeVisible({ timeout: 5000 });
+    await customerOption.first().click();
 
     // Wait for customer data to load
     const customerFirstName = this.page.locator(
@@ -96,8 +102,8 @@ export class CreateJobCloseJobPage {
     );
 
     await expect(customerFirstName).not.toHaveValue('First Name', { timeout: 10000 });
-    await expect(customerFirstName).toHaveValue(expectedLastName, { timeout: 10000 });
-    await expect(customerLastName).toHaveValue(expectedFirstName, { timeout: 10000 });
+    await expect(customerFirstName).toHaveValue(expectedFirstName, { timeout: 10000 });
+    await expect(customerLastName).toHaveValue(expectedLastName, { timeout: 10000 });
   }
 
   // Check "Same as Customer" checkbox and verify job address
@@ -116,8 +122,8 @@ export class CreateJobCloseJobPage {
       '#ctl00_ContentPlaceHolder1_JobParentInformation_TextBox_LastNameLoss',
     );
 
-    await expect(jobAddressFirstName).toHaveValue(expectedLastName);
-    await expect(jobAddressLastName).toHaveValue(expectedFirstName);
+    await expect(jobAddressFirstName).toHaveValue(expectedFirstName);
+    await expect(jobAddressLastName).toHaveValue(expectedLastName);
   }
 
   // Policy information Start Date and Expiration Date only
@@ -151,18 +157,18 @@ export class CreateJobCloseJobPage {
     await policyStartDateInput.fill(startDate);
 
     const policyEndDateInput = this.page.locator(
-      '#ctl00_ContentPlaceHolder1_JobParentInformation_DatePicker_PolicyEndDate_dateInput',
+      '#ctl00_ContentPlaceHolder1_JobParentInformation_DatePicker_PolicyExpirationDate_dateInput',
     );
     await expect(policyEndDateInput).toBeEnabled();
     await policyEndDateInput.fill(endDate);
   }
 
-  // Policy information
+  // Policy information input
   async fillPolicyInformation(claimNumber, fileNumber, policyNumber, yearBuilt) {
-    // Generate random values if not provided
+    // Generate random values for policy information
     claimNumber = claimNumber || getRandomNumber(1, 9999).toString();
     fileNumber = fileNumber || getRandomNumber(1, 9999).toString();
-    policyNumber = policyNumber || getRandomNumber(1, 999).toString();
+    policyNumber = policyNumber || getRandomNumber(1, 9999).toString();
     yearBuilt = yearBuilt || getRandomNumber(1900, 2025).toString();
 
     const claimNumberInput = this.page.locator(
@@ -188,7 +194,7 @@ export class CreateJobCloseJobPage {
     await expect(yearBuiltInput).toBeEnabled();
     await yearBuiltInput.fill(yearBuilt);
 
-    await this.fillPolicyStartAndEndDates();
+    await this.selectLastMonthDateRangeAndFillPolicyDates();
   }
 
   // Check Water Mitigation checkbox

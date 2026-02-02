@@ -58,6 +58,23 @@ class ReportsPage {
     await expect(legacyReportCreatorHeadingLocator).toBeVisible();
     await expect(legacyReportCreatorHeadingLocator).toHaveText('Legacy Report Creator');
   }
+  
+// Open Open Jobs Report and generate download
+async verifyOpenJobsReport() {
+  const [newPage] = await Promise.all([
+    this.page.context().waitForEvent('page'),
+    this.page.locator("a:has-text('Open Jobs Report')").click(),
+  ]);
+  await newPage.waitForLoadState('networkidle', { timeout: 60000 });
+
+  // Wait for download on the new page
+  const [download] = await Promise.all([
+    newPage.waitForEvent('download'),
+    newPage.locator('#btnSubmit').click(),
+  ]);
+
+  return download;
+}
 
   // Click on Jobs Received Report Option, handle new tab, and assert URL
   async clickJobsReceivedReportOptionAndAssertUrl(expectedUrlSuffix = 'JobsReceivedReport.aspx') {

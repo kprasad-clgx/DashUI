@@ -42,9 +42,6 @@ test('Add New Payment Details', async ({ authenticatedPage }) => {
   // Verify Invoice Number label is visible
   await addPaymentPage.assertInvoiceNumberLabelVisible();
 
-  // Select first invoice from dropdown
-  await addPaymentPage.selectFirstInvoice();
-
   // Select today's date
   await addPaymentPage.selectTodayDateForPayment();
 

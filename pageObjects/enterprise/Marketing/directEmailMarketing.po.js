@@ -25,11 +25,11 @@ import { expect } from '@playwright/test';
 /** @type {DirectEmailMarketingPage} */
 const directEmailMarketingLocators = {
   marketingTab: "a.rmLink.rmRootLink:has-text('Marketing')",
-  bizDevDashboardSubTab: "a.rmLink.menuNoChildSubHeader:has-text('Biz Dev Dashboard')",
+  directEmailMarketingSubTab: "a.rmLink.menuNoChildSubHeader:has-text('Direct E-mail Marketing')",
   pageLabel: '#ctl00_ContentPlaceHolder1_lblEmailTemplateBuilder',
-  backToDashboardButton: '#ctl00_ContentPlaceHolder1_btnBackToMarketing',
+  backToMarketingDashboard: '#ctl00_ContentPlaceHolder1_btnBackToMarketing',
   gridHeader: '#ctl00_ContentPlaceHolder1_grdFB_ctl00 .rgHeader',
-  buttonRow: '#ctl00_ContentPlaceHolder1_MainPnl input[type="button"]',
+  buttonRow: 'button',
 };
 
 class DirectEmailMarketingPage {
@@ -40,9 +40,9 @@ class DirectEmailMarketingPage {
   async navigateToDirectEmailMarketing() {
     await this.page.locator(directEmailMarketingLocators.marketingTab).hover();
     await this.page
-      .locator(directEmailMarketingLocators.bizDevDashboardSubTab)
+      .locator(directEmailMarketingLocators.directEmailMarketingSubTab)
       .waitFor({ state: 'visible', timeout: 10000 });
-    await this.page.locator(directEmailMarketingLocators.bizDevDashboardSubTab).click();
+    await this.page.locator(directEmailMarketingLocators.directEmailMarketingSubTab).click();
     await this.page.waitForLoadState('networkidle');
   }
 
@@ -54,25 +54,23 @@ class DirectEmailMarketingPage {
 
   async assertBackToDashboardButton() {
     const backToMarketingDashboardButton = this.page.locator(
-      directEmailMarketingLocators.backToDashboardButton,
+      '#ctl00_ContentPlaceHolder1_btnBackToMarketing',
     );
     await expect(backToMarketingDashboardButton).toBeVisible();
   }
 
   async assertGridHeaders(expectedHeaders) {
     for (const labelText of expectedHeaders) {
-      const labelLocator = this.page.locator(
-        `${directEmailMarketingLocators.gridHeader} :has-text('${labelText}')`,
-      );
+      const labelLocator = this.page
+        .locator(directEmailMarketingLocators.gridHeader)
+        .filter({ hasText: labelText });
       await labelLocator.waitFor({ state: 'visible', timeout: 5000 });
     }
   }
 
   async assertButtonRow(expectedButtons) {
     for (const labelText of expectedButtons) {
-      const buttonLocator = this.page.locator(
-        `${directEmailMarketingLocators.buttonRow}[value="${labelText}"]`,
-      );
+      const buttonLocator = this.page.getByRole('button', { name: labelText });
       await buttonLocator.waitFor({ state: 'visible', timeout: 5000 });
     }
   }
