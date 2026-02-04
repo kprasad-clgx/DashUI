@@ -49,9 +49,15 @@ test('Convert Estimate To WorkOrder', async ({ authenticatedPage }) => {
   // Select estimate from dropdown
   await workOrderPage.selectEstimateFromDropdown();
 
+  // Wait for any AJAX after estimate selection
+  await workOrderPage.waitForAjax();
+
   // Fill work order date from test data
   const workOrderDate = workOrderData.workOrder?.workOrderDate;
   await workOrderPage.fillWorkOrderDate(workOrderDate);
+
+  // Wait for button to be enabled before clicking
+  await expect(workOrderPage.generateWorkOrderButton).toBeEnabled({ timeout: 10000 });
 
   // Click generate work order
   await workOrderPage.clickGenerateWorkOrder();

@@ -1,0 +1,22 @@
+{
+  "claimDetails": {
+    "dateOfLoss": "11/18/2025",
+    "lossDescription": "Description of the loss",
+    "reportedBy": "Adjuster",
+    "office": "Oxford",
+    "estimator": "admin, admin",
+    "coordinator": "admin, admin",
+    "accounting": "admin, admin",
+    "lossCategory": "Residential",
+    "yearBuilt": "2020",
+    "otherMobileNumber": "1-999-888-7777",
+    "customer": {
+      "dropdownText": "Smith, Xavier",
+      "firstName": "Xavier",
+      "lastName": "Smith",
+      "email": "dpls.cotality@gmail.com",
+      "phone": "1-580-594-8354",
+      "address": "101 test street"
+    }
+  }
+}

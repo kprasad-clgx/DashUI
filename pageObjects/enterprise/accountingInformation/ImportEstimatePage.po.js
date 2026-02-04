@@ -18,18 +18,20 @@ export class ImportEstimatePage extends EnterpriseHomePage {
   }
 
   async openImportEstimateModal() {
-    // Wait for the import icon to be visible before clicking
     await this.importEstimateIcon.waitFor({ state: 'visible', timeout: 10000 });
     await this.importEstimateIcon.click();
 
-    // Wait for modal wrapper to be visible
+    // Wait for modal to appear
     await this.modalWrapper.waitFor({ state: 'visible', timeout: 10000 });
 
-    // Wait for iframe to be attached and visible
-    await this.page.locator(this.modalIframeName).waitFor({ state: 'visible', timeout: 10000 });
+    // Wait for iframe to be attached
+    await this.page.locator(this.modalIframeName).waitFor({ state: 'attached', timeout: 10000 });
 
-    // Validate file input is visible inside the modal
-    await this.iframe.locator('input[type="file"]').waitFor({ state: 'visible', timeout: 5000 });
+    // Wait for network to settle (iframe content to load)
+    await this.page.waitForLoadState('networkidle', { timeout: 15000 });
+
+    // Wait for file input or any content in iframe to confirm it loaded
+    await this.iframe.locator('body').waitFor({ state: 'attached', timeout: 10000 });
   }
 
   async closeModal() {

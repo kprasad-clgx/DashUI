@@ -1,0 +1,14 @@
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "userName": "johndoe",
+  "password": "Password123!",
+  "jobTitle": "Estimator",
+  "address": "123 Main St",
+  "zipCode": "12345",
+  "city": "Anytown",
+  "state": "CA",
+  "country": "USA",
+  "county": "Any County",
+  "email": "john.doe@example.com"
+}

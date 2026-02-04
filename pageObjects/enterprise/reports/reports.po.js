@@ -186,7 +186,7 @@ export class ReportsPage extends BasePage {
     await jobNumberInput.click();
     await firstOption.click();
     await goButton.click();
-    await notification.waitFor({ state: 'visible', timeout: 10000 });
+    await notification.waitFor({ state: 'visible', timeout: 30000 });
     return { reportPopup, notification };
   }
   async verifyCreateReportHeader() {

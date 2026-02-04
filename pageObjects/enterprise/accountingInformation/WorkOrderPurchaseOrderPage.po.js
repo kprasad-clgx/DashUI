@@ -116,23 +116,6 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
     this.backToWorkOrderButton = page.locator('#ctl00_ContentPlaceHolder1_btnWorkOrder');
   }
 
-  // ================= UTILITIES =================
-
-  /**
-   * Helper to wait for Telerik AJAX loading panels to disappear.
-   * Add this to BasePage if possible, but kept here for completeness.
-   */
-  async waitForAjax() {
-    try {
-      await this.page.waitForLoadState('networkidle', { timeout: 2000 });
-      if (await this.loadingPanel.isVisible({ timeout: 500 })) {
-        await this.loadingPanel.waitFor({ state: 'hidden', timeout: 30000 });
-      }
-    } catch {
-      // Ignore timeouts if spinner didn't appear
-    }
-  }
-
   // ================= ACTIONS =================
 
   async openWorkOrderPurchaseOrder() {
@@ -145,7 +128,8 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
 
   async createNewWorkOrder(data) {
     await this.toolbar.createNew.click();
-    await this.createWOContainer.waitFor({ state: 'visible' });
+    await this.waitForAjax(); // Wait for postback to complete before form appears
+    await this.createWOContainer.waitFor({ state: 'visible', timeout: 15000 });
 
     if (data.categoryCode) await this.categoryCodeInput.fill(data.categoryCode);
     if (data.summary) await this.summaryInput.fill(data.summary);
@@ -335,7 +319,16 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
       }
     }
     await this.selectEstimateFromDropdown();
+
+    // Wait for any AJAX after estimate selection
+    await this.waitForAjax();
+
     await this.workOrderDatePicker.fill(workOrderDate);
+
+    // Wait for button to be enabled before clicking
+    await this.generateWorkOrderButton.waitFor({ state: 'visible', timeout: 10000 });
+    await this.page.waitForTimeout(500); // Brief wait for button state to update
+
     await this.generateWorkOrderButton.click();
 
     await this.waitForAjax();

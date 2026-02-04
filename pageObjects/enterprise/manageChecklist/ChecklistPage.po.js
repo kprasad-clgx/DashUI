@@ -21,9 +21,31 @@ export class ChecklistPage extends BasePage {
       this.addNewChecklistButton.click(),
     ]);
 
+    // Log popup URL for debugging
+    console.log('Popup URL:', popup.url());
+
     // 2. Initialize a temporary Page Object for the Popup
     const designer = new ChecklistDesignerPage(popup);
+
+    // Wait for popup to fully load
     await designer.page.waitForLoadState('domcontentloaded');
+    await designer.page.waitForLoadState('networkidle', { timeout: 60000 });
+
+    // Wait for body to be visible
+    await designer.page.locator('body').waitFor({ state: 'visible', timeout: 10000 });
+
+    // Wait for the ribbon container or any ribbon element to appear
+    try {
+      await designer.page
+        .locator('[id*="ribbon"], [class*="ribbon"], [class*="Ribbon"]')
+        .first()
+        .waitFor({ state: 'visible', timeout: 10000 });
+    } catch {
+      console.log('Ribbon container not found, continuing...');
+    }
+
+    // Wait for the specific ribbon tab to be visible
+    await designer.formFieldTab.waitFor({ state: 'visible', timeout: 30000 });
 
     // 3. Perform Actions on the Popup
     await designer.fillFormFields();
@@ -60,11 +82,25 @@ class ChecklistDesignerPage {
   constructor(page) {
     this.page = page;
 
-    // --- Ribbon Items ---
-    this.formFieldTab = page.getByText('Form Fields', { exact: true });
-    this.documentSignature = page.getByText('Document Signature', { exact: true });
-    this.jobTab = page.getByText('Job', { exact: true });
-    this.internalParticipants = page.getByText('Internal Participants', { exact: true });
+    // --- Ribbon Items (try multiple selector strategies) ---
+    this.formFieldTab = page
+      .locator('text="Form Fields"')
+      .or(page.getByText('Form Fields', { exact: true }))
+      .or(page.locator('[title="Form Fields"]'))
+      .first();
+    this.documentSignature = page
+      .locator('text="Document Signature"')
+      .or(page.getByText('Document Signature', { exact: true }))
+      .first();
+    this.jobTab = page
+      .locator('text="Job"')
+      .or(page.getByText('Job', { exact: true }))
+      .or(page.locator('[title="Job"]'))
+      .first();
+    this.internalParticipants = page
+      .locator('text="Internal Participants"')
+      .or(page.getByText('Internal Participants', { exact: true }))
+      .first();
 
     // --- Form Elements ---
     this.comboBoxBtn = page.locator('#ribbonTabFormFields_btnInsertComboBoxField');
@@ -84,6 +120,11 @@ class ChecklistDesignerPage {
   }
 
   async clickRibbonItem(locator) {
+    try {
+      await locator.waitFor({ state: 'visible', timeout: 20000 });
+    } catch (error) {
+      throw new Error(`Ribbon item not visible: ${error.message}`);
+    }
     await locator.click();
     await this.page.waitForTimeout(500);
   }

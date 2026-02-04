@@ -17,11 +17,8 @@ test('Create Workflow from Quick Notes', async ({ authenticatedPage }) => {
   // Create workflow using the complete workflow
   await workflowPage.createWorkflow(testData);
 
-  // Wait for the grid to update
-  await authenticatedPage.waitForTimeout(5000);
-
   // Wait for the grid to be visible using POM
-  await workflowPage.waitForGridVisible();
+  await workflowPage.waitForGridVisible(30000);
 
   // Verify workflow was created successfully
   const isWorkflowCreated = await workflowPage.verifyWorkflowCreated(uniqueName);

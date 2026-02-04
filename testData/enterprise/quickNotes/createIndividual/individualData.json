@@ -1,0 +1,12 @@
+{
+  "firstName": "John",
+  "lastName": "Paul",
+  "mainPhone": "5240-456-7890",
+  "address": "542 Main St",
+  "zipCode": "54321",
+  "email": "john.paul@example.com",
+  "city": "autauga",
+  "country": "USA",
+  "state": "Alabama",
+  "county": "Autauga"
+}

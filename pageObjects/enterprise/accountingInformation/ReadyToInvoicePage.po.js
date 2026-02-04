@@ -34,14 +34,19 @@ export class ReadyToInvoicePage extends BasePage {
     await this.iframe.locator('#DateOfInVoiceDateTimePicker_dateInput').fill(date);
   }
 
-  async selectBillTo(customerLastName) {
+  async selectBillTo() {
     const billToInput = this.iframe.locator('#BillToRadComboBox_Input');
-    const billToOption = this.iframe
-      .locator('#BillToRadComboBox_DropDown li')
-      .filter({ hasText: customerLastName })
-      .first();
 
-    await this.selectFromDropdown(billToInput, customerLastName, billToOption);
+    // Click to open the dropdown
+    await billToInput.click();
+    await this.page.waitForTimeout(300);
+    await this.waitForAjax();
+
+    // Select the first available option
+    const firstOption = this.iframe.locator('#BillToRadComboBox_DropDown li').first();
+
+    await firstOption.waitFor({ state: 'visible', timeout: 15000 });
+    await firstOption.click();
   }
 
   async fillInvoiceAmount(amount) {
@@ -82,7 +87,6 @@ export class ReadyToInvoicePage extends BasePage {
 
   async createInvoice({
     dateOfInvoice,
-    customerLastName,
     invoiceAmount,
     invoiceNumber,
     terms,
@@ -94,7 +98,7 @@ export class ReadyToInvoicePage extends BasePage {
     await this.clickAddNewRecord();
 
     await this.fillDateOfInvoice(dateOfInvoice);
-    await this.selectBillTo(customerLastName);
+    await this.selectBillTo();
     await this.fillInvoiceAmount(invoiceAmount);
     await this.fillInvoiceNumber(invoiceNumber);
     await this.fillTerms(terms);

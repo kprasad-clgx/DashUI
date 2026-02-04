@@ -1,0 +1,24 @@
+{
+  "jobDetails": {
+    "office": "Oxford",
+    "dateOfLoss": "01/25/2026",
+    "lossCategory": "Residential",
+    "lossDescription": "Water damage in basement.",
+    "specialInstructions": "Gate code 1234",
+    "divisions": ["Mitigation-WTR"],
+    "customer": {
+      "firstName": "Xavier",
+      "lastName": "Smith",
+      "mainPhone": "5240-456-7890",
+      "address": "542 Main St",
+      "zipCode": "10008",
+      "email": "xavier.smith@gmail.com",
+      "city": "New York",
+      "country": "USA",
+      "state": "New York",
+      "county": "New York"
+    },
+    "sameAsCustomerAddress": true,
+    "priority": "High"
+  }
+}
