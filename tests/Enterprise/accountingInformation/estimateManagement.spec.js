@@ -25,6 +25,7 @@ const estimatesPdfDir = path.resolve('testData/enterprise/estimates');
 
 test.describe('Estimate Management', () => {
   let jobNumber;
+  let test1Passed = false;
 
   test.beforeAll(async () => {
     const jobData = JSON.parse(
@@ -42,15 +43,20 @@ test.describe('Estimate Management', () => {
     // 2. Add Estimate (Robust PO handles Iframe & Dropdowns)
     const estimateData = addEstimateData.estimates[0];
     await addEstimatesPage.addEstimate(estimateData);
+
+    // Mark test 1 as passed
+    test1Passed = true;
   });
 
   test('2. Upload Estimate', async ({ authenticatedPage }) => {
+    test.skip(!test1Passed, 'Skipping because Test 1 failed');
+
     const uploadEstimatePage = new UploadEstimatePage(authenticatedPage);
 
     // 1. Navigate to Job
     await searchJobNumber(authenticatedPage, jobNumber);
 
-    // 2. Upload Files
+    // 2. Upload Files and verify
     await uploadEstimatePage.uploadEstimate({
       ...uploadEstimateData.upload,
       pdfDir: estimatesPdfDir,

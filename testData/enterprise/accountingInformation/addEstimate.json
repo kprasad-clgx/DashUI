@@ -10,7 +10,19 @@
       "type": "Supplement",
       "amount": 30500.0,
       "description": "Supplemental estimate",
-      "fileName": "supplement.pdf"
+      "fileName": "Final_Draft.pdf"
+    },
+    {
+      "type": "Main",
+      "amount": 99999999999,
+      "description": "Test estimate with max limit amount",
+      "fileName": "Final_Draft.pdf"
+    },
+    {
+      "type": "Supplement",
+      "amount": 99999999999,
+      "description": "Supplemental estimate",
+      "fileName": "Final_Draft.pdf"
     }
   ]
 }

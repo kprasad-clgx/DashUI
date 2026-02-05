@@ -9,7 +9,7 @@ export class ProductionActionItemsPage extends BasePage {
     this.gridContent = page.locator('.k-grid-content');
     this.gridRows = this.gridContent.locator('tbody tr');
 
-    // 2. CONTROLS & DROPDOWNS (From HTML Snippets)
+    // 2. CONTROLS & DROPDOWNS
 
     // Employee Dropdown
     this.employeeDropdown = {

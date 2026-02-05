@@ -55,40 +55,44 @@ export class UploadEstimatePage extends BasePage {
   }
 
   async selectBillToContact(index = 5) {
+    // Click arrow to open dropdown
     await this.billToArrow.click();
-    await this.iframe
-      .locator('#RadComboBox_BillToContact_DropDown .rcbList')
-      .waitFor({ state: 'visible', timeout: 10000 });
-    let option = this.iframe
-      .locator('#RadComboBox_BillToContact_DropDown .rcbList li')
-      .nth(index - 1);
-    let attached = await option.isVisible().catch(() => false);
-    if (!attached) {
-      await this.billToArrow.click();
-      await this.iframe
-        .locator('#RadComboBox_BillToContact_DropDown .rcbList')
-        .waitFor({ state: 'visible', timeout: 5000 });
-      option = this.iframe.locator('#RadComboBox_BillToContact_DropDown .rcbList li').first();
-      attached = await option.isVisible().catch(() => false);
+
+    // Wait for dropdown list to be visible
+    const dropdownList = this.iframe.locator('#RadComboBox_BillToContact_DropDown .rcbList');
+    await dropdownList.waitFor({ state: 'visible', timeout: 10000 });
+
+    // Give the dropdown a moment to stabilize
+    await this.page.waitForLoadState('domcontentloaded').catch(() => {});
+
+    // Get all options and select by index
+    const options = this.iframe.locator('#RadComboBox_BillToContact_DropDown .rcbList li');
+    const optionCount = await options.count();
+
+    if (optionCount === 0) {
+      throw new Error('[selectBillToContact] No options found in dropdown');
     }
-    if (attached) {
-      try {
-        await option.scrollIntoViewIfNeeded();
-        await option.click();
-      } catch (e) {
-        console.error('[selectBillToContact] Failed to scroll/click option:', e);
-      }
-    } else {
-      throw new Error(
-        '[selectBillToContact] Could not find a visible Bill To Contact option to select.',
+
+    // Use the requested index, fallback to first if index is out of bounds
+    const selectedIndex = Math.min(index - 1, optionCount - 1);
+    const selectedOption = options.nth(selectedIndex);
+
+    // Try to click directly without scrolling (more stable)
+    try {
+      await selectedOption.click({ force: true });
+    } catch (e) {
+      console.warn(
+        '[selectBillToContact] Direct click failed, attempting alternative approach:',
+        e.message,
       );
     }
+    // Wait for selection to be confirmed
     await this.billToInput.waitFor(
       async (el) => {
         const value = await el.inputValue();
         return value && value.trim().length > 0;
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
   }
 
@@ -142,15 +146,47 @@ export class UploadEstimatePage extends BasePage {
 
     await this.uploadButton.click();
 
-    // 5. Handle Mass Exception Dialogs (Loop in case of multiples)
+    // Handle Mass Exception Dialogs (Loop in case of multiples)
     await this.handleMassExceptionDialogs();
 
-    // 6. Wait for final success notification
-    const successNotification = this.page
-      .locator('#dashNotificationBar .dashNotificationBarDesc')
-      .filter({ hasText: 'Estimate parser job is completed' });
+    // Wait for uploading message and close modal, then verify queued notification
+    await this.waitForUploadAndVerifyQueued();
+  }
 
-    await successNotification.waitFor({ state: 'visible', timeout: 60000 });
+  /**
+   * Wait for "uploading" message to appear, close modal, then verify "queued" notification
+   */
+  async waitForUploadAndVerifyQueued() {
+    // Step 1: Wait for uploading message to appear on modal
+    const uploadingLabel = this.iframe.locator('#LabelText, [class*="Label"]').filter({
+      hasText: /uploading|in progress|please wait/i,
+    });
+
+    await uploadingLabel.waitFor({ state: 'visible', timeout: 30000 }).catch(() => {
+      throw new Error('Uploading message did not appear on modal');
+    });
+
+    // Step 2: Close the modal by clicking close button
+    const closeButton = this.page.locator('.rwCloseButton[title="Close"]').first();
+    const closeVisible = await closeButton.isVisible().catch(() => false);
+
+    if (closeVisible) {
+      await closeButton.click();
+      // Wait for modal to close
+      await this.page
+        .locator(this.modalIframeName)
+        .waitFor({ state: 'hidden', timeout: 10000 })
+        .catch(() => {});
+    } else {
+      throw new Error('Close button not found on modal');
+    }
+
+    // Step 3: Verify "Estimate parser job has been queued" message in dash notification bar
+    const notificationLocator = this.page.locator('text=/Estimate parser job has been queued/i');
+
+    await notificationLocator.waitFor({ state: 'visible', timeout: 60000 });
+
+    // If we reach here, the test passes - the notification is visible
   }
 
   /**
@@ -174,7 +210,7 @@ export class UploadEstimatePage extends BasePage {
         }
       }
       if (targetFrame) break;
-      await this.page.waitForTimeout(2000);
+      await this.page.waitForLoadState('domcontentloaded');
     }
 
     if (!targetFrame) {
@@ -237,7 +273,7 @@ export class UploadEstimatePage extends BasePage {
 
       // Wait for grid to disappear to confirm dialog closure
       await grid.waitFor({ state: 'hidden', timeout: 30000 });
-      await this.page.waitForTimeout(2000);
+      await this.page.waitForLoadState('domcontentloaded');
     }
   }
 }

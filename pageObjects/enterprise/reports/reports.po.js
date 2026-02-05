@@ -67,7 +67,6 @@ class ReportsPage {
     ]);
     await newPage.waitForLoadState('networkidle', { timeout: 60000 });
 
-    // Wait for download on the new page
     const [download] = await Promise.all([
       newPage.waitForEvent('download'),
       newPage.locator('#btnSubmit').click(),
@@ -94,7 +93,6 @@ class ReportsPage {
     const lastMonth = new Date(today);
     lastMonth.setMonth(today.getMonth() - 1);
 
-    // Format: MM/D/YYYY (no leading zero for day)
     const formatDate = (date) => {
       const mm = date.getMonth() + 1;
       const d = date.getDate();
@@ -117,15 +115,30 @@ class ReportsPage {
     await startDateInput.fill(startDate);
     await endDateInput.fill(endDate);
 
-    // Wait for download event triggered by clicking the button
     const [download] = await Promise.all([
       this.page.waitForEvent('download'),
       generateReportButton.click(),
     ]);
 
-    // Assert the file name contains 'JobsReceived_Report' and ends with .xlsx
     const suggestedFilename = await download.suggestedFilename();
     expect(suggestedFilename).toContain('JobsReceived_Report');
+  }
+
+  // New method for Job Status Popup handling (Resolved from your branch)
+  async handleJobStatusReportPopup(reportPopup) {
+    const header = reportPopup.locator('span').filter({ hasText: 'Job Status Report' }).first();
+    const jobNumberInput = reportPopup.locator('#JobNumberComboBox_Input');
+    const firstOption = reportPopup.locator('#JobNumberComboBox_DropDown li').first();
+    const goButton = reportPopup.getByRole('button', { name: 'Go' });
+    const notification = reportPopup.locator('#dashNotificationBar');
+
+    await header.waitFor({ state: 'visible', timeout: 10000 });
+    await jobNumberInput.click();
+    await firstOption.click();
+    await goButton.click();
+    await notification.waitFor({ state: 'visible', timeout: 30000 });
+    
+    return { reportPopup, notification };
   }
 
   // Click on Job Status report Option and Assert Url
@@ -142,11 +155,9 @@ class ReportsPage {
 
   // Select the second option from the Job Number dropdown after loading
   async selectSecondJobNumberDropdownOption() {
-    // Wait for dropdown to be visible
     const dropdown = this.page.locator('#JobNumberComboBox_DropDown');
     await dropdown.waitFor({ state: 'visible', timeout: 10000 });
 
-    // Select the second option (li.rcbHovered or the second li.rcbItem)
     const secondOption = dropdown.locator('ul.rcbList > li').nth(1);
     await secondOption.click();
   }
@@ -157,7 +168,6 @@ class ReportsPage {
     await expect(jobDropdown).toBeVisible();
     await jobDropdown.click();
 
-    // Wait for dropdown to be visible
     const dropdown = this.page.locator('#JobNumberComboBox_DropDown');
     await dropdown.waitFor({ state: 'visible', timeout: 10000 });
     const secondOption = dropdown.locator('ul.rcbList > li').nth(1);
@@ -165,7 +175,6 @@ class ReportsPage {
 
     const goButton = this.page.locator('#GoButton');
 
-    // Wait for the network request to the expected URL after clicking Go
     const [request] = await Promise.all([
       this.page.waitForRequest((req) => req.url().includes(expectedRequestUrl)),
       goButton.click(),

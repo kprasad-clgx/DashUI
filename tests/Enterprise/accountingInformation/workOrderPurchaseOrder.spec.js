@@ -15,6 +15,8 @@ const jobData = JSON.parse(
 );
 
 test.describe('Work Order & Purchase Order Workflow', () => {
+  let test1Passed = false;
+
   // TEST 1: Convert Estimate -> Scheduler -> Export
   test('Convert Estimate, Scheduler, and Invoice Export', async ({ authenticatedPage }) => {
     test.setTimeout(180000);
@@ -68,10 +70,15 @@ test.describe('Work Order & Purchase Order Workflow', () => {
       // Optional cleanup
       await download.delete();
     });
+
+    // Mark test 1 as passed
+    test1Passed = true;
   });
 
   // TEST 2: Create Manual WO -> Add Milestone -> Delete (New Data Flow)
   test('Create Manual Work Order, Milestone, and Delete', async ({ authenticatedPage }) => {
+    test.skip(!test1Passed, 'Skipping because Test 1 failed');
+
     const jobNumber = jobData.jobNumber;
     const workOrderPage = new WorkOrderPurchaseOrderPage(authenticatedPage);
 

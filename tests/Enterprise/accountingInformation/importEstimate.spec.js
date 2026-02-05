@@ -1,4 +1,4 @@
-import { test, expect } from '../../../fixtures/enterpriseFixtures.js';
+import { test } from '../../../fixtures/enterpriseFixtures.js';
 import { searchJobNumber } from '../../../utils/searchJobNumber.js';
 import { ImportEstimatePage } from '../../../pageObjects/enterprise/accountingInformation/ImportEstimatePage.po.js';
 import fs from 'fs';

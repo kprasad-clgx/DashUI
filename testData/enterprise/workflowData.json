@@ -1,6 +1,27 @@
 {
   "actionTitle": "Test Workflow",
   "description": "Automated test workflow",
+  "actionTrigger": "Job Date Events",
+  "actionEvent": "Date Received",
+  "assignedToType": "Employee",
+  "assignedTo": "admin, admin",
   "assignmentDelay": 30,
-  "mustCompleteWithin": 120
+  "assignmentDelayUnit": "Minutes",
+  "mustCompleteWithin": 120,
+  "mustCompleteWithinUnit": "Minutes",
+  "requiredCompletionAction": "Mark Completed",
+  "associatedCompletionDate": "Date Contacted",
+  "notificationType": "ALL",
+  "divisions": "ALL",
+  "lossTypes": "ALL",
+  "jobSize": "ALL",
+  "yearBuilt": "ALL",
+  "lossCategories": "ALL",
+  "propertyManagementCompany": "ALL",
+  "mortageCompany": "ALL",
+  "tpaCompany": "ALL",
+  "insuranceCarrier": "ALL",
+  "employeeMonitors": "admin, admin",
+  "completionMonitors": "admin, admin",
+  "appliesToType": "Local Jobs"
 }
