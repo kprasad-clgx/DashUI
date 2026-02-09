@@ -88,10 +88,21 @@ export class CreateJobCloseJobPage {
     const dropdownOptions = dropdown.locator('ul.rcbList > li');
     await dropdownOptions.first().waitFor({ state: 'visible', timeout: 5000 });
 
-    // Check if customer name is present and click on it
-    const customerOption = dropdownOptions.filter({ hasText: new RegExp(customerName, 'i') });
-    await expect(customerOption.first()).toBeVisible({ timeout: 5000 });
-    await customerOption.first().click();
+    // Normalize both dropdown text and customerName for robust comparison
+    const normalizedTarget = customerName.replace(/\s+/g, '').toLowerCase();
+    const count = await dropdownOptions.count();
+    let found = false;
+    for (let i = 0; i < count; i++) {
+      const optionText = (await dropdownOptions.nth(i).textContent())?.replace(/\s+/g, '').toLowerCase() || '';
+      if (optionText.includes(normalizedTarget)) {
+        await dropdownOptions.nth(i).click();
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      throw new Error(`Customer option matching '${customerName}' not found in dropdown.`);
+    }
 
     // Wait for customer data to load
     const customerFirstName = this.page.locator(

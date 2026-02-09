@@ -1,5 +1,11 @@
 import { expect } from '@playwright/test';
 
+// Environment-specific expected username
+// Production: NextGear, Other environments: Admin
+const EXPECTED_USERNAME = process.env.NODE_ENV === 'prod' 
+  ? 'NextGear' 
+  : 'Admin';
+
 // Expected values for home page validation
 const homePageExpectedValues = {
   menuItems: {
@@ -7,7 +13,8 @@ const homePageExpectedValues = {
     administration: 'Administration',
   },
   user: {
-    defaultUsername: 'Admin',
+    // Environment-specific: NextGear for prod, Admin for others
+    defaultUsername: EXPECTED_USERNAME,
   },
 };
 

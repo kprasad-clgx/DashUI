@@ -9,6 +9,9 @@ export const AddIndividualCustomerLocators = {
   contactTypeDropdown: '#ctl00_ContentPlaceHolder1_ddlContactType_Input',
   contactTypeList: 'ul.rcbList li.rcbItem',
   saveBtn: '#ctl00_ContentPlaceHolder1_btnSaveAndBack',
+  address: '#ctl00_ContentPlaceHolder1_txtAddress',
+  zipCodeInput: '#ctl00_ContentPlaceHolder1_ctl07_ZipCodeTextBox',
+  city: '#ctl00_ContentPlaceHolder1_ctl07_CityTextBox',
 };
 
 class AddIndividualCustomerPage {
@@ -42,6 +45,14 @@ class AddIndividualCustomerPage {
 
   async enterLastName(lastName) {
     await this.page.locator(AddIndividualCustomerLocators.lastNameInput).fill(lastName);
+  }
+
+  async enterAddress(address) {
+    await this.page.locator(AddIndividualCustomerLocators.address).fill(address);
+  }
+
+  async enterZipCode(zip) {
+    await this.page.locator(AddIndividualCustomerLocators.zipCodeInput).fill(zip);
   }
 
   async enterPhone(phone) {
@@ -84,6 +95,10 @@ class AddIndividualCustomerPage {
     await expect(this.page.locator(AddIndividualCustomerLocators.contactTypeDropdown)).toHaveValue(
       expected,
     );
+  }
+
+  async assertCity(expected) {
+    await expect(this.page.locator(AddIndividualCustomerLocators.city)).toHaveValue(expected);
   }
 
   async assertSavedUrl() {

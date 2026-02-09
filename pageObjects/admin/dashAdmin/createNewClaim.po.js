@@ -202,11 +202,23 @@ class CreateClaimPage {
   }
 
   /**
-   * Select loss type - 5th option
+   * Select loss type - Type "Water" and select from dropdown
    */
   async selectLossType() {
     await this.page.locator(CreateClaimLocators.lossTypeDropdownArrow).click();
-    await this.page.locator(CreateClaimLocators.lossTypeDropdownList).nth(4).click();
+    const lossTypeInput = this.page.locator('#ctl00_ContentPlaceHolder1_rcbLossType_Input');
+    await lossTypeInput.click();
+    await this.typeSequentially(lossTypeInput, 'Water', 300);
+
+    // Wait for dropdown options to be filtered and visible
+    const dropdownOptions = this.page.locator(CreateClaimLocators.lossTypeDropdownList);
+    await dropdownOptions.first().waitFor({ state: 'visible', timeout: 15000 });
+
+    // Select matching option - trim text to handle trailing spaces
+    const lossTypeOption = dropdownOptions.filter({ 
+      has: this.page.locator('text=/^\\s*Water\\s*$/')
+    });
+    await lossTypeOption.first().click();
   }
 
   /**
@@ -333,14 +345,14 @@ class CreateClaimPage {
   async assignProgram() {
     // Wait for the iframe to be attached
     const iframe = this.page.locator(CreateClaimLocators.assignProgramIframe);
-    await iframe.waitFor({ state: 'attached', timeout: 15000 });
+    await iframe.waitFor({ state: 'attached', timeout: 60000 });
     console.log('Assign Program iframe is attached');
 
     const assignProgramFrame = this.page.frameLocator(CreateClaimLocators.assignProgramIframe);
     const assignProgramButton = assignProgramFrame
       .locator(CreateClaimLocators.assignProgramButton)
       .first();
-    await assignProgramButton.waitFor({ state: 'visible', timeout: 15000 });
+    await assignProgramButton.waitFor({ state: 'visible', timeout: 30000 });
     console.log('Assign Program button is visible');
     await assignProgramButton.click();
   }

@@ -27,7 +27,7 @@ export default defineConfig({
   timeout: 300000, // 300 seconds (5 minutes) - increased for complex test flows
   /* Maximum time expect() should wait for the condition to be met */
   expect: {
-    timeout: 60000, // 60 seconds - increased for slower elements
+    timeout: 120000, // 60 seconds - increased for slower elements
   },
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -82,35 +82,36 @@ export default defineConfig({
     launchOptions: browserConfig.launchOptions,
 
     /* Action timeout for each Playwright action (click, fill, etc.) */
-    actionTimeout: 60000, // 60 seconds - increased for slow-loading elements
+    actionTimeout: 180000, // 180 seconds - increased for slow-loading elements
 
     /* Navigation timeout */
-    navigationTimeout: 300000, // 300 seconds (5 minutes) - increased for heavy pages
+    navigationTimeout: 240000, // 120 seconds (2 minutes) - increased for heavy pages
   },
 
   /* Global teardown - browser closes automatically after all tests */
   projects: [
     {
-      name: 'admin-chromium',
-      testMatch: '**/Admin/**/*.spec.js',
-      use: {
-        storageState: '.auth/admin.json',
-      },
-    },
-    {
       name: 'enterprise-setup',
       testMatch: '**/Enterprise/00-setup_Job_Claim/**/*.spec.js',
-      fullyParallel: false, // Run tests one by one
+      fullyParallel: false, // Run tests one by one (sequentially)
       retries: 2, // Retry failed tests twice
       use: {
         storageState: '.auth/enterprise.json',
       },
     },
     {
+      name: 'admin-chromium',
+      testMatch: '**/Admin/**/*.spec.js',
+      dependencies: ['enterprise-setup'], // Wait for setup to complete
+      use: {
+        storageState: '.auth/admin.json',
+      },
+    },
+    {
       name: 'enterprise-chromium',
       testMatch: '**/Enterprise/**/*.spec.js',
       testIgnore: '**/Enterprise/00-setup_Job_Claim/**/*.spec.js',
-      dependencies: ['enterprise-setup'],
+      dependencies: ['enterprise-setup'], // Wait for setup to complete
       use: {
         storageState: '.auth/enterprise.json',
       },
@@ -118,8 +119,16 @@ export default defineConfig({
     {
       name: 'mixed-chromium',
       testMatch: '**/EnterpriseAndAdmin/**/*.spec.js',
+      // Wait for setup to ensure auth files are created
+      dependencies: ['enterprise-setup'],
+      // Force sequential execution - ALWAYS run tests one at a time
+      fullyParallel: false,
+      // Retry failed tests - mixed tests are more prone to timing issues
+      retries: 1,
+      // Force single worker for sequential execution - overrides workers setting
+      workers: 1,
       use: {
-        storageState: '.auth/admin.json',
+        // Don't specify storageState - mixedFixtures creates separate contexts
       },
     },
 

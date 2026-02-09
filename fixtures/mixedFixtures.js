@@ -1,5 +1,6 @@
 import { test as base } from '@playwright/test';
 import path from 'path';
+import fs from 'fs';
 import { config } from '../config/environment.config.js';
 import { setupWalkMeRemoval, setupNavigationWalkMeRemoval } from '../utils/walkmeRemover.js';
 
@@ -11,8 +12,15 @@ import { setupWalkMeRemoval, setupNavigationWalkMeRemoval } from '../utils/walkm
 export const test = base.extend({
   // Admin context with admin authentication
   adminContext: async ({ browser }, use) => {
+    const authPath = path.join(process.cwd(), '.auth', 'admin.json');
+    
+    // Verify auth file exists
+    if (!fs.existsSync(authPath)) {
+      throw new Error(`Admin auth file not found at ${authPath}. Run global-setup first.`);
+    }
+    
     const adminContext = await browser.newContext({
-      storageState: path.join(process.cwd(), '.auth', 'admin.json'),
+      storageState: authPath,
     });
     await use(adminContext);
     await adminContext.close();
@@ -20,8 +28,15 @@ export const test = base.extend({
 
   // Enterprise context with enterprise authentication
   enterpriseContext: async ({ browser }, use) => {
+    const authPath = path.join(process.cwd(), '.auth', 'enterprise.json');
+    
+    // Verify auth file exists
+    if (!fs.existsSync(authPath)) {
+      throw new Error(`Enterprise auth file not found at ${authPath}. Run global-setup first.`);
+    }
+    
     const enterpriseContext = await browser.newContext({
-      storageState: path.join(process.cwd(), '.auth', 'enterprise.json'),
+      storageState: authPath,
     });
     await use(enterpriseContext);
     await enterpriseContext.close();
@@ -30,8 +45,8 @@ export const test = base.extend({
   // Admin page
   adminPage: async ({ adminContext }, use) => {
     const page = await adminContext.newPage();
-    await page.goto(config.admin.baseUrl, { timeout: 300000 }); // Increased timeout to 5 minutes
-    await page.waitForLoadState('networkidle'); // Changed to 'networkidle' for dynamic content
+    await page.goto(config.admin.baseUrl, { timeout: 60000 }); // Reduced timeout to 60s
+    await page.waitForLoadState('domcontentloaded'); // Faster than networkidle
 
     // 🔧 Remove WalkMe overlays with continuous monitoring
     await setupWalkMeRemoval(page);
@@ -44,8 +59,8 @@ export const test = base.extend({
   // Enterprise page
   enterprisePage: async ({ enterpriseContext }, use) => {
     const page = await enterpriseContext.newPage();
-    await page.goto(config.enterprise.baseUrl, { timeout: 300000 }); // Increased timeout to 5 minutes
-    await page.waitForLoadState('networkidle'); // Changed to 'networkidle' for dynamic content
+    await page.goto(config.enterprise.baseUrl, { timeout: 60000 }); // Reduced timeout to 60s
+    await page.waitForLoadState('domcontentloaded'); // Faster than networkidle
 
     // 🔧 Remove WalkMe overlays with continuous monitoring
     await setupWalkMeRemoval(page);

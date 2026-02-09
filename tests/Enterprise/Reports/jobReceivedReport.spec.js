@@ -38,9 +38,6 @@ test.describe('Job Received Report', () => {
       await endDateInput.fill(data.endDate);
       await endDateInput.blur();
 
-      // Wait a moment for validation
-      await reportNewPage.waitForTimeout(500);
-
       // Wait for download while clicking the button
       const download = await Promise.all([
         reportNewPage.waitForEvent('download', { timeout: 30000 }),

@@ -1,9 +1,12 @@
 {
   "newJobData": {
-    "customerName": "Automate, Enterprise",
+    "customerName": "Automate,Enterprise",
     "customerFirstName": "Enterprise",
     "customerLastName": "Automate",
     "lossDescription": "Automated test job loss description",
-    "jobName": "DashboardTestJob"
+    "jobName": "JobName",
+    "address": "1320 Old Georgia Rd",
+    "zipCode": "29376",
+    "city": "Roebuck"
   }
 }

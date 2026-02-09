@@ -1,12 +1,5 @@
-# Triggers disabled - uncomment to re-enable automatic runs
-# trigger:
-#   branches:
-#     include:
-#       - main
-#       - develop
-#   pr:
-#     - main
-#     - develop
+# Azure DevOps Pipeline - DISABLED FOR LOCAL TESTING
+# To enable this pipeline, uncomment the trigger section below and set trigger to a valid branch or pr configuration
 
 trigger: none
 pr: none

@@ -6,7 +6,7 @@ let automatedWorkflowName = `Auto${getRandomNumber(1, 10000)}`;
 let assignmentDelayDigit = `${getRandomNumber(1, 9)}`;
 let mustCompleteWithinDigit = `${getRandomNumber(1, 9)}`;
 
-test('Add New Workflow validation', async ({ authenticatedPage }) => {
+test('Add/Delete New Workflow validation', async ({ authenticatedPage }) => {
   const page = authenticatedPage;
   const workFlowBuilderPage = new WorkFlowBuilderPage(page);
 
@@ -101,10 +101,10 @@ test('Add New Workflow validation', async ({ authenticatedPage }) => {
   await workFlowBuilderPage.selectRandomMustCompleteWithinUnit(addWorkModalFrame);
 
   // Select required completion action
-  await workFlowBuilderPage.selectRequiredCompletionAction(addWorkModalFrame, addWorkModal);
+  await workFlowBuilderPage.selectRequiredCompletionAction(addWorkModalFrame);
 
   // Select random associated completion date
-  await workFlowBuilderPage.selectRandomAssociatedCompletionDate(addWorkModalFrame, addWorkModal);
+  await workFlowBuilderPage.selectRandomAssociatedCompletionDate(addWorkModalFrame);
 
   // Select random notification type
   await workFlowBuilderPage.selectRandomNotificationType(addWorkModalFrame);
@@ -145,5 +145,5 @@ test('Add New Workflow validation', async ({ authenticatedPage }) => {
   await workFlowBuilderPage.deleteWorkflow(automatedWorkflowName);
 
   // Verify workflow is deleted
-  await workFlowBuilderPage.verifyWorkflowDoesNotExistInGrid(automatedWorkflowName);
+  await workFlowBuilderPage.verifyWorkflowDoesNotExistInGrid();  
 });

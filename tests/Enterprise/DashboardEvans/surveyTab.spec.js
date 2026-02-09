@@ -37,14 +37,6 @@ test('Survey Tab Validation', async ({ authenticatedPage }) => {
   // Validate Average Score column header is visible
   await expect(await surveyTabPage.verifyAverageScoreColumnHeaderVisible()).toBeVisible();
 
-  // Click on Take a Survey button
-  await surveyTabPage.clickTakeSurveyButton();
-
-  // Validate Customer Service Survey Form title text is correct
-  await expect(await surveyTabPage.verifyCustomerServiceSurveyFormTitle()).toHaveText(
-    'Customer Service Survey Form',
-  );
-
   // Click On Export to Excel button and assert download
   const downloadSuccess = await surveyTabPage.downloadAndAssertExcel();
   expect(downloadSuccess).toBeTruthy();
@@ -52,4 +44,12 @@ test('Survey Tab Validation', async ({ authenticatedPage }) => {
   // Click on Export to PDF button and assert download
   const pdfDownloadSuccess = await surveyTabPage.downloadAndAssertPDF();
   expect(pdfDownloadSuccess).toBeTruthy();
+
+    // Click on Take a Survey button
+  await surveyTabPage.clickTakeSurveyButton();
+
+  // Validate Customer Service Survey Form title text is correct
+  await expect(await surveyTabPage.verifyCustomerServiceSurveyFormTitle()).toHaveText(
+    'Customer Service Survey Form',
+  );
 });

@@ -193,16 +193,23 @@ export class CreateClaimPage {
     );
     await expect(dropdown).toBeVisible({ timeout: 15000 });
 
-    // Find the first <li> whose first <td> contains the fullName
-    const customerOption = dropdown
-      .locator('ul.rcbList > li')
-      .filter({
-        has: this.page.locator('td').first().filter({ hasText: fullName }),
-      })
-      .first();
-
-    await expect(customerOption).toBeVisible({ timeout: 15000 });
-    await customerOption.click();
+    // Normalize both dropdown text and fullName for robust comparison
+    const options = dropdown.locator('ul.rcbList > li');
+    const normalizedTarget = fullName.replace(/\s+/g, '').toLowerCase();
+    const count = await options.count();
+    let found = false;
+    for (let i = 0; i < count; i++) {
+      // Get the text from the first td (customer name cell)
+      const optionText = (await options.nth(i).locator('td').first().textContent())?.replace(/\s+/g, '').toLowerCase() || '';
+      if (optionText.includes(normalizedTarget)) {
+        await options.nth(i).click();
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      throw new Error(`Customer option matching '${fullName}' not found in dropdown.`);
+    }
 
     // Wait for customer data to load (field should not be placeholder)
     await expect(this.customerFirstName).not.toHaveValue('First Name', { timeout: 15000 });

@@ -2,10 +2,11 @@ import { test } from '../../../fixtures/enterpriseFixtures.js';
 import { CreateJobCloseJobPage } from '../../../pageObjects/enterprise/closeAndDeleteJobAndClaim/createJobCloseJob.po.js';
 import createJobData from '../../../testData/enterprise/enterpriseJobData.json' with { type: 'json' };
 import { saveJobNumber } from '../../../utils/enterpriseJobGenerator.js';
+import { saveJobNumberForCompanySettings } from '../../../utils/enterpriseJobGenerator.js';
 
 const { newJobData } = createJobData;
 
-test('Setup - Create Job for DashboardEvans Tests', async ({ authenticatedPage }) => {
+test('Setup - Create Job for Enterprise', async ({ authenticatedPage }) => {
   const page = authenticatedPage;
   const createJobPage = new CreateJobCloseJobPage(page);
 
@@ -45,4 +46,7 @@ test('Setup - Create Job for DashboardEvans Tests', async ({ authenticatedPage }
     'testData/enterprise/enterpriseCompanySettings/DashboardAccountingNotes.json',
     uniqueJobName,
   );
+
+  // Save job number to all Company Settings JSON files
+    saveJobNumberForCompanySettings(jobNumber, jobNumberWithName);
 });

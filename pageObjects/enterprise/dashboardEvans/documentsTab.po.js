@@ -239,7 +239,7 @@ class DashboardDocumentsTabPage {
     const uploadPopupCloseButton = this.page.locator(
       DashboardDocumentsTabLocators.uploadPopupCloseButton,
     );
-    await uploadPopupCloseButton.click();
+    await uploadPopupCloseButton.click({ force: true });
   }
 }
 

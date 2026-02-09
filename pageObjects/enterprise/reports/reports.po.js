@@ -68,8 +68,7 @@ class ReportsPage {
     await newPage.waitForLoadState('networkidle', { timeout: 60000 });
 
     const [download] = await Promise.all([
-      newPage.waitForEvent('download'),
-      newPage.locator('#btnSubmit').click(),
+      newPage.waitForEvent('download', { timeout: 30000 }),
     ]);
 
     return download;

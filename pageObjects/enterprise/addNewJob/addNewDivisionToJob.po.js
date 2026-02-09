@@ -116,14 +116,14 @@ class AddNewDivisionToJobPage {
   }
 
   /**
-   * Select "Aircraft Restoration" from the division dropdown
+   * Select "Duct Cleaning" from the division dropdown
    */
-  async selectAircraftRestoration() {
+  async selectDuctCleaning() {
     const modalIframe = this.getModalIframe();
-    const aircraftOption = modalIframe
+    const ductCleaningOption = modalIframe
       .locator(AddNewDivisionToJobPageLocators.divisionDropdownItems)
-      .filter({ hasText: 'Aircraft Restoration' });
-    await aircraftOption.click();
+      .filter({ hasText: 'Duct Cleaning' });
+    await ductCleaningOption.click();
   }
 
   /**

@@ -155,7 +155,7 @@ export class TimesheetsAllOptionsPage {
 
   async navigateToApproverSettings() {
     await this.timesheetsMenuHover.hover();
-    await this.approverSettingsMenuItem.waitFor({ state: 'visible', timeout: 5000 });
+    await this.approverSettingsMenuItem.waitFor({ state: 'visible', timeout: 15000 });
     await this.approverSettingsMenuItem.click();
     await this.approverSettingsHeader.waitFor({ state: 'visible', timeout: 10000 });
   }

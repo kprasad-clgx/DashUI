@@ -70,8 +70,8 @@ test('Add New Division to Job, Delete Newly Created Job and Assert Cannot Copy N
     timeout: 5000,
   });
 
-  // Select "Aircraft Restoration" from the dropdown
-  await addNewDivisionPage.selectAircraftRestoration();
+  // Select "Duct Cleaning" from the dropdown
+  await addNewDivisionPage.selectDuctCleaning();
 
   // Click the Save button inside the iframe
   await expect(await addNewDivisionPage.verifySaveButtonVisible()).toBeVisible({ timeout: 15000 });
@@ -93,9 +93,9 @@ test('Add New Division to Job, Delete Newly Created Job and Assert Cannot Copy N
   await expect(lastTab).toHaveClass(/rtsLast/);
   await expect(lastTab).toBeVisible({ timeout: 15000 });
 
-  // Assert that the last tab text is "Aircraft Restoration"
-  await expect(await addNewDivisionPage.verifyLastTabText('Aircraft Restoration')).toHaveText(
-    'Aircraft Restoration',
+  // Assert that the last tab text is "Duct Cleaning"
+  await expect(await addNewDivisionPage.verifyLastTabText('Duct Cleaning')).toHaveText(
+    'Duct Cleaning',
   );
 
   // Click the last tab and wait for it to be selected
