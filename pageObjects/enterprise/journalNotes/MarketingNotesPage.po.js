@@ -38,10 +38,12 @@ export class MarketingNotesPage extends BasePage {
     await this._waitForModalToOpen();
   }
 
-  async clickAddCompanyRecord() {
-    await this.addCompanyNoteBtn.click();
-    await this._waitForModalToOpen();
-  }
+async clickAddCompanyRecord() {
+  await this.clickCompanyNotesTab();
+  await this.page.waitForLoadState('networkidle');
+  await this.addCompanyNoteBtn.click();
+  await this._waitForModalToOpen();
+}
 
   // Helper to prevent code duplication
   async _waitForModalToOpen() {
@@ -114,7 +116,7 @@ export class MarketingNotesPage extends BasePage {
     await activeSearch.fill(uniqueId);
     await activeSearch.press('Enter');
 
-    // 3. Wait for Loading Spinner to disappear (if it exists)
+    // 3. Wait for Loading Spinner to disappear
     if (await this.loadingMask.isVisible()) {
       await this.loadingMask.waitFor({ state: 'hidden', timeout: 10000 });
     }

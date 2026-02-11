@@ -42,6 +42,13 @@ test('Add Start Date Column to Job Task Grid', async ({ authenticatedPage }) => 
   });
   await taskPage.saveTask();
 
+  // Wait for task to be saved and modal to close
+  await authenticatedPage.waitForLoadState('networkidle');
+  await expect(authenticatedPage.locator('.modal-content')).toBeHidden({ timeout: 10000 });
+
+  // Verify we did not navigate to error page
+  expect(authenticatedPage.url()).not.toContain('ErrorPage');
+
   // Now search for the task using the timestamp in the Action filter
   await jobSlideboardPage.filterTasksByAction(timestamp);
 

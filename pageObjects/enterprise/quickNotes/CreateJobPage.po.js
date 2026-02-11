@@ -156,6 +156,8 @@ export class CreateJobPage extends BasePage {
     await this.selectDivisions(jobData.divisions);
     await this.fillLossDetails({ ...jobData, customer: jobData.customer });
     await this.submitJob();
+    await this.page.waitForLoadState('networkidle');
+
   }
 
   async openQuickNotesCreateJob() {

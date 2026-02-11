@@ -43,6 +43,7 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
       addEstimate: page.locator('#ctl00_ContentPlaceHolder1_imgaddEstimate'),
       printSummary: page.locator('#ctl00_ContentPlaceHolder1_imgPrintProductionSummary'),
       addMilestone: page.locator('#ctl00_ContentPlaceHolder1_MilestoneImageButton'),
+      shareUnshareExternally: page.locator('#ctl00_ContentPlaceHolder1_WorkOrderSharedExternallyImageButton'),
     };
 
     // --- Auto Generate Work Order Modal ---
@@ -57,6 +58,7 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
     // --- Create New Work Order Form ---
     this.createWOContainer = page.locator('#ctl00_ContentPlaceHolder1_SummaryPanel');
     this.woNumberLabel = page.locator('#ctl00_ContentPlaceHolder1_lblWorkorderNO');
+    this.convertToPOButton = page.locator('#ctl00_ContentPlaceHolder1_imgConvertPurchaseOrder');
     this.categoryCodeInput = page.locator('#ctl00_ContentPlaceHolder1_CategoryCodeTextBox');
     this.summaryInput = page.locator('#ctl00_ContentPlaceHolder1_txtDescription');
     this.budgetHoursInput = page.locator('#ctl00_ContentPlaceHolder1_txtHourRate');
@@ -70,6 +72,7 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
 
     this.userTypeDropdown = page.locator('#ctl00_ContentPlaceHolder1_ddlUserType');
     this.assigneeInput = page.locator('#ctl00_ContentPlaceHolder1_lsbUser');
+    this.assigneeOptions = page.locator('.rlbList .rlbItem .rlbText');
     this.commentsInput = page.locator('#ctl00_ContentPlaceHolder1_CommentsTextBox');
     this.saveWOBtn = page.locator('#ctl00_ContentPlaceHolder1_btnSave');
 
@@ -110,10 +113,32 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
     this.backToWorkFromSchedulerLink = page.locator(
       '#ctl00_ContentPlaceHolder1_LinkButtonBackToWorkOrder',
     );
+    this.backToSchedulerLink = page.locator(
+      '#ctl00_ContentPlaceHolder1_LinkButtonBackToScheduler',
+    );
     this.exportInvoicesButton = page.locator(
       '#ctl00_ContentPlaceHolder1_gvInvoice_ctl00_ctl02_ctl00_ExportToExcelButton',
     );
     this.backToWorkOrderButton = page.locator('#ctl00_ContentPlaceHolder1_btnWorkOrder');
+
+    // --- Reschedule Modal ---
+    this.rescheduleButton = page.locator('#ctl00_ContentPlaceHolder1_ImageButton2:visible');
+    this.rescheduleModal = {
+      datePickerPopupButton: page.locator('#ctl00_ContentPlaceHolder1_RadDatePickerEstimateDate_popupButton'),
+      dateInput: page.locator('#ctl00_ContentPlaceHolder1_RadDatePickerEstimateDate_dateInput'),
+      calendarTable: page.locator('table#ctl00_ContentPlaceHolder1_RadDatePickerEstimateDate_calendar_Top'),
+      rescheduleButton: page.locator('#ctl00_ContentPlaceHolder1_Button1'),
+    };
+
+    // --- Purchase Order Grid & Reset ---
+    this.purchaseOrderGrid = page.locator('#ctl00_ContentPlaceHolder1_gvPurchaseOrder');
+    this.poSearchBox = page.locator('#ctl00_ContentPlaceHolder1_gvPurchaseOrder_ctl00_ctl02_ctl03_FilterTextBox_PONumber');
+    this.convertPOToWOButton = page.locator('#ctl00_ContentPlaceHolder1_btnreset');
+
+    // --- Scheduler & Edit Modal ---
+    this.schedulerIcon = page.locator('#ctl00_ContentPlaceHolder1_imgJobGantchart');
+    this.userTypeDropdown = page.locator('#ctl00_ContentPlaceHolder1_ddlUserType');
+    this.assigneeDropdown = page.locator('#ctl00_ContentPlaceHolder1_lsbUser');
   }
 
   // ================= ACTIONS =================
@@ -131,6 +156,10 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
     await this.waitForAjax(); // Wait for postback to complete before form appears
     await this.createWOContainer.waitFor({ state: 'visible', timeout: 15000 });
 
+    // Get the work order number as soon as the form is visible
+    await this.woNumberLabel.waitFor({ state: 'visible', timeout: 10000 });
+    const workOrderNumber = await this.woNumberLabel.textContent();
+
     if (data.categoryCode) await this.categoryCodeInput.fill(data.categoryCode);
     if (data.summary) await this.summaryInput.fill(data.summary);
     if (data.budgetHoursOverride) await this.budgetHoursInput.fill(data.budgetHoursOverride);
@@ -138,28 +167,49 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
 
     if (data.userType) {
       await this.userTypeDropdown.selectOption({ label: data.userType });
-      await this.waitForAjax(); // Dropdown change might trigger postback
+      await this.waitForAjax();
     }
 
     if (data.assignee) {
       await this.assigneeInput.click();
-      await this.assigneeInput.pressSequentially(data.assignee, { delay: 100 });
+      await this.page.waitForTimeout(300);
+      
+      await this.assigneeInput.pressSequentially(data.assignee, { delay: 50 });
+      await this.page.waitForTimeout(500);
 
-      // Improved: robust wait for Telerik autocomplete list
-      const assigneeOption = this.page
-        .locator('.rlbList .rlbItem .rlbText')
-        .filter({ hasText: new RegExp(`^${data.assignee}$`, 'i') });
+      await this.assigneeOptions.first().waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+      
+      const count = await this.assigneeOptions.count();
+      let foundOption = false;
+      
+      for (let i = 0; i < count; i++) {
+        const text = (await this.assigneeOptions.nth(i).textContent()).trim();
+        if (text === data.assignee.trim()) {
+          await this.assigneeOptions.nth(i).click();
+          foundOption = true;
+          await this.page.waitForTimeout(300);
+          break;
+        }
+      }
 
-      await assigneeOption.first().waitFor({ state: 'visible', timeout: 10000 });
-      await assigneeOption.first().click();
+      if (!foundOption) {
+        const partialMatch = this.assigneeOptions.filter({ hasText: new RegExp(data.assignee.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') });
+        const partialCount = await partialMatch.count();
+        if (partialCount > 0) {
+          await partialMatch.first().click();
+          await this.page.waitForTimeout(300);
+        } else {
+          throw new Error(`Could not find assignee "${data.assignee}" in the list`);
+        }
+      }
     }
 
     if (data.comments) await this.commentsInput.fill(data.comments);
 
     await this.saveWOBtn.click();
-    await this.waitForAjax(); // Wait for grid reload
+    await this.waitForAjax(); 
 
-    return await this.woNumberLabel.innerText();
+    return workOrderNumber.trim();
   }
 
   // --- Workflow: Milestones ---
@@ -192,14 +242,33 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
     return milestoneNum;
   }
 
+  // --- Workflow: Reschedule ---
+
+  async rescheduleWorkOrder(daysOffset = 7) {
+    await this.rescheduleButton.click();
+    await this.rescheduleModal.datePickerPopupButton.click();
+
+    // Get current date and calculate target date
+    const currentDateValue = await this.rescheduleModal.dateInput.inputValue();
+    const currentDate = new Date(currentDateValue);
+    const futureDate = new Date(currentDate);
+    futureDate.setDate(futureDate.getDate() + daysOffset);
+    const dayToSelect = futureDate.getDate();
+
+    // Click the target date
+    await this.rescheduleModal.calendarTable.locator(`td:has-text("${dayToSelect}") a`).click();
+
+    // Submit reschedule
+    await this.rescheduleModal.rescheduleButton.click();
+    await this.waitForAjax();
+  }
+
   // --- Workflow: Delete ---
 
   async deleteWorkOrder(woNumber) {
-    // Search for the work order
     await this.searchBox.click();
     await this.searchBox.fill(woNumber);
     await this.page.keyboard.press('Enter');
-    // Wait for the result to appear in the grid
     const grid = this.page.locator('#ctl00_ContentPlaceHolder1_gvWorkOrder');
     const resultCell = grid.getByText(woNumber);
     await resultCell.waitFor({ state: 'visible', timeout: 10000 });
@@ -237,23 +306,19 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
   async verifyGridEntry(entryNumber) {
     await this.searchForWorkOrder(entryNumber);
     await this.waitForAjax();
-    // Wait for AJAX loader to disappear
     await this.waitForAjax();
-    // Wait for grid to be visible
     await this.page
       .locator('#ctl00_ContentPlaceHolder1_gvWorkOrder_ctl00')
       .waitFor({ state: 'visible' });
-    // Wait 5 seconds to ensure grid is updated after search
     await this.page.waitForTimeout(5000);
-    // Select all data rows in the grid
-    const rows = await this.page.$$('#ctl00_ContentPlaceHolder1_gvWorkOrder_ctl00 tr.rgRow');
+    const rows = await this.page.locator('#ctl00_ContentPlaceHolder1_gvWorkOrder_ctl00 tr.rgRow').all();
     if (!rows || rows.length === 0) {
       throw new Error('Grid verification failed: No data rows found.');
     }
     let found = false;
     for (const row of rows) {
-      const numberCell = await row.$('td:nth-child(3)');
-      const cellText = numberCell ? (await numberCell.textContent()).trim() : '';
+      const numberCell = await row.locator('td:nth-child(3)').first();
+      const cellText = (await numberCell.textContent()).trim();
       if (cellText === entryNumber) {
         found = true;
         break;
@@ -267,6 +332,31 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
     return true;
   }
 
+  async selectWorkOrderCheckbox(workOrderNumber) {
+    await this.searchForWorkOrder(workOrderNumber);
+    await this.waitForAjax();
+    const workOrderCell = this.grid.getByText(workOrderNumber).first();
+    await workOrderCell.click();
+    await this.waitForAjax();
+  }
+
+  async clearSearchAndRefresh() {
+    await this.searchBox.click();
+    await this.searchBox.clear();
+    await this.page.keyboard.press('Enter');
+    await this.waitForAjax();
+    await this.page.waitForTimeout(1000);
+  }
+
+  async workOrderNotFoundInGrid(workOrderNumber) {
+    await this.searchForWorkOrder(workOrderNumber);
+    await this.waitForAjax();
+    const grid = this.page.locator('#ctl00_ContentPlaceHolder1_gvWorkOrder');
+    const resultCell = grid.getByText(workOrderNumber);
+    const isHidden = await resultCell.isHidden();
+    return isHidden; // Returns true if WO is not found (hidden/not visible)
+  }
+
   async verifyWorkOrderDeleted(workOrderNumber, expect) {
     await this.searchBox.click();
     await this.searchBox.fill(workOrderNumber);
@@ -275,6 +365,33 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
 
     const resultCell = this.grid.getByText(workOrderNumber);
     await expect(resultCell).toBeHidden();
+  }
+
+  /**
+   * Gets the estimated start date for a work order from the grid
+   * @param {string} workOrderNumber - The work order number to search for
+   * @returns {Promise<string>} The estimated start date (e.g., "4/29/2026 12:00:00 AM")
+   */
+  async getEstimatedStartDateFromGrid(workOrderNumber) {
+    await this.searchForWorkOrder(workOrderNumber);
+    await this.waitForAjax();
+    await this.page.waitForTimeout(2000); // Wait for grid update
+
+    const rows = this.page.locator('#ctl00_ContentPlaceHolder1_gvWorkOrder_ctl00 tr.rgRow');
+    const rowCount = await rows.count();
+    
+    for (let i = 0; i < rowCount; i++) {
+      const row = rows.nth(i);
+      const numberCell = row.locator('td:nth-child(3)').first();
+      const cellText = (await numberCell.textContent()).trim();
+      if (cellText === workOrderNumber) {
+        // Estimated Start Date is in column 14 (td:nth-child(14))
+        const dateCell = row.locator('td:nth-child(14)').first();
+        const dateText = (await dateCell.textContent()).trim();
+        return dateText;
+      }
+    }
+    throw new Error(`Work order ${workOrderNumber} not found in grid`);
   }
 
   // --- Other Methods (Preserved) ---
@@ -286,6 +403,7 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
   }
 
   async backToWorkFromScheduler() {
+    await this.backToWorkFromSchedulerLink.waitFor({ state: 'visible', timeout: 10000 });
     await this.backToWorkFromSchedulerLink.click();
     await this.page.waitForLoadState('networkidle');
   }
@@ -294,11 +412,9 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
     await this.toolbar.addEstimate.click();
     await this.page.waitForLoadState('networkidle');
     await this.exportInvoicesButton.waitFor({ state: 'visible' });
-
     const downloadPromise = this.page.waitForEvent('download');
     await this.exportInvoicesButton.click();
     const download = await downloadPromise;
-
     await this.backToWorkOrderButton.click();
     return download;
   }
@@ -319,18 +435,11 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
       }
     }
     await this.selectEstimateFromDropdown();
-
-    // Wait for any AJAX after estimate selection
     await this.waitForAjax();
-
     await this.workOrderDatePicker.fill(workOrderDate);
-
-    // Wait for button to be enabled before clicking
     await this.generateWorkOrderButton.waitFor({ state: 'visible', timeout: 10000 });
-    await this.page.waitForTimeout(500); // Brief wait for button state to update
-
+    await this.page.waitForTimeout(500); 
     await this.generateWorkOrderButton.click();
-
     await this.waitForAjax();
     await this.autoGenModal.waitFor({ state: 'hidden', timeout: 15000 });
   }
@@ -413,4 +522,367 @@ export class WorkOrderPurchaseOrderPage extends BasePage {
     await this.waitForAjax();
     await this.autoGenModal.waitFor({ state: 'hidden', timeout: 10000 });
   }
+
+  async convertWorkOrderToPurchaseOrder(workOrderNumber) {
+    await this.convertToPOButton.click();
+    await this.waitForAjax();
+    await this.page.waitForTimeout(3000); // Wait for conversion to complete
+    // Refresh the page to reload the grid with updated data
+    await this.page.reload();
+    await this.waitForAjax();
+    await this.page.waitForTimeout(2000);
+  }
+
+  async searchPurchaseOrderByWorkOrder(workOrderNumber) {
+    // Search by work order number 
+    const woSearchBox = this.page.locator('#ctl00_ContentPlaceHolder1_gvPurchaseOrder_ctl00_ctl02_ctl03_FilterTextBox_WorkOrderNumber');
+    await woSearchBox.click();
+    await woSearchBox.fill(workOrderNumber);
+    await this.page.keyboard.press('Enter');
+    await this.waitForAjax();
+    await this.page.waitForTimeout(1500);
+  }
+
+  async selectPurchaseOrderCheckbox(poNumber) {
+    // Search for the PO
+    await this.searchPurchaseOrder(poNumber);
+    
+    // Find and click the checkbox for the PO row
+    const poCell = this.purchaseOrderGrid.getByText(poNumber).first();
+    const poRow = poCell.locator('..').first();
+    const checkbox = poRow.locator('input[type="checkbox"]').first();
+    await checkbox.check();
+    await this.waitForAjax();
+  }
+
+  async convertPurchaseOrderToWorkOrder() {
+    await this.convertPOToWOButton.click();
+    await this.waitForAjax();
+    await this.page.waitForTimeout(2000); // Wait for conversion to complete
+    await this.page.reload();
+    await this.waitForAjax();
+  }
+
+  async doubleClickFirstWorkOrder() {
+    await this.page.waitForLoadState('networkidle');
+    const schedulerViewDropdown = this.page.locator('#SchedulerViewDropDownList');
+    await schedulerViewDropdown.waitFor({ state: 'visible', timeout: 20000 });
+
+    // Strategy 1: Text elements matching WO pattern (e.g. WO0001)
+    const woTextLocator = this.page.locator('text=/WO\\d+/');
+    // Strategy 2: DayPilot event containers with WO text
+    const eventInnerWithWO = this.page.locator('[class*="event_inner"]').filter({ hasText: /WO\d+/ });
+    // Strategy 3: Generic DayPilot event elements
+    const eventElements = this.page.locator('[class*="scheduler_default_event_inner"], [class*="event_inner"]');
+
+    let woElements = null;
+    let woCount = 0;
+
+    // Strategy 1: Wait for WO text elements to appear
+    try {
+      await woTextLocator.first().waitFor({ state: 'visible', timeout: 30000 });
+      woCount = await woTextLocator.count();
+      woElements = woTextLocator;
+    } catch {
+      // Strategy 1 unsuccessful, attempt next strategy
+    }
+
+    // Strategy 2: If text elements not found, try event containers
+    if (!woElements) {
+      try {
+        await eventInnerWithWO.first().waitFor({ state: 'visible', timeout: 10000 });
+        woCount = await eventInnerWithWO.count();
+        woElements = eventInnerWithWO;
+      } catch {
+        // Strategy 2 unsuccessful, attempt next strategy
+      }
+    }
+
+    // Strategy 3: If event containers not found, try generic event elements
+    if (!woElements) {
+      try {
+        await eventElements.first().waitFor({ state: 'visible', timeout: 10000 });
+        woCount = await eventElements.count();
+        woElements = eventElements;
+      } catch {
+        // All locator strategies exhausted
+      }
+    }
+
+    // If any work order elements were located, double-click the first one
+    if (woElements && woCount > 0) {
+      const firstWO = woElements.first();
+      await firstWO.scrollIntoViewIfNeeded();
+      await this.page.waitForTimeout(500);
+      await firstWO.dblclick({ force: true });
+
+      // Double-clicking work order event navigates to EditWorkOrder.aspx (full page navigation)
+      await this.page.waitForURL(/EditWorkOrder\.aspx/, { timeout: 20000 });
+      await this.page.waitForLoadState('networkidle');
+    } else {
+      throw new Error('No work order elements found in scheduler');
+    }
+  }
+
+  async doubleClickWorkOrderAtIndex(index = 0) {
+    // Wait for scheduler page to fully load
+    await this.page.waitForLoadState('networkidle');
+    
+    // Wait for scheduler to be ready (check for work order elements first)
+    const woTextLocator = this.page.locator('text=/WO\\d+/');
+    await woTextLocator.first().waitFor({ state: 'visible', timeout: 30000 });
+
+    const woCount = await woTextLocator.count();
+    if (index >= woCount) {
+      throw new Error(`Work order index ${index} out of bounds, found ${woCount} elements`);
+    }
+
+    const woElement = woTextLocator.nth(index);
+    await woElement.scrollIntoViewIfNeeded();
+    await this.page.waitForTimeout(500);
+    await woElement.dblclick({ force: true });
+
+    // Double-clicking navigates to EditWorkOrder.aspx (full page navigation)
+    await this.page.waitForURL(/EditWorkOrder\.aspx/, { timeout: 20000 });
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  async navigateBackToScheduler() {
+    // Click the "Back to Scheduler" link on EditWorkOrder.aspx page
+    await this.backToSchedulerLink.waitFor({ state: 'visible', timeout: 10000 });
+    await this.backToSchedulerLink.click();
+    
+    // Wait for navigation to scheduler page
+    await this.page.waitForURL(/jSchedular\.aspx/, { timeout: 20000 });
+    await this.page.waitForLoadState('networkidle');
+    
+    // Wait for work orders to appear in the scheduler
+    const woTextLocator = this.page.locator('text=/WO\\d+/');
+    await woTextLocator.first().waitFor({ state: 'visible', timeout: 30000 });
+    
+    // Additional wait to ensure scheduler is fully interactive
+    await this.page.waitForTimeout(2000);
+  }
+
+  async selectUserType(userType) {
+    // On EditWorkOrder.aspx page (full page navigation from scheduler)
+    await this.page.waitForLoadState('networkidle');
+
+    // RadComboBox for assignee type
+    const comboBox = this.page.locator('#ctl00_ContentPlaceHolder1_AssigneeTypeComboBox');
+    await comboBox.waitFor({ state: 'visible', timeout: 15000 });
+
+    // Get current value to check if already selected
+    const currentValue = await comboBox.locator('input').inputValue().catch(() => '');
+
+    if (currentValue.toLowerCase().includes(userType.toLowerCase())) {
+      await this.page.waitForTimeout(1000);
+      return;
+    }
+
+    // Click the dropdown button/arrow to open RadComboBox
+    const comboBoxButton = comboBox.locator('button, [class*="rcbArrowCell"]').first();
+    await comboBoxButton.waitFor({ state: 'visible', timeout: 10000 });
+    await comboBoxButton.click();
+    await this.page.waitForTimeout(1000);
+
+    // Wait for dropdown options to appear
+    const dropdownList = this.page.locator('#ctl00_ContentPlaceHolder1_AssigneeTypeComboBox_DropDown');
+    await dropdownList.waitFor({ state: 'visible', timeout: 10000 });
+
+    // Select the option using exact text matching (required for precise control)
+    const exactOption = this.page.getByText(userType, { exact: true }).first();
+    const partialOption = this.page.getByText(userType, { exact: false }).first();
+    
+    const exactVisible = await exactOption.isVisible({ timeout: 2000 }).catch(() => false);
+    if (exactVisible) {
+      await exactOption.click();
+    } else {
+      await partialOption.waitFor({ state: 'visible', timeout: 10000 });
+      await partialOption.click();
+    }
+    
+    // Wait for AJAX to complete after user type change
+    await this.waitForAjax();
+    await this.page.waitForTimeout(3000); 
+  }
+
+  async selectFirstAssignee() {
+    // Access the assignee RadComboBox on EditWorkOrder.aspx page
+    const assigneeComboBox = this.page.locator('#ctl00_ContentPlaceHolder1_AsigneeRadComboBox');
+    await assigneeComboBox.waitFor({ state: 'visible', timeout: 15000 });
+
+    // Click the dropdown button/arrow to open RadComboBox
+    const comboBoxButton = assigneeComboBox.locator('button, [class*="rcbArrowCell"]').first();
+    await comboBoxButton.waitFor({ state: 'visible', timeout: 10000 });
+    await comboBoxButton.click();
+    await this.page.waitForTimeout(1000);
+
+    // Wait for dropdown list to appear (use specific ID to avoid strict mode violation)
+    const dropdownList = this.page.locator('#ctl00_ContentPlaceHolder1_AsigneeRadComboBox_DropDown');
+    await dropdownList.waitFor({ state: 'visible', timeout: 10000 });
+
+    // Select the first assignee item (skips the placeholder item at index 0)
+    const dropdownItems = this.page.locator('[id*="AsigneeRadComboBox_DropDown"] .rcbItem');
+    const itemCount = await dropdownItems.count();
+
+    if (itemCount === 0) {
+      throw new Error('No assignees available in the dropdown for the selected user type');
+    }
+
+    // Get the first item text to check if it's a placeholder
+    const firstItemText = await dropdownItems.first().textContent();
+
+    // If first item is a placeholder (e.g., "Select"), use the second item; otherwise use the first
+    if (firstItemText.toLowerCase().includes('select') && itemCount > 1) {
+      await dropdownItems.nth(1).click();
+    } else {
+      await dropdownItems.first().click();
+    }
+
+    await this.page.waitForTimeout(500);
+    await this.waitForAjax();
+  }
+
+  async saveWorkOrderInScheduler() {
+    // Click the save button on EditWorkOrder.aspx page
+    const saveButton = this.page.locator('#ctl00_ContentPlaceHolder1_ButtonSave');
+    await saveButton.waitFor({ state: 'visible', timeout: 10000 });
+    await saveButton.click();
+    await this.waitForAjax();
+    await this.page.waitForTimeout(2000);
+  }
+
+  async checkSchedulingConflictModal() {
+    try {
+      // After selecting assignee, the conflict may appear as:
+      // 1. A RadWindow iframe popup on the EditWorkOrder page
+      // 2. A visible element/label directly on the page
+
+      // Strategy 1: Check for conflict text directly on the page
+      const pageConflictText = this.page.getByText('already booked at this time', { exact: false });
+      const pageConflictVisible = await pageConflictText.isVisible({ timeout: 3000 }).catch(() => false);
+      if (pageConflictVisible) {
+        const message = await pageConflictText.textContent();
+        return { hasConflict: true, message };
+      }
+
+      // Strategy 2: Check for conflict inside a RadWindow iframe popup
+      const iframe = this.page.frameLocator('iframe[name*="RadWindow"]').first();
+      const iframeConflictText = iframe.locator('text=/already booked at this time/');
+      await iframeConflictText.waitFor({ state: 'visible', timeout: 8000 });
+      const message = await iframeConflictText.textContent();
+      return { hasConflict: true, message };
+    } catch {
+      return { hasConflict: false, message: '' };
+    }
+  }
+
+  async closeSchedulingConflictModal() {
+    // Try closing via close button, OK button, or Escape
+    try {
+      const closeButton = this.page.locator('.rwCloseButton, button:has-text("Close"), button:has-text("OK"), input[value="OK"]').first();
+      if (await closeButton.isVisible({ timeout: 2000 })) {
+        await closeButton.click();
+      } else {
+        await this.page.keyboard.press('Escape');
+      }
+    } catch {
+      await this.page.keyboard.press('Escape');
+    }
+    await this.page.waitForTimeout(1000);
+  }
+
+  async selectWorkOrderByNumber(workOrderNumber) {
+    // Search for the work order
+    await this.searchBox.click();
+    await this.searchBox.fill(workOrderNumber);
+    await this.page.keyboard.press('Enter');
+    
+    // Wait for grid to filter and show the result
+    await this.waitForAjax();
+    await this.page.waitForTimeout(2000);
+    
+    // Find the work order row by number
+    const workOrderCell = this.grid.getByText(workOrderNumber).first();
+    await workOrderCell.waitFor({ state: 'visible', timeout: 10000 });
+    
+    // Get the parent row and check its checkbox to select it
+    const row = workOrderCell.locator('xpath=ancestor::tr[1]');
+    const checkbox = row.locator('input[type="checkbox"]').first();
+    await checkbox.check();
+    await this.waitForAjax();
+    
+    // Wait for toolbar buttons to be enabled after selection
+    await this.page.waitForTimeout(3000);
+  }
+
+  async clickShareUnshareExternally() {
+    // The Share/Unshare button triggers confirmMsg() which uses native browser confirm().
+    // If user clicks OK, it proceeds with __doPostBack to toggle the external status.
+    // We MUST register a dialog handler BEFORE the click to accept the confirm dialog.
+    // IMPORTANT: Do NOT use force:true — it bypasses the onclick handler and prevent the confirm dialog.
+    const shareButton = this.toolbar.shareUnshareExternally;
+    
+    // Wait for button to be visible and ready
+    await shareButton.waitFor({ state: 'visible', timeout: 10000 });
+    await shareButton.scrollIntoViewIfNeeded();
+    await this.page.waitForTimeout(500);
+    
+    // Set up dialog handler BEFORE clicking — accept the confirm dialog
+    this.page.once('dialog', async (dialog) => {
+      await dialog.accept();
+    });
+    
+    // Click the button WITHOUT force:true so the onclick handler (confirmMsg) fires properly
+    await shareButton.click();
+    
+    // Wait for the postback triggered by confirm acceptance to complete
+    await this.page.waitForTimeout(3000);
+    await this.waitForAjax();
+  }
+
+  async confirmShareUnshareMessage() {
+    // Dialog is already handled in clickShareUnshareExternally via page.once('dialog')
+    // Just wait for the server to process and the grid to refresh
+    await this.waitForAjax();
+    
+    // Ensure the grid is visible after the confirmation
+    await this.grid.waitFor({ state: 'visible', timeout: 10000 });
+    
+    // Wait for grid to refresh with updated data
+    await this.waitForAjax();
+    await this.page.waitForTimeout(2000);
+  }
+
+  async getExternalStatusByWorkOrderNumber(workOrderNumber) {
+    // Clear any existing search filter and search for the specific work order
+    await this.searchBox.click();
+    await this.searchBox.clear();
+    await this.searchBox.fill(workOrderNumber);
+    await this.page.keyboard.press('Enter');
+    
+    // Wait for grid to filter and show the result
+    await this.waitForAjax();
+    await this.page.waitForTimeout(2000);
+    
+    // Wait for grid to refresh and render new data
+    await this.grid.waitFor({ state: 'visible', timeout: 10000 });
+    await this.waitForAjax();
+    
+    // Find the work order row by number
+    const workOrderCell = this.grid.getByText(workOrderNumber).first();
+    await workOrderCell.waitFor({ state: 'visible', timeout: 10000 });
+    
+    // Get the parent row
+    const row = workOrderCell.locator('xpath=ancestor::tr[1]');
+    
+    // The External? column is at index 6 in the grid row 
+    const cells = row.locator('td');
+    const externalCell = cells.nth(6);
+    const externalValue = await externalCell.textContent();
+    
+    return externalValue.trim(); // Returns "Yes" or "No"
+  }
 }
+

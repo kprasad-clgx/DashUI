@@ -26,6 +26,10 @@ export class UploadEstimatePage extends BasePage {
     this.billToArrow = this.iframe.locator('#RadComboBox_BillToContact_Arrow');
     this.billToInput = this.iframe.locator('#RadComboBox_BillToContact_Input');
 
+    // Estimate Type Dropdown
+    this.estimateTypeArrow = this.iframe.locator('#DropDownList1_Arrow');
+    this.estimateTypeDropdown = this.iframe.locator('#DropDownList1_DropDown');
+
     this.notesInput = this.iframe.locator('#Notes');
     this.descriptionInput = this.iframe.locator('#TextBox1');
     this.uploadButton = this.iframe.locator('#btnUploadEstimate');
@@ -50,43 +54,85 @@ export class UploadEstimatePage extends BasePage {
     await this.page.locator(this.modalIframeName).waitFor({ state: 'visible', timeout: 15000 });
 
     // Initialize dynamic locators
+    this.normalXmlRadioBtn = this.iframe.locator('#NormalEstimatePdf_RadioButton');
     this.roughDraftRadioBtn = this.iframe.locator('#RoughDraftEstimatePdf_RadioButton');
+    this.originalRadioBtn = this.iframe.locator('#rdOriginal, input[id*="Original"]').first();
+    this.revisionRadioBtn = this.iframe.locator('#rdSupplement, input[id*="Revision"]').first();
     await this.overrideAmountInput.waitFor({ state: 'visible', timeout: 10000 });
   }
 
+  async hasMainEstimate() {
+    // Check visibility first with minimal timeout, then enabled state
+    const revisionVisible = await this.revisionRadioBtn.isVisible({ timeout: 500 }).catch(() => false);
+    let revisionEnabled = false;
+    if (revisionVisible) {
+      revisionEnabled = await this.revisionRadioBtn.isEnabled().catch(() => false);
+    }
+
+    const originalVisible = await this.originalRadioBtn.isVisible({ timeout: 500 }).catch(() => false);
+    let originalEnabled = false;
+    if (originalVisible) {
+      originalEnabled = await this.originalRadioBtn.isEnabled().catch(() => false);
+    }
+
+    if (revisionVisible && revisionEnabled) {
+      return true;
+    }
+
+    if (originalEnabled && !revisionEnabled) {
+      return false;
+    }
+
+    return revisionVisible;
+  }
+
+  async selectEstimateOptionBasedOnJobState() {
+    const jobHasMainEstimate = await this.hasMainEstimate();
+
+    if (jobHasMainEstimate) {
+      const isRevisionVisible = await this.revisionRadioBtn.isVisible({ timeout: 500 }).catch(() => false);
+      let isRevisionEnabled = false;
+      if (isRevisionVisible) {
+        isRevisionEnabled = await this.revisionRadioBtn.isEnabled().catch(() => false);
+      }
+      
+      if (isRevisionVisible && isRevisionEnabled) {
+        await this.revisionRadioBtn.click();
+      }
+      return 'revision';
+    } else {
+      const isOriginalVisible = await this.originalRadioBtn.isVisible({ timeout: 500 }).catch(() => false);
+      let isOriginalEnabled = false;
+      if (isOriginalVisible) {
+        isOriginalEnabled = await this.originalRadioBtn.isEnabled().catch(() => false);
+      }
+      
+      if (isOriginalVisible && isOriginalEnabled) {
+        await this.originalRadioBtn.click();
+      }
+      return 'original';
+    }
+  }
+
   async selectBillToContact(index = 5) {
-    // Click arrow to open dropdown
     await this.billToArrow.click();
 
-    // Wait for dropdown list to be visible
     const dropdownList = this.iframe.locator('#RadComboBox_BillToContact_DropDown .rcbList');
     await dropdownList.waitFor({ state: 'visible', timeout: 10000 });
-
-    // Give the dropdown a moment to stabilize
     await this.page.waitForLoadState('domcontentloaded').catch(() => {});
 
-    // Get all options and select by index
     const options = this.iframe.locator('#RadComboBox_BillToContact_DropDown .rcbList li');
     const optionCount = await options.count();
 
     if (optionCount === 0) {
-      throw new Error('[selectBillToContact] No options found in dropdown');
+      throw new Error('No options found in Bill To Contact dropdown');
     }
 
-    // Use the requested index, fallback to first if index is out of bounds
     const selectedIndex = Math.min(index - 1, optionCount - 1);
     const selectedOption = options.nth(selectedIndex);
 
-    // Try to click directly without scrolling (more stable)
-    try {
-      await selectedOption.click({ force: true });
-    } catch (e) {
-      console.warn(
-        '[selectBillToContact] Direct click failed, attempting alternative approach:',
-        e.message,
-      );
-    }
-    // Wait for selection to be confirmed
+    await selectedOption.click({ force: true });
+    
     await this.billToInput.waitFor(
       async (el) => {
         const value = await el.inputValue();
@@ -96,65 +142,137 @@ export class UploadEstimatePage extends BasePage {
     );
   }
 
+  async selectEstimateType(estimateType = 'Main') {
+    const isVisible = await this.estimateTypeArrow.isVisible().catch(() => false);
+    
+    if (!isVisible) {
+      return;
+    }
+
+    await this.estimateTypeArrow.click();
+
+    const dropdownList = this.iframe.locator('#DropDownList1_DropDown .rcbList');
+    await dropdownList.waitFor({ state: 'visible', timeout: 10000 });
+
+    const options = this.iframe.locator('#DropDownList1_DropDown .rcbList li');
+    const optionCount = await options.count();
+
+    if (optionCount === 0) {
+      throw new Error('No options found in Estimate Type dropdown');
+    }
+
+    let selectedOption = null;
+    for (let i = 0; i < optionCount; i++) {
+      const option = options.nth(i);
+      const text = await option.textContent();
+      if (text && text.trim().toLowerCase().includes(estimateType.toLowerCase())) {
+        selectedOption = option;
+        break;
+      }
+    }
+
+    if (!selectedOption) {
+      selectedOption = options.first();
+    }
+
+    await selectedOption.click({ force: true });
+    
+    try {
+      await dropdownList.waitFor({ state: 'hidden', timeout: 10000 });
+    } catch (e) {
+      await this.page.locator('body').click({ force: true });
+      await this.page.waitForLoadState('domcontentloaded').catch(() => {});
+    }
+  }
+
   async uploadEstimate({
     overrideAmount,
     dataEstimateFile,
+    dataEstimateFileRoughDraft,
     finalDraftFile,
     billToContactIndex,
     notes,
     description,
+    estimateType = 'Main',
+    jobNumber,
   }) {
     await this.openUploadEstimateModal();
 
-    if (await this.roughDraftRadioBtn.isVisible()) {
-      await this.roughDraftRadioBtn.click();
+    // PDF selection: Prefer Normal XML, fallback to Rough Draft
+    let isRoughDraftSelected = false;
+    
+    // Check visibility FIRST with minimal timeout to avoid waiting on isEnabled for missing elements
+    const isNormalXmlVisible = await this.normalXmlRadioBtn.isVisible({ timeout: 500 }).catch(() => false);
+    let isNormalXmlEnabled = false;
+    if (isNormalXmlVisible) {
+      isNormalXmlEnabled = await this.normalXmlRadioBtn.isEnabled().catch(() => false);
     }
-
-    if (await this.revisionRadioBtn.isEnabled()) {
-      await this.revisionRadioBtn.click();
-      // Logic for supplemental dropdown
-      const estTypeArrow = this.iframe.locator('#DropDownList1_Arrow');
-      if (await estTypeArrow.isVisible()) {
-        await estTypeArrow.click();
-        const estTypeList = this.iframe.locator('#DropDownList1_DropDown .rcbList li');
-        const supplementalOption = estTypeList.filter({ hasText: 'Supplemental 1' });
-
-        if (await supplementalOption.isVisible()) {
-          await supplementalOption.click();
-        } else {
-          await estTypeList.first().click();
-        }
+    
+    if (isNormalXmlVisible && isNormalXmlEnabled) {
+      await this.normalXmlRadioBtn.click();
+    } else {
+      const isRoughDraftVisible = await this.roughDraftRadioBtn.isVisible({ timeout: 500 }).catch(() => false);
+      let isRoughDraftEnabled = false;
+      if (isRoughDraftVisible) {
+        isRoughDraftEnabled = await this.roughDraftRadioBtn.isEnabled().catch(() => false);
+      }
+      
+      if (isRoughDraftVisible && isRoughDraftEnabled) {
+        await this.roughDraftRadioBtn.click();
+        isRoughDraftSelected = true;
       }
     }
 
-    if (overrideAmount) await this.overrideAmountInput.fill(String(overrideAmount));
+    // Detect job state and select appropriate option
+    const selectedOption = await this.selectEstimateOptionBasedOnJobState();
 
-    if (dataEstimateFile) {
-      const p1 = this.resolveFilePath(dataEstimateFile);
-      await this.dataEstimateInput.setInputFiles(p1);
+    // Select estimate type
+    if (selectedOption === 'revision') {
+      await this.selectEstimateType('Main');
+    } else {
+      await this.selectEstimateType(estimateType || 'Supplement');
     }
 
+    await this.page.waitForLoadState('domcontentloaded');
+
+    // Fill form fields
+    if (overrideAmount) {
+      await this.overrideAmountInput.fill(String(overrideAmount));
+    }
+
+    // Upload PDF files
+    const pdfToUpload = isRoughDraftSelected && dataEstimateFileRoughDraft ? dataEstimateFileRoughDraft : dataEstimateFile;
+    if (pdfToUpload) {
+      await this.dataEstimateInput.setInputFiles(this.resolveFilePath(pdfToUpload));
+    }
+    
     if (finalDraftFile) {
-      const p2 = this.resolveFilePath(finalDraftFile);
-      await this.finalDraftInput.setInputFiles(p2);
+      await this.finalDraftInput.setInputFiles(this.resolveFilePath(finalDraftFile));
     }
 
     await this.selectBillToContact(billToContactIndex);
 
-    if (notes) await this.notesInput.fill(notes);
-    if (description) await this.descriptionInput.fill(description);
+    if (notes) {
+      await this.notesInput.fill(notes);
+    }
+
+    if (description) {
+      await this.descriptionInput.fill(description);
+    }
 
     await this.uploadButton.click();
-
-    // Handle Mass Exception Dialogs (Loop in case of multiples)
     await this.handleMassExceptionDialogs();
-
-    // Wait for uploading message and close modal, then verify queued notification
     await this.waitForUploadAndVerifyQueued();
+
+    // Verify notification
+    if (jobNumber) {
+      await this.verifyEstimateParserNotification(jobNumber);
+    }
   }
+  
 
   /**
-   * Wait for "uploading" message to appear, close modal, then verify "queued" notification
+   * Wait for "uploading" message to appear, close modal when button is enabled, then capture notification text
    */
   async waitForUploadAndVerifyQueued() {
     // Step 1: Wait for uploading message to appear on modal
@@ -166,27 +284,107 @@ export class UploadEstimatePage extends BasePage {
       throw new Error('Uploading message did not appear on modal');
     });
 
-    // Step 2: Close the modal by clicking close button
+    //  Wait for close button to be ENABLED 
     const closeButton = this.page.locator('.rwCloseButton[title="Close"]').first();
-    const closeVisible = await closeButton.isVisible().catch(() => false);
-
-    if (closeVisible) {
-      await closeButton.click();
-      // Wait for modal to close
-      await this.page
-        .locator(this.modalIframeName)
-        .waitFor({ state: 'hidden', timeout: 10000 })
-        .catch(() => {});
-    } else {
-      throw new Error('Close button not found on modal');
+    
+    // Wait for button to be enabled by checking it's not disabled
+    let isEnabled = false;
+    let attempts = 0;
+    const maxAttempts = 60; // 60 attempts * 1 second = up to 60 seconds
+    
+    while (!isEnabled && attempts < maxAttempts) {
+      try {
+        const isDisabled = await closeButton.evaluate(el => el.disabled || el.classList.contains('rpDisabled'));
+        if (!isDisabled) {
+          isEnabled = true;
+        } else {
+          attempts++;
+          await this.page.waitForTimeout(1000); // Wait 1 second before next check
+        }
+      } catch (e) {
+        attempts++;
+        await this.page.waitForTimeout(1000);
+      }
     }
 
-    // Step 3: Verify "Estimate parser job has been queued" message in dash notification bar
-    const notificationLocator = this.page.locator('text=/Estimate parser job has been queued/i');
+    if (!isEnabled) {
+      throw new Error(`Close button did not become enabled after ${maxAttempts} seconds`);
+    }
 
-    await notificationLocator.waitFor({ state: 'visible', timeout: 60000 });
+    //  Click the close button
+    await closeButton.click();
 
-    // If we reach here, the test passes - the notification is visible
+    // Wait for modal to close
+    await this.page
+      .locator(this.modalIframeName)
+      .waitFor({ state: 'hidden', timeout: 10000 })
+      .catch(() => {
+        console.warn('Modal did not close within timeout');
+      });
+        await this.page.waitForTimeout(500);
+  }
+
+  /**
+   * Verify estimate parser notification after upload
+   * Checks for notification with job number and green "Completed" tick
+   */
+  async verifyEstimateParserNotification(jobNumber) {
+    // Click notification icon
+    const notificationIcon = this.page.locator('#ctl00_imageDashNotifications');
+    await notificationIcon.click();
+
+    // Wait for modal
+    const notificationsModal = this.page.locator('#Dash_notifications');
+    await notificationsModal.waitFor({ state: 'visible', timeout: 10000 });
+
+    // Poll for notification with job number and "Completed" status
+    const maxAttempts = 120; 
+    
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const notificationRows = this.page.locator('td[class*="Notification_Summary_Data"]').filter({
+        hasText: new RegExp(`Estimate Parser for Job Number:${jobNumber}`, 'i'),
+      });
+
+      const rowCount = await notificationRows.count();
+      
+      if (rowCount > 0) {
+        // Check the first notification for "Completed" status
+        const firstRow = notificationRows.first();
+        const iconCell = firstRow.locator('xpath=following-sibling::td[1]');
+        
+        // Check for completed icon
+        const completedIcon = iconCell.locator('img[title="Completed"]');
+        const hasCompleted = await completedIcon.count() > 0;
+        
+        if (hasCompleted) {
+          return true; // Success!
+        }
+        
+        // Get current status for better error handling and robust waiting
+        const icon = iconCell.locator('img').first();
+        const iconCount = await icon.count();
+        let status = '';
+        if (iconCount > 0) {
+          status = await icon.getAttribute('title');
+        }
+
+        if (status && (status.includes('Fail') || status.includes('Error'))) {
+           throw new Error(`Notification for job ${jobNumber} failed - Status: ${status}`);
+        }
+      }
+
+      // Refresh modal every 5 seconds (every 5 attempts since we wait 1s)
+      if (attempt > 0 && attempt % 5 === 0) {
+        await this.page.locator('body').click({ position: { x: 10, y: 10 } });
+        await this.page.waitForTimeout(200);
+        await notificationIcon.click();
+        await notificationsModal.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+      }
+
+      await this.page.waitForTimeout(1000);
+    }
+    
+    throw new Error(`Notification for job ${jobNumber} did not complete after ${maxAttempts} attempts`);
   }
 
   /**
@@ -194,7 +392,6 @@ export class UploadEstimatePage extends BasePage {
    * Scans all iframes to find the one containing the specific grid ID, then interacts with it.
    */
   async handleMassExceptionDialogs() {
-    // Target only the DATA table ID (ends in _ctl00), ignoring Header/Pager tables.
     const uniqueGridSelector = 'table[id$="_CompliancExceptionGridView_ctl00"]';
 
     let targetFrame = null;
