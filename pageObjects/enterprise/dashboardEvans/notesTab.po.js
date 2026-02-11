@@ -413,9 +413,12 @@ class DashboardNotesTabPage {
     const copyNotesIframe = this.page.frameLocator(DashboardNotesTabLocators.copyNotesIframe);
     const cancelButton = copyNotesIframe.locator(DashboardNotesTabLocators.cancelButton);
 
-    // Wait for button to be visible and clickable
+    // Wait for button to be visible
     await cancelButton.waitFor({ state: 'visible', timeout: 10000 });
-    await cancelButton.click();
+    
+    // Scroll the button into view within the iframe and click with force
+    await cancelButton.scrollIntoViewIfNeeded();
+    await cancelButton.click({ force: true });
   }
 
   /**

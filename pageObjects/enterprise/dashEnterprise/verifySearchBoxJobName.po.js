@@ -34,12 +34,12 @@ class VerifySearchBoxJobNamePage {
       await loadingIndicator.waitFor({ state: 'hidden', timeout: 10000 });
     }
 
-    // Wait for the specific item containing the full text to appear
-    const specificItem = dropdownList.filter({ hasText: jobName });
+    // Wait for the specific item containing the full text to appear and select the first match
+    const specificItem = dropdownList.filter({ hasText: jobName }).first();
     await specificItem.waitFor({ state: 'visible', timeout: 10000 });
 
     // Click the specific suggestion in the dropdown
-    await specificItem.first().click();
+    await specificItem.click();
 
     // Click the search button if present
     if (await searchButton.isVisible().catch(() => false)) {

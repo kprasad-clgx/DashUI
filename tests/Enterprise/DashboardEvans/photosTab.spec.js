@@ -44,41 +44,6 @@ test('Photos Tab Upload and Download Validation', async ({ authenticatedPage }) 
   // Verify 3D Room Models button is visible
   await expect(await photosTabPage.verifyRoomModelsButtonVisible()).toBeVisible();
 
-  // Click on 3D Room Models button
-  await photosTabPage.click3DRoomModelsButton();
-
-  // Wait for the popup div to be visible
-  await photosTabPage.waitForLinksPopupVisible();
-
-  // Verify header text inside iframe
-  await photosTabPage.verifyLinksIframeHeaderText('3D Room Models');
-
-  // Verify cancel image is visible inside iframe
-  await expect(await photosTabPage.verifyLinksIframeCancelImgVisible()).toBeVisible();
-
-  // Verify all three buttons are visible inside the iframe
-  await expect(await photosTabPage.verifyDocusketchButtonVisible()).toBeVisible();
-  await expect(await photosTabPage.verifyMatterportButtonVisible()).toBeVisible();
-  await expect(await photosTabPage.verifyHoverButtonVisible()).toBeVisible();
-
-  // Click cancel image inside iframe to close popup
-  await photosTabPage.clickLinksIframeCancelImg();
-
-  // Verify popup is hidden
-  await photosTabPage.verifyLinksPopupHidden();
-
-  // Verify Manage Photos and Albums button is visible
-  await expect(await photosTabPage.verifyManagePhotosAndAlbumsButtonVisible()).toBeVisible();
-
-  // Verify Export Photos for Linked Jobs to PDF button is visible
-  await expect(await photosTabPage.verifyExportPhotosToPDFButtonVisible()).toBeVisible();
-
-  // Verify Sort Albums label is visible
-  await expect(await photosTabPage.verifySortAlbumsLabelVisible()).toBeVisible();
-
-  // Verify Date Created dropdown is visible
-  await expect(await photosTabPage.verifyDateCreatedDropdownVisible()).toBeVisible();
-
   // Click on add album button
   await photosTabPage.clickAddAlbumButton();
 
@@ -104,8 +69,8 @@ test('Photos Tab Upload and Download Validation', async ({ authenticatedPage }) 
   // Click on manage photos and albums button
   await photosTabPage.navigateToManagePhotosAndAlbums();
 
-  await this.page.reload();
-  await this.page.waitForLoadState('networkidle');
+  await page.reload();
+  await page.waitForLoadState('networkidle');
 
   // Verify All button is visible in manage photos and albums page
   await expect(await photosTabPage.verifySelectAllButtonVisible()).toBeVisible();
@@ -160,6 +125,41 @@ test('Photos Tab Upload and Download Validation', async ({ authenticatedPage }) 
 
   // Navigate to Photos tab
   await photosTabPage.navigateToPhotosTab();
+
+  // Click on 3D Room Models button
+  await photosTabPage.click3DRoomModelsButton();
+
+  // Wait for the popup div to be visible
+  await photosTabPage.waitForLinksPopupVisible();
+
+  // Verify header text inside iframe
+  await photosTabPage.verifyLinksIframeHeaderText('3D Room Models');
+
+  // Verify cancel image is visible inside iframe
+  await expect(await photosTabPage.verifyLinksIframeCancelImgVisible()).toBeVisible();
+
+  // Verify all three buttons are visible inside the iframe
+  await expect(await photosTabPage.verifyDocusketchButtonVisible()).toBeVisible();
+  await expect(await photosTabPage.verifyMatterportButtonVisible()).toBeVisible();
+  await expect(await photosTabPage.verifyHoverButtonVisible()).toBeVisible();
+
+  // Click cancel image inside iframe to close popup
+  await photosTabPage.clickLinksIframeCancelImg();
+
+  // Verify popup is hidden
+  await photosTabPage.verifyLinksPopupHidden();
+
+  // Verify Manage Photos and Albums button is visible
+  await expect(await photosTabPage.verifyManagePhotosAndAlbumsButtonVisible()).toBeVisible();
+
+  // Verify Export Photos for Linked Jobs to PDF button is visible
+  await expect(await photosTabPage.verifyExportPhotosToPDFButtonVisible()).toBeVisible();
+
+  // Verify Sort Albums label is visible
+  await expect(await photosTabPage.verifySortAlbumsLabelVisible()).toBeVisible();
+
+  // Verify Date Created dropdown is visible
+  await expect(await photosTabPage.verifyDateCreatedDropdownVisible()).toBeVisible();
 
   // Assert Auto Generate Photos Tags are present
   await photosTabPage.verifyAutoGeneratePhotoTagsPresent();

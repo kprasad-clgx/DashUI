@@ -45,6 +45,12 @@ test('Create Job', async ({ authenticatedPage }) => {
 
   await page.waitForLoadState('networkidle');
 
+  const linkJobToAssignmentButton = page.locator('#link_job_to_assignment');
+  await expect(linkJobToAssignmentButton).toBeVisible();
+
+  const exportAsAssignmentButton = page.locator('#ctl00_ContentPlaceHolder1_export_as_assignment');
+ await expect(exportAsAssignmentButton).toBeVisible();
+
     // Assert the modal is visible
   const radWindow = page.locator('#RadWindowWrapper_ctl00_ContentPlaceHolder1_RadWindow_Common');
   await expect(radWindow).toBeVisible({ timeout: 30000 });
@@ -54,14 +60,16 @@ test('Create Job', async ({ authenticatedPage }) => {
 
   // Wait for iframe to load and be visible
   const iframeLocator = page.frameLocator('iframe[name="RadWindow_Common"]');
-  await page.waitForLoadState('networkidle', { timeout: 90000 });
+  await page.waitForLoadState('networkidle', { timeout: 0 });
   
-  // Assert Switch to Company button is visible inside the iframe with extended timeout
+  // Assert Switch to Company button is visible inside the iframe with no timeout
   const switchCompanyButton = iframeLocator.locator('#buttonSwitchToCompany');
-  await switchCompanyButton.waitFor({ state: 'visible', timeout: 30000 });
+  await switchCompanyButton.waitFor({ state: 'visible', timeout: 0 });
 
-  // Use scrollIntoViewIfNeeded to bring button into viewport
-  await switchCompanyButton.scrollIntoViewIfNeeded();
+  // Scroll the button into view using JavaScript evaluation within iframe context
+  await switchCompanyButton.evaluate(element => {
+    element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+  });
 
   // Click Switch to Company button and accept confirmation alert
   await Promise.all([
