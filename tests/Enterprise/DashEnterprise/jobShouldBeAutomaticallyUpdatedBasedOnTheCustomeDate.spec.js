@@ -1,35 +1,50 @@
 import { test, expect } from '../../../fixtures/enterpriseFixtures.js';
 import { JobSlideboardPage } from '../../../pageObjects/enterprise/jobSlideboard/jobSlideboardPage.po.js';
-import { searchJobNumber } from '../../../utils/searchJobNumber.js';
-import jobData from '../../../testData/enterprise/enterpriseJobNumber.json' with { type: 'json' };
+import { CreateJobPage } from '../../../pageObjects/enterprise/quickNotes/CreateJobPage.po.js';
+import jobData from '../../../testData/enterprise/quickNotes/createJob/jobData.json' with { type: 'json' };
 
-test('Job status should be automatically updated based on the custom date', async ({
+test('Job status should be automatically updated based on the custom start date', async ({
   authenticatedPage,
 }) => {
+  //Load page and data 
   const jobSlideboardPage = new JobSlideboardPage(authenticatedPage);
-  let jobNumber = jobData.jobNumber;
+  const createJobPage = new CreateJobPage(authenticatedPage);
+  const { jobDetails } = jobData;
 
-  // Search for the job using the robust utility
-  await searchJobNumber(authenticatedPage, jobNumber);
+  //  Navigate to quick notes
+  await createJobPage.openQuickNotesCreateJob();
+
+  //  Create Job using the JSON object directly
+  await createJobPage.createNewJob(jobDetails);
+
+  //  Verify the job is created with job number
+  await expect(authenticatedPage).toHaveURL(/Job(Id|Number)/i, { timeout: 30000 });
+
+  // Wait for the job slideboard page to fully load
+  await authenticatedPage.waitForLoadState('domcontentloaded');
+  await authenticatedPage.waitForLoadState('networkidle');
 
   //confirm status for the job is pending sales
-  const statusValue = authenticatedPage.locator('span:has-text("Status:") + span');
-
-  // Verify the text
-  await expect(statusValue).toHaveText('Pending Sales');
+  let statusText = await jobSlideboardPage.getJobStatus();
+  expect(statusText?.trim()).toBe('Pending Sales');
 
   //click on dates tab
   await jobSlideboardPage.clickDatesTab();
 
-  // //enter current date/time in date contacted
-  // await jobSlideboardPage.enterCurrentDateTimeInDateContacted();
+  //enter current date/time in date contacted
+  await jobSlideboardPage.enterCurrentDateTimeInDateStarted();
 
-  // //click on save button
-  // await jobSlideboardPage.clickSaveDates();
+  //click on save button
+  await jobSlideboardPage.clickSaveDates();
 
-  // // wait for network to be idle
-  // await authenticatedPage.waitForLoadState('networkidle');
+  // wait for network to be idle and page refresh
+  await authenticatedPage.waitForLoadState('networkidle');
+  await authenticatedPage.waitForTimeout(2000); // Wait for status to update after save
+  await authenticatedPage.reload(); // Reload to ensure status is updated
+  await authenticatedPage.waitForLoadState('domcontentloaded');
+  await authenticatedPage.waitForLoadState('networkidle');
 
-  // // confirm status for the job is open
-  // await expect(statusValue).toHaveText('Work in Progress');
+  // confirm status for the job is work in progress
+  statusText = await jobSlideboardPage.getJobStatus();
+  expect(statusText?.trim()).toBe('Work in Progress');
 });

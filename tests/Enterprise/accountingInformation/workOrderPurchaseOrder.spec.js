@@ -15,11 +15,9 @@ const jobData = JSON.parse(
 );
 
 test.describe('Work Order & Purchase Order Workflow', () => {
-  let test1Passed = false;
 
   // TEST 1: Convert Estimate -> Scheduler -> Export
   test('Convert Estimate, Scheduler, and Invoice Export', async ({ authenticatedPage }) => {
-    test.setTimeout(180000);
     const jobNumber = jobData.jobNumber;
     const workOrderPage = new WorkOrderPurchaseOrderPage(authenticatedPage);
 
@@ -44,7 +42,7 @@ test.describe('Work Order & Purchase Order Workflow', () => {
       // Uses "workOrderDate": "12/15/2025" from JSON
       await workOrderPage.convertEstimateToWorkOrder(workOrderData.workOrder.workOrderDate);
 
-      // Verify Notification Success (Retry logic built-in to expect)
+      // Verify Notification Success
       const notificationIcon = await workOrderPage.getNotificationStatus();
       await expect(notificationIcon).toBeVisible({ timeout: 30000 });
       await expect(notificationIcon).toHaveAttribute('title', 'Completed');
@@ -53,9 +51,6 @@ test.describe('Work Order & Purchase Order Workflow', () => {
     await test.step('4. Verify Scheduler Integration', async () => {
       // Open Scheduler
       const jobLabel = await workOrderPage.openSchedulerAndGetJobLabel(jobNumber);
-
-      // Screenshot for debug
-      await authenticatedPage.screenshot({ path: 'scheduler-debug.png', fullPage: true });
 
       // Assert Job Number exists on Scheduler
       await expect(jobLabel).toBeVisible();
@@ -71,14 +66,10 @@ test.describe('Work Order & Purchase Order Workflow', () => {
       await download.delete();
     });
 
-    // Mark test 1 as passed
-    test1Passed = true;
   });
 
-  // TEST 2: Create Manual WO -> Add Milestone -> Delete (New Data Flow)
+  // TEST 2: Create Manual WO -> Add Milestone -> Delete
   test('Create Manual Work Order, Milestone, and Delete', async ({ authenticatedPage }) => {
-    test.skip(!test1Passed, 'Skipping because Test 1 failed');
-
     const jobNumber = jobData.jobNumber;
     const workOrderPage = new WorkOrderPurchaseOrderPage(authenticatedPage);
 
@@ -92,7 +83,6 @@ test.describe('Work Order & Purchase Order Workflow', () => {
       woNumber = await workOrderPage.createNewWorkOrder(workOrderData.newWorkOrder);
 
       expect(woNumber).not.toBeNull();
-      console.log(`Created Work Order: ${woNumber}`);
 
       // Verify it exists in grid
       await workOrderPage.searchForWorkOrder(woNumber);
@@ -101,8 +91,6 @@ test.describe('Work Order & Purchase Order Workflow', () => {
     await test.step('Add Milestone', async () => {
       // Passes the specific "milestone" object from your JSON
       await workOrderPage.addMilestone(workOrderData.milestone);
-
-      // Optional: Add assertions here if the milestone appears in a specific sub-grid
     });
 
     await test.step('Delete Work Order', async () => {

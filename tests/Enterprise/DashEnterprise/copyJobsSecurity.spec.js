@@ -1,4 +1,4 @@
-import { test } from '../../../fixtures/enterpriseFixtures';
+import { test,expect } from '../../../fixtures/enterpriseFixtures';
 import { SecurityPage } from '../../../pageObjects/enterprise/dashEnterprise/securityPage.po.js';
 import { JobSlideboardPage } from '../../../pageObjects/enterprise/jobSlideboard/jobSlideboardPage.po.js';
 import { searchJobNumber } from '../../../utils/searchJobNumber.js';

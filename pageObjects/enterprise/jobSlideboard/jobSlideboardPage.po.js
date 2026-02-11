@@ -553,6 +553,63 @@ export class JobSlideboardPage extends BasePage {
     await this.page.waitForLoadState('domcontentloaded');
   }
 
+  async clickUploadDocumentButton() {
+    // Click on the Upload Document button with force to bypass any intercepting elements
+    const uploadButton = this.page.getByTitle('Upload Document', { exact: true });
+    await uploadButton.waitFor({ state: 'visible' });
+    await uploadButton.click({ force: true });
+    await this.page.waitForTimeout(500);
+  }
+
+  async uploadAllDocuments(filePaths) {
+    // Open the upload modal by clicking Upload Document button
+    await this.clickUploadDocumentButton();
+
+    // Set all files at once to the file uploader input - use .first() to handle multiple matches
+    const fileUploader = this.page.locator('#fileUploader').first();
+    await fileUploader.waitFor({ state: 'attached', timeout: 10000 });
+    await fileUploader.setInputFiles(filePaths);
+    await this.page.waitForTimeout(1000);
+  }
+
+  async selectAlbumFromDropdown(albumLabel) {
+    // Get the album dropdown and select the option with matching label
+    const albumDropdown = this.page.locator('#fileAlbumControl');
+    await albumDropdown.waitFor({ state: 'visible' });
+    await albumDropdown.selectOption({ label: albumLabel });
+    await this.page.waitForTimeout(300);
+  }
+
+  async clickUploadDocumentsButton() {
+    // Click the upload button that shows "Upload X document(s)"
+    const uploadButton = this.page.locator('.fileUploadSave');
+    await uploadButton.waitFor({ state: 'visible' });
+    await uploadButton.click();
+    await this.page.waitForTimeout(1000);
+  }
+
+  getUploadCompletionMessage() {
+    // Return the locator for the upload completion message
+    return this.page.locator('#uploadPercentage');
+  }
+
+  getUploadProgressBar() {
+    // Return the locator for the upload progress bar
+    return this.page.locator('#uploadProgress');
+  }
+
+  async uploadDocument(filePath) {
+    // Legacy method - kept for backward compatibility
+    // For bulk uploads, use uploadAllDocuments instead
+    await this.clickUploadDocumentButton();
+
+    // Use .first() to handle multiple file input elements with same ID
+    const fileUploader = this.page.locator('#fileUploader').first();
+    await fileUploader.waitFor({ state: 'attached', timeout: 10000 });
+    await fileUploader.setInputFiles(filePath);
+    await this.page.waitForTimeout(500);
+  }
+
   async clickChecklistTab() {
     await this.checklistTab.waitFor({ state: 'visible' });
     await this.checklistTab.click();
@@ -586,7 +643,19 @@ export class JobSlideboardPage extends BasePage {
     await this.actionFilterTextBox.waitFor({ state: 'visible' });
     await this.actionFilterTextBox.fill(actionText);
     await this.actionFilterTextBox.press('Enter');
-    await this.page.waitForTimeout(2000); // Wait for filter to apply
+    
+    // Wait for navigation and grid update
+    await this.page.waitForLoadState('networkidle', { timeout: 15000 }).catch((e) => {
+      console.error('Network load timeout during filter:', e.message);
+    });
+    
+    // Verify we're not on error page
+    if (this.page.url().includes('ErrorPage')) {
+      throw new Error(`Filtered by action "${actionText}" caused navigation to error page: ${this.page.url()}`);
+    }
+    
+    // Wait for grid to show filtered results
+    await this.page.waitForTimeout(1000);
   }
 
   async getTaskDescriptionText() {
@@ -1236,8 +1305,7 @@ export class JobSlideboardPage extends BasePage {
     await this.page.keyboard.press('ArrowDown');
     await this.page.keyboard.press('Enter');
 
-    // 5. Click on selectRow
-    // We wait for the row to become enabled/visible after selection
+    // 5. wait for the row to become enabled/visible after selection
     await this.selectRow.waitFor({ state: 'visible' });
     await this.selectRow.click();
 
@@ -1283,5 +1351,98 @@ export class JobSlideboardPage extends BasePage {
     // 13. Click on copyJobFinalButton
     await this.copyJobFinalButton.waitFor({ state: 'visible' });
     await this.copyJobFinalButton.click();
+  }
+
+  // --- Status Methods ---
+
+  async getJobStatus() {
+    const statusValue = this.page.locator('span:has-text("Status:") + span');
+    await statusValue.waitFor({ state: 'visible', timeout: 15000 });
+    return await statusValue.textContent();
+  }
+
+  // --- Dates Tab Methods ---
+
+  async clickSaveDates() {
+    await this.saveDatesButton.waitFor({ state: 'visible' });
+    await this.saveDatesButton.click();
+  }
+
+  async clickCurrentDateTimeButton(dateFieldId) {
+    const currentDateTimeBtn = this.page.locator(
+      `#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_CurrentDateTimeDiv_${dateFieldId}`,
+    );
+    await currentDateTimeBtn.waitFor({ state: 'visible' });
+    await currentDateTimeBtn.click();
+  }
+
+  async enterCurrentDateTimeInDateStarted() {
+    // Date Started has ID: 6
+    await this.clickCurrentDateTimeButton(6);
+    await this.page.waitForTimeout(500); // Wait for the date to be set
+  }
+
+  async enterCurrentDateTimeInDateLoss() {
+    // Date of Loss has ID: 17
+    await this.clickCurrentDateTimeButton(17);
+    await this.page.waitForTimeout(500);
+  }
+
+  async enterCurrentDateTimeInDateIntoProduction() {
+    // Into Production has ID: 13
+    await this.clickCurrentDateTimeButton(13);
+    await this.page.waitForTimeout(500);
+  }
+
+  async enterCurrentDateTimeInDateReceived() {
+    // Date Received has ID: 0
+    await this.clickCurrentDateTimeButton(0);
+    await this.page.waitForTimeout(500);
+  }
+
+  async enterCurrentDateTimeInDateContacted() {
+    // Date Contacted has ID: 1
+    await this.clickCurrentDateTimeButton(1);
+    await this.page.waitForTimeout(500);
+  }
+
+  async getDateStartedValue() {
+    const dateStartedInput = this.page.locator(
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_DateTimePicker_6_dateInput',
+    );
+    await dateStartedInput.waitFor({ state: 'visible' });
+    return await dateStartedInput.inputValue();
+  }
+
+  async getDateLossValue() {
+    const dateOfLossInput = this.page.locator(
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_DateTimePicker_17_dateInput',
+    );
+    await dateOfLossInput.waitFor({ state: 'visible' });
+    return await dateOfLossInput.inputValue();
+  }
+
+  async getDateIntoProductionValue() {
+    const dateIntoProductionInput = this.page.locator(
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_DateTimePicker_13_dateInput',
+    );
+    await dateIntoProductionInput.waitFor({ state: 'visible' });
+    return await dateIntoProductionInput.inputValue();
+  }
+
+  async getDateReceivedValue() {
+    const dateReceivedInput = this.page.locator(
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_DateTimePicker_0_dateInput',
+    );
+    await dateReceivedInput.waitFor({ state: 'visible' });
+    return await dateReceivedInput.inputValue();
+  }
+
+  async getDateContactedValue() {
+    const dateContactedInput = this.page.locator(
+      '#ctl00_ContentPlaceHolder1_dockJobTabs_C_Dates_userControl_DateTimePicker_1_dateInput',
+    );
+    await dateContactedInput.waitFor({ state: 'visible' });
+    return await dateContactedInput.inputValue();
   }
 }

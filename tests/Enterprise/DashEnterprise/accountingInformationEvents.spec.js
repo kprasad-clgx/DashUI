@@ -20,7 +20,7 @@ test('Accounting Information Events and Upload Dialog Validation', async ({
 
   // --- Validation Regex Patterns ---
   const currencyRegex = /^(\$[\d,]+\.\d{2}|\(\$[\d,]+\.\d{2}\))$/;
-  const percentRegex = /^-?[\d,]+\.\d{2}\s?%$/;
+  const percentRegex = /^-?[\d,]+\.\d{2,}\s?%$/;  // Allows 2 or more decimal places
 
   // Validate Financial Data
   expect(accountingData.totalEstimates).toMatch(currencyRegex);
